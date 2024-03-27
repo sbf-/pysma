@@ -26,13 +26,14 @@ def print_table(sensors):
             print("{:>25}{:>15} {}".format(sen.name, str(sen.value), sen.unit))
 
 
-async def main_loop(password, user, url):
+async def main_loop(user, password, url, accessmethod):
     """Run main loop."""
     async with aiohttp.ClientSession(
         connector=aiohttp.TCPConnector(ssl=False)
     ) as session:
-        VAR["sma"] = pysma.SMA(session, url, password=password, group=user)
-
+        _LOGGER.debug(f"MainLoop called! Url: {url} User/Group: {user} Accessmethod: {accessmethod}")
+        VAR["sma"] = pysma.getDevice(session, url, password, user, accessmethod)
+        print(type(VAR["sma"]))
         try:
             await VAR["sma"].new_session()
         except pysma.exceptions.SmaAuthenticationException:
@@ -50,7 +51,7 @@ async def main_loop(password, user, url):
             device_info = await VAR["sma"].device_info()
 
             for name, value in device_info.items():
-                print("{:>15}{:>25}".format(name, value))
+               print("{:>15}{:>25}".format(name, value))
 
             # enable all sensors
             for sensor in sensors:
@@ -78,8 +79,10 @@ async def main():
         type=str,
         help="Web address of the Webconnect module (http://ip-address or https://ip-address)",
     )
-    parser.add_argument("user", choices=["user", "installer"], help="Login username")
+#    parser.add_argument("user", choices=["user", "installer"], help="Login username")
+    parser.add_argument("user", help="Login Group- or Username (user or installer for Webconnect)")
     parser.add_argument("password", help="Login password")
+    parser.add_argument("access", choices=["webconnect", "ennexos"], help="Login password")
 
     args = parser.parse_args()
 
@@ -88,7 +91,7 @@ async def main():
 
     signal.signal(signal.SIGINT, _shutdown)
 
-    await main_loop(user=args.user, password=args.password, url=args.url)
+    await main_loop(user=args.user, password=args.password, url=args.url, accessmethod=args.access)
 
 
 if __name__ == "__main__":

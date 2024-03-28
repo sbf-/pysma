@@ -41,6 +41,7 @@ from .helpers import version_int_to_string
 from .sensor import Sensors
 from .smawebconnect import SMAwebconnect
 from .smaennexos import SMAennexos
+from .smaspeedwireem import SMAspeedwireEM
 from .device import Device
 _LOGGER = logging.getLogger(__name__)
 
@@ -55,5 +56,7 @@ def getDevice(session: ClientSession,
             return SMAwebconnect(session, url, password=password, group=groupuser)
         elif (accessmethod == "ennexos"):
             return SMAennexos(session, url, password=password, group=groupuser)
+        elif (accessmethod == "speedwire"):
+              return SMAspeedwireEM()
         else:
              return None

@@ -82,7 +82,7 @@ async def main():
 #    parser.add_argument("user", choices=["user", "installer"], help="Login username")
     parser.add_argument("user", help="Login Group- or Username (user or installer for Webconnect)")
     parser.add_argument("password", help="Login password")
-    parser.add_argument("access", choices=["webconnect", "ennexos"], help="Login password")
+    parser.add_argument("access", choices=["webconnect", "ennexos","speedwire"], help="Login password")
 
     args = parser.parse_args()
 

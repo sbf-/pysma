@@ -2,22 +2,18 @@ import socket
 import struct
 import asyncio
 import copy
-import json
 import logging
+import binascii
 from typing import Any, Dict, Optional
-from .speedwiredecoder import decode_speedwire
 
 # https://www.unifox.at/software/sma-em-daemon/
 # https://cdn.sma.de/fileadmin/content/www.developer.sma.de/docs/EMETER-Protokoll-TI-en-10.pdf?v=1699276024
 
 
-#import jmespath  # type: ignore
-from aiohttp import ClientSession, ClientTimeout, client_exceptions, hdrs
 from .sensor import Sensor
 from .const import Identifier
 
 from .exceptions import (
-    SmaAuthenticationException,
     SmaConnectionException,
     SmaReadException,
 )
@@ -25,100 +21,77 @@ from .helpers import version_int_to_string
 from .sensor import Sensors
 from .device import Device
 
-'''
-        metering_power_supplied,
-        metering_power_absorbed,
-        metering_frequency,
-        metering_total_yield,
-        metering_total_absorbed,
-        metering_current_l1,
-        metering_current_l2,
-        metering_current_l3,
-        metering_voltage_l1,
-        metering_voltage_l2,
-        metering_voltage_l3,
-        metering_active_power_feed_l1,
-        metering_active_power_feed_l2,
-        metering_active_power_feed_l3,
-        metering_active_power_draw_l1,
-        metering_active_power_draw_l2,
-        metering_active_power_draw_l3,
-        metering_current_consumption,
-        metering_total_consumption,
-'''
-
-
 obis2sensor= [
-    # 4 actucal / current
-    # 8 counter / sum
+    # 4 actucal / current => 8 Bytes
+    # 8 counter / sum => 12 Bytes
 
-Sensor("1:4:0", None), # p consume
-Sensor("1:8:0", None),
-Sensor("2:4:0", None), # p supply
-Sensor("2:8:0", None),
-Sensor("3:4:0", None), # q consume
-Sensor("3:8:0", None),
-Sensor("4:4:0", None), # q supply
-Sensor("4:8:0", None),
-Sensor("9:4:0", None), # s consume
-Sensor("9:8:0", None),
-Sensor("10:4:0", None), # s supply
-Sensor("10:8:0", None),
-Sensor("13:4:0", None), # cospi
-Sensor("14:4:0", None), # freq
+    Sensor("1:4:0", Identifier.metering_power_absorbed, factor=10, unit="W"), # p consume
+    Sensor("1:8:0", Identifier.metering_total_absorbed, factor=3600000, unit="kWh"),
+    Sensor("2:4:0", Identifier.metering_power_supplied, factor=10, unit="W"), # p supply
+    Sensor("2:8:0", Identifier.metering_total_yield, factor=3600000, unit="kWh", ),
+    Sensor("3:4:0", None), # q consume
+    Sensor("3:8:0", None),
+    Sensor("4:4:0", None), # q supply
+    Sensor("4:8:0", None),
+    Sensor("9:4:0", None), # s consume
+    Sensor("9:8:0", None),
+    Sensor("10:4:0", None), # s supply
+    Sensor("10:8:0", None),
+    Sensor("13:4:0", None), # cospi
+    Sensor("14:4:0", Identifier.metering_frequency, factor=1000, unit="Hz"), # freq
 
-# Phase 1
+    # Phase 1
 
-Sensor("21:4:0", Identifier.metering_active_power_draw_l1),
-Sensor("21:8:0", None),
-Sensor("22:4:0", Identifier.metering_active_power_feed_l1),
-Sensor("22:8:0", None),
-Sensor("23:4:0", None),
-Sensor("23:8:0", None),
-Sensor("24:4:0", None),
-Sensor("24:8:0", None),
-Sensor("29:4:0", None),
-Sensor("29:8:0", None),
-Sensor("30:4:0", None),
-Sensor("30:8:0", None),
-Sensor("31:4:0", Identifier.metering_current_l1),
-Sensor("32:4:0", Identifier.metering_voltage_l1),
-Sensor("33:4:0", None), #cosphi1
+    Sensor("21:4:0", Identifier.metering_active_power_draw_l1, factor=10, unit="W"),
+    Sensor("21:8:0", None),
+    Sensor("22:4:0", Identifier.metering_active_power_feed_l1, factor=10, unit="W"),
+    Sensor("22:8:0", None),
+    Sensor("23:4:0", None),
+    Sensor("23:8:0", None),
+    Sensor("24:4:0", None),
+    Sensor("24:8:0", None),
+    Sensor("29:4:0", None),
+    Sensor("29:8:0", None),
+    Sensor("30:4:0", None),
+    Sensor("30:8:0", None),
+    Sensor("31:4:0", Identifier.metering_current_l1, factor=1000, unit="A"),
+    Sensor("32:4:0", Identifier.metering_voltage_l1, factor=1000, unit="V"),
+    Sensor("33:4:0", None), #cosphi1
 
-# Phase 2
+    # Phase 2
 
-Sensor("41:4:0", None),
-Sensor("41:8:0", None),
-Sensor("42:4:0", None),
-Sensor("42:8:0", None),
-Sensor("43:4:0", None),
-Sensor("43:8:0", None),
-Sensor("44:4:0", None),
-Sensor("44:8:0", None),
-Sensor("49:4:0", None),
-Sensor("49:8:0", None),
-Sensor("50:4:0", None),
-Sensor("50:8:0", None),
-Sensor("51:4:0", None),
-Sensor("52:4:0", None),
-Sensor("53:4:0", None),
+    Sensor("41:4:0", Identifier.metering_active_power_draw_l2, factor=10, unit="W"),
+    Sensor("41:8:0", None),
+    Sensor("42:4:0", Identifier.metering_active_power_feed_l2, factor=10, unit="W"),
+    Sensor("42:8:0", None),
+    Sensor("43:4:0", None),
+    Sensor("43:8:0", None),
+    Sensor("44:4:0", None),
+    Sensor("44:8:0", None),
+    Sensor("49:4:0", None),
+    Sensor("49:8:0", None),
+    Sensor("50:4:0", None),
+    Sensor("50:8:0", None),
+    Sensor("51:4:0", Identifier.metering_current_l2, factor=1000, unit="A"),
+    Sensor("52:4:0", Identifier.metering_voltage_l2, factor=1000, unit="V"),
+    Sensor("53:4:0", None),
 
-# Phase 3
-Sensor("61:4:0", None),
-Sensor("61:8:0", None),
-Sensor("62:4:0", None),
-Sensor("62:8:0", None),
-Sensor("63:4:0", None),
-Sensor("63:8:0", None),
-Sensor("64:4:0", None),
-Sensor("64:8:0", None),
-Sensor("69:4:0", None),
-Sensor("69:8:0", None),
-Sensor("70:4:0", None),
-Sensor("70:8:0", None),
-Sensor("71:4:0", None),
-Sensor("72:4:0", None),
-Sensor("73:4:0", None)
+    # Phase 3
+    Sensor("61:4:0", Identifier.metering_active_power_draw_l3, factor=10, unit="W"),
+    Sensor("61:8:0", None),
+    Sensor("62:4:0", Identifier.metering_active_power_feed_l3, factor=10, unit="W"),
+    Sensor("62:8:0", None),
+    Sensor("63:4:0", None),
+    Sensor("63:8:0", None),
+    Sensor("64:4:0", None),
+    Sensor("64:8:0", None),
+    Sensor("69:4:0", None),
+    Sensor("69:8:0", None),
+    Sensor("70:4:0", None),
+    Sensor("70:8:0", None),
+    Sensor("71:4:0", Identifier.metering_current_l3, factor=1000, unit="A"),
+    Sensor("72:4:0", Identifier.metering_voltage_l3, factor=1000, unit="V"),
+    Sensor("73:4:0", None)
 ]
 
 
@@ -177,6 +150,7 @@ class SMAspeedwireEM(Device):
 
         for s in obis2sensor:
             if s.name is not None:
+                # TODO copy.copy missing
                 device_sensors.add(s) 
 
         return device_sensors
@@ -203,10 +177,14 @@ class SMAspeedwireEM(Device):
             data=self._decode(self._sock.recv(608))
             if data:
                 break
-
+        # TODO raise SmaConnectionException or SmaReadException if no connection after 4 tries
+            
         for sensor in sensors:
           if (sensor.key in data):
-              sensor.value = data[sensor.key]
+              value = data[sensor.key]
+              if (sensor.factor):
+                  value /= sensor.factor
+              sensor.value = value
           else:
               notfound.append(sensor.key)
 
@@ -234,11 +212,19 @@ class SMAspeedwireEM(Device):
             "name": data["device"],
             "type": data["susyid"],
             "manufacturer": "SMA",
-            "sw_version": "x",
+            "sw_version": data["sw_version"],
         }
         return device_info
 
     def _decode(self, p : bytes):
+        """Decode a Speedwire-Packet
+
+        Args:
+            p: Network-Packet
+
+        Returns:
+            dict: Dict with all the decoded information
+        """
         if p[0:4] != b"SMA\0":
             return None
         protocolID = int.from_bytes(p[16:18], byteorder="big")
@@ -255,17 +241,21 @@ class SMAspeedwireEM(Device):
         length = int.from_bytes(p[12:14], byteorder="big") + 16
         pos = 28
         while pos < length:
+            value = None
             mchannel = int.from_bytes(p[pos: pos + 1], byteorder="big")
             mvalueindex = int.from_bytes(p[pos + 1: pos + 2], byteorder="big")
             mtyp = int.from_bytes(p[pos + 2: pos + 3], byteorder="big")
             mtariff = int.from_bytes(p[pos + 3: pos + 4], byteorder="big")
+            obis = f'{mvalueindex}:{mtyp}:{mtariff}'
             if mtyp in [4,8]:
                 value = int.from_bytes(p[pos + 4 : pos + 4 + mtyp], byteorder="big")
                 pos += 4 + mtyp
+            elif mchannel == 144 and mtyp == 0:
+                value = f"{p[pos + 4]}.{p[pos + 5]}.{p[pos + 6]}.{chr(p[pos + 7])}"
+                obis= "sw_version"
+                pos += 4 + 4
             else:
-                # Unknown mtyp
-                pos += 4 + mtyp
-
-            obis = f'{mvalueindex}:{mtyp}:{mtariff}'
+                print(mchannel, mvalueindex, mtyp, mtariff)
+                pos += 4 + 4
             data[obis] = value
         return data

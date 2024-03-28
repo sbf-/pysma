@@ -35,7 +35,99 @@ from .exceptions import (
 from .helpers import version_int_to_string
 from .sensor import Sensors
 from .device import Device
+from .const import Identifier
 
+
+# TODO Identifier.voltage_l1
+ennexosSensors = [
+
+    Sensor("Coolsys.Inverter.TmpVal.1", None, factor=1, unit=None),
+    Sensor("Coolsys.Inverter.TmpVal.2", None, factor=1, unit=None),
+    Sensor("Coolsys.Inverter.TmpVal.3", None, factor=1, unit=None),
+    Sensor("DcMs.Amp.1", Identifier.pv_current_a, factor=1, unit="A"),
+    Sensor("DcMs.Amp.2", Identifier.pv_current_b, factor=1, unit="A"),
+    Sensor("DcMs.Amp.3", Identifier.pv_current_c, factor=1, unit="A"),
+    Sensor("DcMs.TotDcEnCntWh.1", None, factor=1, unit=None),
+    Sensor("DcMs.TotDcEnCntWh.2", None, factor=1, unit=None),
+    Sensor("DcMs.TotDcEnCntWh.3", None, factor=1, unit=None),
+    Sensor("DcMs.Vol.1", Identifier.pv_voltage_a, factor=1, unit="V"),
+    Sensor("DcMs.Vol.2", Identifier.pv_voltage_b, factor=1, unit="V"),
+    Sensor("DcMs.Vol.3", Identifier.pv_voltage_c, factor=1, unit="V"),
+    Sensor("DcMs.Watt.1", Identifier.pv_power_a, factor=1, unit="W"),
+    Sensor("DcMs.Watt.2", Identifier.pv_power_b, factor=1, unit="W"),
+    Sensor("DcMs.Watt.3", Identifier.pv_power_c, factor=1, unit="W"),
+    Sensor("GridGuard.Cntry", None, factor=1, unit=None),
+    Sensor("GridMs.A.phsA", Identifier.current_l1, factor=1, unit="A"),
+    Sensor("GridMs.A.phsB", Identifier.current_l2, factor=1, unit="A"),
+    Sensor("GridMs.A.phsC", Identifier.current_l3, factor=1, unit="A"),
+    Sensor("GridMs.GriTyp", None, factor=1, unit=None),
+    Sensor("GridMs.Hz", Identifier.frequency, factor=1, unit="Hz"),
+    Sensor("GridMs.PhV.phsA", None, factor=1, unit=None), 
+    Sensor("GridMs.PhV.phsA2B", None, factor=1, unit=None),
+    Sensor("GridMs.PhV.phsB", None, factor=1, unit=None),
+    Sensor("GridMs.PhV.phsB2C", None, factor=1, unit=None),
+    Sensor("GridMs.PhV.phsC", None, factor=1, unit=None),
+    Sensor("GridMs.PhV.phsC2A", None, factor=1, unit=None),
+    Sensor("GridMs.TotA", Identifier.current_total, factor=1, unit="A"),
+    Sensor("GridMs.TotPFEEI", None, factor=1, unit=None),
+    Sensor("GridMs.TotPFExt", None, factor=1, unit=None),
+    Sensor("GridMs.TotPFPrc", None, factor=1, unit=None),
+    Sensor("GridMs.TotVA", Identifier.grid_apparent_power, factor=1, unit="VA"),
+    Sensor("GridMs.TotVAr", Identifier.grid_reactive_power, factor=1, unit="var"),
+    Sensor("GridMs.TotW", Identifier.grid_power, factor=1, unit="W"),
+    Sensor("GridMs.TotW.Pv", Identifier.pv_power, factor=1, unit="W"),
+    Sensor("GridMs.VA.phsA", Identifier.grid_apparent_power_l1, factor=1, unit="VA"),
+    Sensor("GridMs.VA.phsB", Identifier.grid_apparent_power_l2, factor=1, unit="VA"),
+    Sensor("GridMs.VA.phsC", Identifier.grid_apparent_power_l3, factor=1, unit="VA"),
+    Sensor("GridMs.VAr.phsA", Identifier.grid_reactive_power_l1, factor=1, unit="var"),
+    Sensor("GridMs.VAr.phsB", Identifier.grid_reactive_power_l2, factor=1, unit="var"),
+    Sensor("GridMs.VAr.phsC", Identifier.grid_reactive_power_l3, factor=1, unit="var"),
+    Sensor("GridMs.W.phsA", Identifier.power_l1, factor=1, unit="W"),
+    Sensor("GridMs.W.phsB", Identifier.power_l2, factor=1, unit="W"),
+    Sensor("GridMs.W.phsC", Identifier.power_l3, factor=1, unit="W"),
+    Sensor("InOut.GI1", None, factor=1, unit=None),
+    Sensor("Inverter.VArModCfg.PFCtlVolCfg.Stt", None, factor=1, unit=None),
+    Sensor("Isolation.FltA", Identifier.insulation_residual_current, factor=1000, unit="mA"),
+    Sensor("Isolation.LeakRis", None, factor=1, unit="kOhm"), # TODO "pv_isolation_resistance"
+    Sensor("Metering.TotFeedTms", None, factor=1, unit=None),
+    Sensor("Metering.TotOpTms", None, factor=1, unit=None),
+    Sensor("Metering.TotWhOut", Identifier.total_yield, factor=1000, unit="kWh"),
+    Sensor("Metering.TotWhOut.Pv", Identifier.pv_gen_meter, factor=1000, unit="kWh"),
+    Sensor("Operation.BckStt", None, factor=1, unit=None),
+    Sensor("Operation.DrtStt", None, factor=1, unit=None),
+    Sensor("Operation.Evt.Dsc", None, factor=1, unit=None),
+    Sensor("Operation.Evt.EvtNo", None, factor=1, unit=None),
+    Sensor("Operation.Evt.Msg", None, factor=1, unit=None),
+    Sensor("Operation.EvtCntIstl", None, factor=1, unit=None),
+    Sensor("Operation.EvtCntUsr", None, factor=1, unit=None),
+    Sensor("Operation.GriSwCnt", None, factor=1, unit=None),
+    Sensor("Operation.GriSwStt", None, factor=1, unit=None),
+    Sensor("Operation.Health", None, factor=1, unit=None),
+    Sensor("Operation.HealthStt.Alm", None, factor=1, unit=None),
+    Sensor("Operation.HealthStt.Ok", None, factor=1, unit=None),
+    Sensor("Operation.HealthStt.Wrn", None, factor=1, unit=None),
+    Sensor("Operation.OpStt", None, factor=1, unit=None),
+    Sensor("Operation.PvGriConn", None, factor=1, unit=None),
+    Sensor("Operation.RstrLokStt", None, factor=1, unit=None),
+    Sensor("Operation.RunStt", None, factor=1, unit=None),
+    Sensor("Operation.StandbyStt", None, factor=1, unit=None),
+    Sensor("Operation.VArCtl.VArModAct", None, factor=1, unit=None),
+    Sensor("Operation.VArCtl.VArModStt", None, factor=1, unit=None),
+    Sensor("Operation.WMaxLimSrc", None, factor=1, unit=None),
+    Sensor("Operation.WMinLimSrc", None, factor=1, unit=None),
+    Sensor("PvGen.PvW", None, factor=1, unit=None),
+    Sensor("PvGen.PvWh", None, factor=1, unit=None),
+    Sensor("Spdwr.ComSocA.Stt", None, factor=1, unit=None),
+    Sensor("SunSpecSig.SunSpecTx.1", None, factor=1, unit=None),
+    Sensor("Upd.Stt", None, factor=1, unit=None),
+    Sensor("WebConn.Stt", None, factor=1, unit=None),
+    Sensor("Wl.AcqStt", None, factor=1, unit=None),
+    Sensor("Wl.AntMod", None, factor=1, unit=None),
+    Sensor("Wl.ConnStt", None, factor=1, unit=None),
+    Sensor("Wl.SigPwr", None, factor=1, unit=None),
+    Sensor("Wl.SoftAcsConnStt", None, factor=1, unit=None),
+    Sensor("Setpoint.PlantControl.InOut.GO1", None, factor=1, unit=None)
+]
 _LOGGER = logging.getLogger(__name__)
 class SMAennexos(Device):
     """Class to connect to the ennexos based SMA inverters. (e.g. Tripower X Devices)"""
@@ -90,7 +182,7 @@ class SMAennexos(Device):
             dict: json returned by device
         """
 
-        _LOGGER.debug("Sending Request to %s: %s", url, parameters)
+        #_LOGGER.debug("Sending Request to %s: %s", url, parameters)
 
         try:
                 async with self._aio_session.request(
@@ -104,7 +196,7 @@ class SMAennexos(Device):
                             f"Login failed!"
                         )
                     res = await res.json()
-                    _LOGGER.debug("Received reply %s", res)
+                   # _LOGGER.debug("Received reply %s", res)
                     return res
         except SmaAuthenticationException as e:
                 raise e
@@ -144,7 +236,7 @@ class SMAennexos(Device):
             return "V"
         if (name.endswith(".VA.")):
             return "VA"
-        _LOGGER.debug("No unit of measurement for " + name)
+    #    _LOGGER.debug("No unit of measurement for " + name)
         return ""
 
 
@@ -215,13 +307,9 @@ class SMAennexos(Device):
         """
         device_sensors = Sensors()
         ret = await self._get_livedata()
-        for s in ret.items():
-            #TODO Create correct Sensor Instances
-            device_sensors.add(Sensor(
-                s[1]["origname"], 
-                s[1]["name"], 
-                unit = self.unit_of_measurement(s[1]["origname"]), 
-                enabled = False))
+        for s in ennexosSensors:
+            if s.name:
+                device_sensors.add(copy.copy(s))
         return device_sensors
 
 
@@ -251,8 +339,11 @@ class SMAennexos(Device):
         data = await self._get_livedata()
         for sen in sensors:
             if sen.enabled:
-                if sen.name in data:
-                    sen.value = data[sen.name]["value"]
+                if sen.key in data:
+                    value = data[sen.key]["value"]
+                    if (sen.factor):
+                        value = round(value/sen.factor,4)
+                    sen.value = value
                     continue
                 notfound.append(f"{sen.name} [{sen.key}]")
 

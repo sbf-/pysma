@@ -45,6 +45,12 @@ from .smaspeedwireem import SMAspeedwireEM
 from .device import Device
 _LOGGER = logging.getLogger(__name__)
 
+
+# Backward compatibility
+def SMA(session, url, password, group):
+    return SMAwebconnect(session, url, password=password, group=group)
+
+
 def getDevice(session: ClientSession,
         url: str,
         password: Optional[str] = None,

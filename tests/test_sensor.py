@@ -5,13 +5,13 @@ from unittest.mock import patch
 
 import pytest
 
-from pysma.const import (
+from pysma.const_webconnect import (
     GENERIC_SENSORS,
     JMESPATH_VAL,
     JMESPATH_VAL_IDX,
     JMESPATH_VAL_STR,
 )
-from pysma.definitions import sensor_map
+from pysma.definitions_webconnect import sensor_map
 from pysma.sensor import Sensor, Sensors
 
 _LOGGER = logging.getLogger(__name__)

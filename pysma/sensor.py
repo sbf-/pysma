@@ -1,14 +1,27 @@
 """Sensor classes for SMA WebConnect library for Python."""
+
 import copy
 import logging
-from typing import Any, Iterator, List, Optional, Union
+from dataclasses import dataclass
+from typing import Any, Iterator, List, Optional, Union, cast
 
 import attr
 import jmespath  # type: ignore
 
-from .const import JMESPATH_VAL, JMESPATH_VAL_IDX, JMESPATH_VAL_STR
+from .const_webconnect import JMESPATH_VAL, JMESPATH_VAL_IDX, JMESPATH_VAL_STR
 
 _LOGGER = logging.getLogger(__name__)
+
+
+@dataclass
+class Sensor_Range:
+    typ: str
+    values: list[int]
+    editable: bool
+
+    def __str__(self) -> str:
+        """String Function."""
+        return f"{self.typ} {self.values} {self.editable}"
 
 
 @attr.s(slots=True)
@@ -18,14 +31,17 @@ class Sensor:
     # pylint: disable=too-many-instance-attributes
     # pylint: disable=too-few-public-methods
     key: str = attr.ib()
-    name: str = attr.ib()
-    unit: str = attr.ib(default=None)
+    name: str | None = attr.ib()
+    unit: str | None = attr.ib(default=None)
     factor: int = attr.ib(default=None)
     path: Union[list, tuple] = attr.ib(default=None)
     enabled: bool = attr.ib(default=True)
     l10n_translate: bool = attr.ib(default=False)
     value: Any = attr.ib(default=None, init=False)
     key_idx: int = attr.ib(default=0, repr=False, init=False)
+    mapper: dict[int, str] = attr.ib(default=None, repr=False)
+    mapped_value: Any = attr.ib(default=None, init=False)
+    range: Sensor_Range = attr.ib(default=None, init=False)
 
     def __attrs_post_init__(self) -> None:
         """Post init Sensor."""
@@ -130,7 +146,7 @@ class Sensors:
         """
         return len(self.__s)
 
-    def __contains__(self, key: Union[str, Sensor]) -> bool:
+    def __contains__(self, key: Sensor | str) -> bool:
         """Check if a sensor is defined.
 
         Args:
@@ -140,7 +156,10 @@ class Sensors:
             bool: [description]
         """
         if isinstance(key, Sensor):
-            key = key.name
+            sen = cast(Sensor, key)
+            if not sen.name:
+                return False
+            key = sen.name
 
         try:
             if self[key]:
@@ -195,9 +214,9 @@ class Sensors:
         if isinstance(sensor, Sensor):
             sensor = copy.copy(sensor)
         else:
-            raise TypeError("pysma.Sensor expected")
+            raise TypeError(f"pysma.Sensor expected {type(sensor)} {sensor}")
 
-        if sensor.name in self:
+        if sensor.name and sensor.name in self:
             old = self[sensor.name]
             self.__s.remove(old)
             _LOGGER.warning("Replacing sensor %s with %s", old, sensor)
@@ -208,3 +227,7 @@ class Sensors:
             )
 
         self.__s.append(sensor)
+
+    def __str__(self) -> str:
+        """Return the dict as string."""
+        return str(self.__s)

@@ -1,0 +1,4071 @@
+[
+    {
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "channelId": "Parameter.Inverter.CtlComCfg.WCtlCom.GraFlbMod",
+                "editable": true,
+                "possibleValues": [
+                    "303",
+                    "5314",
+                    "5315"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.456Z",
+                "value": "303"
+            },
+            {
+                "channelId": "Parameter.Inverter.DGSModCfg.DGSFlCfg.FltEnd.ArGraMax",
+                "editable": true,
+                "max": 5000,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.408Z",
+                "value": "2500"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.PFCnstCfg.PFOut",
+                "editable": true,
+                "max": 1,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.433Z",
+                "value": "1.0000"
+            },
+            {
+                "channelId": "Parameter.Metering.TotkWhOutSet",
+                "editable": true,
+                "max": 4000000,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.407Z",
+                "value": "0"
+            },
+            {
+                "channelId": "Parameter.FTPPush.RemStoLcn",
+                "editable": true,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:08.467Z",
+                "value": ""
+            },
+            {
+                "channelId": "Parameter.Nameplate.CmpMain.SwRev",
+                "editable": false,
+                "state": "Confirmed",
+                "timestamp": "2024-04-03T12:07:59.152Z",
+                "value": "02.24.04.R"
+            },
+            {
+                "channelId": "Parameter.GridGuard.Cntry.AMaxOfsNom",
+                "editable": true,
+                "max": 100,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.420Z",
+                "value": "1.000"
+            },
+            {
+                "channelId": "Parameter.Inverter.WCtlHzModCfg.WCtlHzCfg.HzUnGra[]",
+                "editable": true,
+                "max": 0,
+                "min": -200,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.430Z",
+                "values": [
+                    "-40.000",
+                    "-40.000",
+                    "-40.000"
+                ]
+            },
+            {
+                "channelId": "Parameter.Inverter.WCtlHzModCfg.WGraPos",
+                "editable": true,
+                "max": 1000,
+                "min": 0.01,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.457Z",
+                "value": "20.00"
+            },
+            {
+                "channelId": "Parameter.Inverter.DGSModCfg.DGSFlCfg.DbVMaxPu",
+                "editable": true,
+                "max": 1.2,
+                "min": 1,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.413Z",
+                "value": "1.10"
+            },
+            {
+                "channelId": "Parameter.GridGuard.Cntry.VolCtl.ReconMaxPu",
+                "editable": true,
+                "max": 2,
+                "min": 1,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.414Z",
+                "value": "1.100"
+            },
+            {
+                "channelId": "Parameter.Inverter.AfciIsOn",
+                "editable": true,
+                "possibleValues": [
+                    "1129",
+                    "1130"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.408Z",
+                "value": "1130"
+            },
+            {
+                "channelId": "Parameter.Inverter.CtlComCfg.VArCtlVolCom.FlbVolRefPu",
+                "editable": true,
+                "max": 2,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.428Z",
+                "value": "0.00"
+            },
+            {
+                "channelId": "Parameter.Inverter.WModCfg.WCtlVolCfg.Crv.YVal[]",
+                "editable": true,
+                "max": 100,
+                "min": -100,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.440Z",
+                "values": [
+                    "100.000",
+                    "0.000",
+                    "0.000",
+                    "0.000",
+                    "0.000",
+                    "0.000",
+                    "0.000",
+                    "0.000"
+                ]
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.VArCtlWCfg.Dyn.ActTms",
+                "editable": true,
+                "max": 1000,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.440Z",
+                "value": "0"
+            },
+            {
+                "channelId": "Parameter.Inverter.CtlComCfg.WCtlCom.FlbWMinNom",
+                "editable": true,
+                "max": 100,
+                "min": -100,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.456Z",
+                "value": "0.00"
+            },
+            {
+                "channelId": "Parameter.Inverter.DGSModCfg.DGSFlCfg.ArMaxSwell",
+                "editable": true,
+                "max": 150,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.408Z",
+                "value": "100"
+            },
+            {
+                "channelId": "Parameter.Inverter.WModCfg.GriSwOpnZerW",
+                "editable": true,
+                "possibleValues": [
+                    "1129",
+                    "1130"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.442Z",
+                "value": "1130"
+            },
+            {
+                "channelId": "Parameter.Operation.CtrlType",
+                "editable": true,
+                "possibleValues": [
+                    "295",
+                    "443"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.407Z",
+                "value": "295"
+            },
+            {
+                "channelId": "Parameter.Inverter.DGSModCfg.DGSFlCfg.DbVMinPu",
+                "editable": true,
+                "max": 1,
+                "min": 0.8,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.413Z",
+                "value": "0.90"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.VArCfg.Dyn.VArTms",
+                "editable": true,
+                "max": 1000,
+                "min": 0.01,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.432Z",
+                "value": "10.00"
+            },
+            {
+                "channelId": "Parameter.Inverter.PFMinQ4Rtg",
+                "editable": false,
+                "max": 0.4,
+                "min": 0.4,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.428Z",
+                "value": "0.4000"
+            },
+            {
+                "channelId": "Parameter.Inverter.CtlComCfg.VArCtlCom.CtlComMssMod",
+                "editable": true,
+                "possibleValues": [
+                    "2506",
+                    "2507"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.428Z",
+                "value": "2507"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.VArCtlWCfg.Crv.XVal[]",
+                "editable": true,
+                "max": 100,
+                "min": -100,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.435Z",
+                "values": [
+                    "50.000",
+                    "60.000",
+                    "90.000",
+                    "100.000",
+                    "100.000",
+                    "100.000",
+                    "100.000",
+                    "100.000"
+                ]
+            },
+            {
+                "channelId": "Parameter.FTPPush.Pwd",
+                "editable": true,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:08.466Z",
+                "value": "****"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.PFCnstCfg.PFIn",
+                "editable": true,
+                "max": 1,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.433Z",
+                "value": "1.0000"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArMaxQ1Rtg",
+                "editable": false,
+                "max": 14850,
+                "min": 14850,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.449Z",
+                "value": "14850"
+            },
+            {
+                "channelId": "Parameter.Inverter.CtlComCfg.PFCtlCom.FlbPF",
+                "editable": true,
+                "max": 1,
+                "min": 0.4,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.428Z",
+                "value": "1.0000"
+            },
+            {
+                "channelId": "Parameter.Inverter.WCtlHzModCfg.WCtlHzCfg.WCtlTmms",
+                "editable": true,
+                "max": 60000,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.431Z",
+                "value": "0"
+            },
+            {
+                "channelId": "Parameter.Inverter.WGraConnEna",
+                "editable": true,
+                "possibleValues": [
+                    "303",
+                    "308"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.442Z",
+                "value": "308"
+            },
+            {
+                "channelId": "Parameter.Nameplate.MainModel",
+                "editable": false,
+                "possibleValues": [
+                    "8001"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:09.693Z",
+                "value": "8001"
+            },
+            {
+                "channelId": "Parameter.Wl.Sec.Psk",
+                "editable": true,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:06.850Z",
+                "value": "****"
+            },
+            {
+                "channelId": "Parameter.GridGuard.Cntry.Aid.AsymDet.AsymMax",
+                "editable": true,
+                "max": 50,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.412Z",
+                "value": "50"
+            },
+            {
+                "channelId": "Parameter.Nameplate.CmpCom.SusyId",
+                "editable": false,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:31.011Z",
+                "value": "427"
+            },
+            {
+                "channelId": "Parameter.Inverter.WModCfg.WCnstCfg.W",
+                "editable": true,
+                "max": 15000,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.433Z",
+                "value": "15000"
+            },
+            {
+                "channelId": "Parameter.Inverter.WCtlHzModCfg.WGraNeg",
+                "editable": true,
+                "max": 1000,
+                "min": 0.01,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.457Z",
+                "value": "20.00"
+            },
+            {
+                "channelId": "Parameter.Spdwr.AutoCfgIsOn",
+                "editable": true,
+                "possibleValues": [
+                    "1130"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:19:59.396Z",
+                "value": "1130"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.ImpCpn.CapacRis",
+                "editable": true,
+                "max": 40000000.0,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.435Z",
+                "value": "0.00"
+            },
+            {
+                "channelId": "Parameter.Acs.PwdIstl",
+                "editable": true,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:21.800Z",
+                "value": "****"
+            },
+            {
+                "channelId": "Parameter.Inverter.DGSModCfg.DGSFlCfg.StepVolPu",
+                "editable": true,
+                "max": 0.2,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.412Z",
+                "value": "0.03"
+            },
+            {
+                "channelId": "Parameter.GridGuard.Cntry.VolCtl.RproPu",
+                "editable": true,
+                "max": 2,
+                "min": 1,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.414Z",
+                "value": "1.100"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.InWNomLimAct",
+                "editable": true,
+                "max": 100,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.444Z",
+                "value": "5.000"
+            },
+            {
+                "channelId": "Parameter.Inverter.WCtlHzModCfg.WCtlHzCfg.HzStopWGraTms",
+                "editable": true,
+                "max": 1600,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.431Z",
+                "value": "0.0"
+            },
+            {
+                "channelId": "Parameter.Nameplate.SerNum",
+                "editable": false,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:09.849Z",
+                "value": "3016252003"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.VArCtlWCfg.Dyn.VArGraEna",
+                "editable": true,
+                "possibleValues": [
+                    "303",
+                    "308"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.437Z",
+                "value": "303"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.ImpCpn.InducRis",
+                "editable": true,
+                "max": 10,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.435Z",
+                "value": "0.0000"
+            },
+            {
+                "channelId": "Parameter.Inverter.CtlComCfg.VArCtlCom.TmsOut",
+                "editable": true,
+                "max": 1800,
+                "min": 1,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.428Z",
+                "value": "600.0"
+            },
+            {
+                "channelId": "Parameter.Spdwr.ActlSnetMsk",
+                "editable": false,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:19:59.396Z",
+                "value": "255.255.255.0"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.VArCnstCfg.VAr",
+                "editable": true,
+                "max": 50000,
+                "min": -50000,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.432Z",
+                "value": "0"
+            },
+            {
+                "channelId": "Parameter.Upd.AutoUpdIsOn",
+                "editable": true,
+                "possibleValues": [
+                    "1129",
+                    "1130"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:19:55.428Z",
+                "value": "1129"
+            },
+            {
+                "channelId": "Parameter.Inverter.WModCfg.WCtlVolCfg.ActTms",
+                "editable": true,
+                "max": 1000,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.440Z",
+                "value": "0.0"
+            },
+            {
+                "channelId": "Parameter.DcCfg.StopVol[]",
+                "editable": true,
+                "max": 1000,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.409Z",
+                "values": [
+                    "100.00",
+                    "100.00",
+                    "100.00"
+                ]
+            },
+            {
+                "channelId": "Parameter.GridGuard.Cntry.FrqCtl.SwMax",
+                "editable": true,
+                "max": 66,
+                "min": 50,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.444Z",
+                "value": "66.00"
+            },
+            {
+                "channelId": "Parameter.Inverter.WCtlHzModCfg.HzFilTmEna",
+                "editable": true,
+                "possibleValues": [
+                    "303",
+                    "308"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.444Z",
+                "value": "308"
+            },
+            {
+                "channelId": "Parameter.GridGuard.Cntry.VolCtl.MaxPeakPu",
+                "editable": true,
+                "max": 3,
+                "min": 1.5,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.420Z",
+                "value": "1.780"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.VArCtlVolCfg.Dyn.VArGraEna",
+                "editable": true,
+                "possibleValues": [
+                    "303",
+                    "308"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.437Z",
+                "value": "303"
+            },
+            {
+                "channelId": "Parameter.GridGuard.Cntry.FrqCtl.SwMaxTmms",
+                "editable": true,
+                "max": 1000000,
+                "min": 40,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.444Z",
+                "value": "1000000"
+            },
+            {
+                "channelId": "Parameter.Inverter.DGSModCfg.ZerCurOvVolPu",
+                "editable": true,
+                "max": 1.4,
+                "min": 1,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.413Z",
+                "value": "1.15"
+            },
+            {
+                "channelId": "Parameter.Wl.ActlSnetMsk",
+                "editable": false,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:19:59.397Z",
+                "value": "255.255.0.0"
+            },
+            {
+                "channelId": "Parameter.Inverter.DGSModCfg.DGSFlCfg.ArMaxSag",
+                "editable": true,
+                "max": 150,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.408Z",
+                "value": "100"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.VArCtlWCfg.Crv.NumPt",
+                "editable": true,
+                "max": 8,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.435Z",
+                "value": "4"
+            },
+            {
+                "channelId": "Parameter.Spdwr.ActlIp",
+                "editable": false,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:19:59.396Z",
+                "value": "192.168.2.81"
+            },
+            {
+                "channelId": "Parameter.Inverter.WModCfg.WMod",
+                "editable": true,
+                "possibleValues": [
+                    "303",
+                    "1077",
+                    "1078",
+                    "1079"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.428Z",
+                "value": "1079"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.VArCtlVolCfg.VolRef.AutnAdjTms",
+                "editable": true,
+                "max": 100000,
+                "min": 1,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.428Z",
+                "value": "300"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.VArCtlWCfg.Trg.DsaUnVolPu",
+                "editable": true,
+                "max": 2,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.444Z",
+                "value": "0.00"
+            },
+            {
+                "channelId": "Parameter.Inverter.CtlComCfg.PFCtlCom.TmsOut",
+                "editable": true,
+                "max": 1800,
+                "min": 1,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.428Z",
+                "value": "600.0"
+            },
+            {
+                "channelId": "Parameter.Inverter.WModCfg.WCtlComCfg.Dyn.WGraEna",
+                "editable": true,
+                "possibleValues": [
+                    "303",
+                    "308"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.433Z",
+                "value": "308"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.InWNomLimDeAct",
+                "editable": true,
+                "max": 100,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.444Z",
+                "value": "5.000"
+            },
+            {
+                "channelId": "Parameter.Inverter.WMaxIn",
+                "editable": true,
+                "max": -1000,
+                "min": -1000,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.426Z",
+                "value": "-1000"
+            },
+            {
+                "channelId": "Parameter.Nameplate.ARtg",
+                "editable": false,
+                "max": 100,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.408Z",
+                "value": "21.700"
+            },
+            {
+                "channelId": "Parameter.GridGuard.Cntry.VolCtl.ReconMinPu",
+                "editable": true,
+                "max": 1,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.416Z",
+                "value": "0.850"
+            },
+            {
+                "channelId": "Parameter.DtTm.NtpSrv",
+                "editable": true,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:07.435Z",
+                "value": ""
+            },
+            {
+                "channelId": "Parameter.Inverter.WModCfg.WCtlComCfg.Dyn.WTms",
+                "editable": true,
+                "max": 1000,
+                "min": 0.01,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.433Z",
+                "value": "3.00"
+            },
+            {
+                "channelId": "Parameter.Inverter.DGSModCfg.DGSFlCfg.ArGraNegSeq",
+                "editable": true,
+                "max": 10,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.408Z",
+                "value": "2.00"
+            },
+            {
+                "channelId": "Parameter.GridGuard.Cntry.FrqCtl.Min",
+                "editable": true,
+                "max": 60,
+                "min": 44,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.419Z",
+                "value": "44.00"
+            },
+            {
+                "channelId": "Parameter.DcCfg.StrVol[]",
+                "editable": true,
+                "max": 1000,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.409Z",
+                "values": [
+                    "188.00",
+                    "188.00",
+                    "188.00"
+                ]
+            },
+            {
+                "channelId": "Parameter.Inverter.PFMinQ3Rtg",
+                "editable": false,
+                "max": 0.4,
+                "min": 0.4,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.428Z",
+                "value": "0.4000"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.VArModInFlb",
+                "editable": true,
+                "possibleValues": [
+                    "303",
+                    "1069",
+                    "1071",
+                    "1073",
+                    "1074",
+                    "1076",
+                    "4562",
+                    "4583"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.434Z",
+                "value": "4583"
+            },
+            {
+                "channelId": "Parameter.Nameplate.CmpCom.SerNum",
+                "editable": false,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:31.010Z",
+                "value": "3015896629"
+            },
+            {
+                "channelId": "Parameter.Wl.ActlDnsSrvIp",
+                "editable": false,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:19:59.397Z",
+                "value": "172.22.0.3"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.VArCnstCfgIn.VAr",
+                "editable": true,
+                "max": 50000,
+                "min": -50000,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.432Z",
+                "value": "0"
+            },
+            {
+                "channelId": "Parameter.Operation.StrTms",
+                "editable": true,
+                "max": 10000,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.408Z",
+                "value": "0"
+            },
+            {
+                "channelId": "Parameter.GridGuard.Cntry.VolCtl.lLimPu",
+                "editable": true,
+                "max": 1,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.414Z",
+                "value": "0.800"
+            },
+            {
+                "channelId": "Parameter.Inverter.WCtlHzModCfg.WCtlHzCfg.HzUnStop",
+                "editable": true,
+                "max": 60,
+                "min": 44,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.430Z",
+                "value": "49.800"
+            },
+            {
+                "channelId": "Parameter.GridGuard.Cntry.FrqCtl.ReconMax",
+                "editable": true,
+                "max": 66,
+                "min": 50,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.419Z",
+                "value": "50.10"
+            },
+            {
+                "channelId": "Parameter.Plnt.VARtg",
+                "editable": true,
+                "max": 4000000000.0,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.428Z",
+                "value": "15000"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.VArCtlWCfg.Trg.EnaVolPu",
+                "editable": true,
+                "max": 2,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.441Z",
+                "value": "0.00"
+            },
+            {
+                "channelId": "Parameter.Inverter.WCtlHzModCfg.RefModOv",
+                "editable": true,
+                "possibleValues": [
+                    "4354",
+                    "4443",
+                    "4444",
+                    "5249"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.430Z",
+                "value": "4443"
+            },
+            {
+                "channelId": "Parameter.Operation.ManRstr.ManRstrRCD",
+                "editable": true,
+                "possibleValues": [
+                    "303",
+                    "308"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.444Z",
+                "value": "303"
+            },
+            {
+                "channelId": "Parameter.Inverter.WModCfg.WCtlComCfg2.Dyn.WGraNeg",
+                "editable": true,
+                "max": 1000,
+                "min": 0.01,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.437Z",
+                "value": "0.50"
+            },
+            {
+                "channelId": "Parameter.GridGuard.Cntry.VolCtl.ConnMaxPu",
+                "editable": true,
+                "max": 2,
+                "min": 1,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.446Z",
+                "value": "1.100"
+            },
+            {
+                "channelId": "Parameter.Inverter.PFMinQ4",
+                "editable": true,
+                "max": 1,
+                "min": 0.4,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.428Z",
+                "value": "0.4000"
+            },
+            {
+                "channelId": "Parameter.Inverter.NConn",
+                "editable": true,
+                "possibleValues": [
+                    "1129",
+                    "1130",
+                    "1438"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.446Z",
+                "value": "1129"
+            },
+            {
+                "channelId": "Parameter.Inverter.DGSModCfg.DGSFlCfg.AWattPrioEna",
+                "editable": true,
+                "possibleValues": [
+                    "303",
+                    "308"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.448Z",
+                "value": "303"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArGraConn",
+                "editable": true,
+                "max": 10000,
+                "min": 1,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.444Z",
+                "value": "1"
+            },
+            {
+                "channelId": "Parameter.Spdwr.IgmpQryTms",
+                "editable": true,
+                "max": 31744,
+                "min": 11,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:07.809Z",
+                "value": "125"
+            },
+            {
+                "channelId": "Parameter.Inverter.WGraReconEna",
+                "editable": true,
+                "possibleValues": [
+                    "303",
+                    "308"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.437Z",
+                "value": "308"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.VArCtlVolCfg.Dyn.VArTmsPrc",
+                "editable": true,
+                "max": 1000,
+                "min": 1,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.420Z",
+                "value": "10.00"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArLimVolCfg.Ena",
+                "editable": true,
+                "possibleValues": [
+                    "303",
+                    "308"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.430Z",
+                "value": "303"
+            },
+            {
+                "channelId": "Parameter.Inverter.WModCfg.WCtlComCfg.Dyn.WGraNeg",
+                "editable": true,
+                "max": 1000,
+                "min": 0.01,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.434Z",
+                "value": "0.50"
+            },
+            {
+                "channelId": "Parameter.Inverter.DGSModCfg.ZerCurUnVolTmms",
+                "editable": true,
+                "max": 5000,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.446Z",
+                "value": "0"
+            },
+            {
+                "channelId": "Parameter.FTPPush.UpldCyc",
+                "editable": true,
+                "possibleValues": [
+                    "1188",
+                    "1189"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:08.465Z",
+                "value": "1189"
+            },
+            {
+                "channelId": "Parameter.Nameplate.CmpCom.Rev",
+                "editable": false,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:09.708Z",
+                "value": "0"
+            },
+            {
+                "channelId": "Parameter.GridMs.GriTyp",
+                "editable": false,
+                "possibleValues": [
+                    "18007"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:44.027Z",
+                "value": "18007"
+            },
+            {
+                "channelId": "Parameter.Inverter.PFMinQ3",
+                "editable": true,
+                "max": 1,
+                "min": 0.4,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.428Z",
+                "value": "0.4000"
+            },
+            {
+                "channelId": "Parameter.Inverter.FliSel",
+                "editable": false,
+                "possibleValues": [
+                    "302",
+                    "3889",
+                    "5387"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.456Z",
+                "value": "3889"
+            },
+            {
+                "channelId": "Parameter.GridGuard.Cntry.VolCtl.hhLimPu",
+                "editable": true,
+                "max": 2,
+                "min": 1,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.414Z",
+                "value": "2.000"
+            },
+            {
+                "channelId": "Parameter.Operation.OpMod",
+                "editable": true,
+                "possibleValues": [
+                    "381",
+                    "1467"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.407Z",
+                "value": "1467"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.PFCtlWCfg.Trg.DsaVolPu",
+                "editable": true,
+                "max": 2,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.438Z",
+                "value": "0.00"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.PFCtlWCfg.Dyn.ActTms",
+                "editable": true,
+                "max": 1000,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.441Z",
+                "value": "0"
+            },
+            {
+                "channelId": "Parameter.Nameplate.Location",
+                "editable": true,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:09.688Z",
+                "value": "WR X15"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.PFCtlVolCfg.Dyn.VArGraEna",
+                "editable": true,
+                "possibleValues": [
+                    "303",
+                    "308"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.442Z",
+                "value": "303"
+            },
+            {
+                "channelId": "Parameter.Inverter.PFMinQ2",
+                "editable": true,
+                "max": 1,
+                "min": 0.4,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.428Z",
+                "value": "0.4000"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArMaxQ3Rtg",
+                "editable": false,
+                "max": -14850,
+                "min": -14850,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.449Z",
+                "value": "-14850"
+            },
+            {
+                "channelId": "Parameter.GridGuard.Cntry.VolCtl.RproTmms",
+                "editable": true,
+                "max": 10000,
+                "min": 40,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.414Z",
+                "value": "40"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.PFCtlWCfg.Dyn.VArGraEna",
+                "editable": true,
+                "possibleValues": [
+                    "303",
+                    "308"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.437Z",
+                "value": "303"
+            },
+            {
+                "channelId": "Parameter.GridGuard.Cntry.VolCtl.hLimTmms",
+                "editable": true,
+                "max": 1000000,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.414Z",
+                "value": "100"
+            },
+            {
+                "channelId": "Parameter.Inverter.WCtlHzModCfg.WCtlHzCfg.HzStopWGra",
+                "editable": true,
+                "max": 10000,
+                "min": 1,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.431Z",
+                "value": "9"
+            },
+            {
+                "channelId": "Parameter.Inverter.WCtlHzModCfg.WCtlHzCfg.HzOv[]",
+                "editable": true,
+                "max": 66,
+                "min": 50,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.430Z",
+                "values": [
+                    "50.200",
+                    "66.000",
+                    "66.000"
+                ]
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.PFCfg.Dyn.WFilTmEna",
+                "editable": true,
+                "possibleValues": [
+                    "303",
+                    "308"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.433Z",
+                "value": "303"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.VArNomRefMod",
+                "editable": true,
+                "possibleValues": [
+                    "4405",
+                    "4406",
+                    "5335"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.428Z",
+                "value": "4405"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.PFCtlWCfg.Crv.PFExt[]",
+                "editable": true,
+                "possibleValues": [
+                    "1041",
+                    "1042"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.437Z",
+                "values": [
+                    "1042",
+                    "1042",
+                    "1042",
+                    "1042"
+                ]
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.PFCfg.Dyn.VArGraNeg",
+                "editable": true,
+                "max": 10000,
+                "min": 0.01,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.433Z",
+                "value": "1200.00"
+            },
+            {
+                "channelId": "Parameter.Inverter.WModCfg.WCtlAsym.Ena",
+                "editable": true,
+                "possibleValues": [
+                    "303",
+                    "308"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.460Z",
+                "value": "308"
+            },
+            {
+                "channelId": "Parameter.Inverter.OutPhs",
+                "editable": true,
+                "possibleValues": [
+                    "326"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.450Z",
+                "value": "326"
+            },
+            {
+                "channelId": "Parameter.Inverter.WGraRecon",
+                "editable": true,
+                "max": 10000,
+                "min": 1,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.406Z",
+                "value": "9"
+            },
+            {
+                "channelId": "Parameter.Nameplate.PkgRev",
+                "editable": false,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:09.689Z",
+                "value": "03.06.15.R"
+            },
+            {
+                "channelId": "Parameter.GridGuard.Cntry.FrqCtl.lLimTmms",
+                "editable": true,
+                "max": 1000000,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.419Z",
+                "value": "100"
+            },
+            {
+                "channelId": "Parameter.GridGuard.Cntry.HzRtg",
+                "editable": true,
+                "max": 65,
+                "min": 44,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.439Z",
+                "value": "50.00"
+            },
+            {
+                "channelId": "Parameter.Inverter.CtlComCfg.WCtlCom2.WGraFlb",
+                "editable": true,
+                "max": 1000,
+                "min": 0.01,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.456Z",
+                "value": "20.000"
+            },
+            {
+                "channelId": "Parameter.Inverter.VRtg",
+                "editable": true,
+                "max": 1000,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.408Z",
+                "value": "400"
+            },
+            {
+                "channelId": "Parameter.Inverter.CtlComCfg.WCtlCom.TmsOut",
+                "editable": true,
+                "max": 1800,
+                "min": 1,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.428Z",
+                "value": "600.0"
+            },
+            {
+                "channelId": "Parameter.Inverter.PFMinQ1",
+                "editable": true,
+                "max": 1,
+                "min": 0.4,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.428Z",
+                "value": "0.4000"
+            },
+            {
+                "channelId": "Parameter.GridGuard.Cntry.FrqCtl.ChgMax",
+                "editable": true,
+                "max": 10,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.413Z",
+                "value": "10.00"
+            },
+            {
+                "channelId": "Parameter.Inverter.CtlComCfg.VArCtlVolCom.TmsOut",
+                "editable": true,
+                "max": 1800,
+                "min": 1,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.428Z",
+                "value": "600"
+            },
+            {
+                "channelId": "Parameter.Operation.ManRstr.ManRstrOvVol",
+                "editable": true,
+                "possibleValues": [
+                    "303",
+                    "308"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.444Z",
+                "value": "303"
+            },
+            {
+                "channelId": "Parameter.IecCfg.GoCfg.GoAppId",
+                "editable": true,
+                "max": 16384,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:07.669Z",
+                "value": "16384"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.PFCfg.Dyn.WFilTms",
+                "editable": true,
+                "max": 1000,
+                "min": 0.01,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.433Z",
+                "value": "1.50"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.VArCtlWCfg.Trg.DsaVolPu",
+                "editable": true,
+                "max": 2,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.441Z",
+                "value": "0.00"
+            },
+            {
+                "channelId": "Parameter.GridGuard.Cntry.FrqCtl.ConnMax",
+                "editable": true,
+                "max": 66,
+                "min": 50,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.446Z",
+                "value": "50.10"
+            },
+            {
+                "channelId": "Parameter.GridGuard.Cntry.FrqCtl.ReconMaxFrqMax",
+                "editable": true,
+                "max": 66,
+                "min": 50,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.446Z",
+                "value": "50.10"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.PFCtlWCfg.Trg.EnaUnVolPu",
+                "editable": true,
+                "max": 2,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.444Z",
+                "value": "0.00"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.VArCfg.Crv.XVal[]",
+                "editable": true,
+                "max": 2,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.431Z",
+                "values": [
+                    "0.94",
+                    "0.96",
+                    "1.04",
+                    "1.06"
+                ]
+            },
+            {
+                "channelId": "Parameter.Metering.TotOpTmhSet",
+                "editable": true,
+                "max": 440000,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.407Z",
+                "value": "0.0"
+            },
+            {
+                "channelId": "Parameter.GridGuard.Cntry.FrqCtl.hLim",
+                "editable": true,
+                "max": 66,
+                "min": 50,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.419Z",
+                "value": "51.50"
+            },
+            {
+                "channelId": "Parameter.Operation.ManRstr.ManRstrAFCI",
+                "editable": true,
+                "possibleValues": [
+                    "303",
+                    "308",
+                    "5407"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.446Z",
+                "value": "303"
+            },
+            {
+                "channelId": "Parameter.Inverter.DGSModCfg.DGSFlCfg.ArGraMod",
+                "editable": true,
+                "possibleValues": [
+                    "4433",
+                    "4434"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.408Z",
+                "value": "4434"
+            },
+            {
+                "channelId": "Parameter.GridGuard.CntryBas",
+                "editable": false,
+                "possibleValues": [
+                    "7584"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:29.659Z",
+                "value": "7584"
+            },
+            {
+                "channelId": "Parameter.GridGuard.Cntry.GriStrTms",
+                "editable": true,
+                "max": 1600,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.420Z",
+                "value": "60.000"
+            },
+            {
+                "channelId": "Parameter.Inverter.WModCfg.WCtlVolCfg.WTmEna",
+                "editable": true,
+                "possibleValues": [
+                    "303",
+                    "308"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.439Z",
+                "value": "308"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.VArModZerW",
+                "editable": true,
+                "possibleValues": [
+                    "303",
+                    "1069",
+                    "1070",
+                    "1071",
+                    "1072",
+                    "1073"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.428Z",
+                "value": "303"
+            },
+            {
+                "channelId": "Parameter.Mb.ScdInEna",
+                "editable": true,
+                "possibleValues": [
+                    "308",
+                    "303"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:24.256Z",
+                "value": "303"
+            },
+            {
+                "channelId": "Parameter.GridGuard.Cntry.VolCtl.llLimPu",
+                "editable": true,
+                "max": 1,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.414Z",
+                "value": "0.450"
+            },
+            {
+                "channelId": "Parameter.Nameplate.ModelStr",
+                "editable": false,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:09.849Z",
+                "value": "Sunny Tripower X 15"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.PFCfg.Dyn.VArGraPos",
+                "editable": true,
+                "max": 10000,
+                "min": 0.01,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.433Z",
+                "value": "1200.00"
+            },
+            {
+                "channelId": "Parameter.Inverter.DGSModCfg.VArDynEna",
+                "editable": true,
+                "possibleValues": [
+                    "303",
+                    "308"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.444Z",
+                "value": "308"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.PFCtlVolCfg.Dyn.ActTms",
+                "editable": true,
+                "max": 1000,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.442Z",
+                "value": "0.0"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.VArCfg.Dyn.VArGraPos",
+                "editable": true,
+                "max": 10000,
+                "min": 0.01,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.432Z",
+                "value": "1200.00"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.PFCtlWCfg.Trg.EnaVolPu",
+                "editable": true,
+                "max": 2,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.439Z",
+                "value": "0.00"
+            },
+            {
+                "channelId": "Parameter.Spdwr.ActlGwIp",
+                "editable": false,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:19:59.396Z",
+                "value": "192.168.2.1"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.PFCtlWCfg.Crv.NumPt",
+                "editable": true,
+                "max": 4,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.437Z",
+                "value": "2"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.PFCtlWCfg.Dyn.VArTms",
+                "editable": true,
+                "max": 1000,
+                "min": 0.01,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.437Z",
+                "value": "10.00"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.OutWNomLimDeAct",
+                "editable": true,
+                "max": 100,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.444Z",
+                "value": "5.000"
+            },
+            {
+                "channelId": "Parameter.GridGuard.Cntry.GriFltReConTms",
+                "editable": true,
+                "max": 6000,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.407Z",
+                "value": "60.000"
+            },
+            {
+                "channelId": "Parameter.Inverter.WModCfg.WCtlAsym.VAMaxAsym",
+                "editable": true,
+                "max": 15000,
+                "min": 1000,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.460Z",
+                "value": "4600"
+            },
+            {
+                "channelId": "Parameter.GridGuard.Cntry.VolCtl.MaxPeakTmms",
+                "editable": true,
+                "max": 5,
+                "min": 0.1,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.420Z",
+                "value": "0.312"
+            },
+            {
+                "channelId": "Parameter.Inverter.WModCfg.WCtlVolCfg.WGraEna",
+                "editable": true,
+                "possibleValues": [
+                    "303",
+                    "308"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.439Z",
+                "value": "303"
+            },
+            {
+                "channelId": "Parameter.Inverter.VAMaxIn",
+                "editable": true,
+                "max": 15000,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.420Z",
+                "value": "15000"
+            },
+            {
+                "channelId": "Parameter.Inverter.WModCfg.WCtlVolCfg.Crv.XVal[]",
+                "editable": true,
+                "max": 2,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.439Z",
+                "values": [
+                    "1.100",
+                    "1.120",
+                    "2.000",
+                    "2.000",
+                    "2.000",
+                    "2.000",
+                    "2.000",
+                    "2.000"
+                ]
+            },
+            {
+                "channelId": "Parameter.GridGuard.Cntry.VolCtl.hhLimTmms",
+                "editable": true,
+                "max": 1000000,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.414Z",
+                "value": "100000"
+            },
+            {
+                "channelId": "Parameter.Wl.Sec.Ssid",
+                "editable": true,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:06.849Z",
+                "value": ""
+            },
+            {
+                "channelId": "Parameter.Inverter.VArMaxQ2Rtg",
+                "editable": false,
+                "max": 14850,
+                "min": 14850,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.449Z",
+                "value": "14850"
+            },
+            {
+                "channelId": "Parameter.GridGuard.Cntry.FrqCtl.SwMin",
+                "editable": true,
+                "max": 60,
+                "min": 44,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.444Z",
+                "value": "44.00"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.PFCtlWCfg.Crv.WNom[]",
+                "editable": true,
+                "max": 100,
+                "min": -100,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.437Z",
+                "values": [
+                    "50",
+                    "100",
+                    "100",
+                    "100"
+                ]
+            },
+            {
+                "channelId": "Parameter.GridGuard.Cntry.FrqCtl.ChgMaxTmms",
+                "editable": true,
+                "max": 10000,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.413Z",
+                "value": "10000"
+            },
+            {
+                "channelId": "Parameter.Inverter.CtlComCfg.PFCtlCom.FlbPFIn",
+                "editable": true,
+                "max": 1,
+                "min": 0.4,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.428Z",
+                "value": "1.0000"
+            },
+            {
+                "channelId": "Parameter.Inverter.WCtlHzModCfg.WCtlHzCfg.WCtlChgOvUnTmms",
+                "editable": true,
+                "max": 60000,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.457Z",
+                "value": "0"
+            },
+            {
+                "channelId": "Parameter.Inverter.DGSModCfg.DGSFlCfg.ArStrMinTmms",
+                "editable": true,
+                "max": 60000,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.413Z",
+                "value": "0"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.OutWNomLimAct",
+                "editable": true,
+                "max": 100,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.444Z",
+                "value": "5.000"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.VArModOutFlb",
+                "editable": true,
+                "possibleValues": [
+                    "303",
+                    "1069",
+                    "1071",
+                    "1073",
+                    "1074",
+                    "1076",
+                    "4562",
+                    "4583"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.434Z",
+                "value": "4583"
+            },
+            {
+                "channelId": "Parameter.Nameplate.WlMacId",
+                "editable": false,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:07.325Z",
+                "value": "6C:1D:EB:4B:81:A2"
+            },
+            {
+                "channelId": "Parameter.Inverter.WModCfg.WCtlVolCfg.WRefMod",
+                "editable": true,
+                "possibleValues": [
+                    "4405",
+                    "4443",
+                    "4444"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.440Z",
+                "value": "4405"
+            },
+            {
+                "channelId": "Parameter.Inverter.CtlComCfg.VArCtlCom.VArGraFlb",
+                "editable": true,
+                "max": 1000,
+                "min": 0.01,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.456Z",
+                "value": "20.000"
+            },
+            {
+                "channelId": "Parameter.Nameplate.Vendor",
+                "editable": false,
+                "possibleValues": [
+                    "461"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:09.708Z",
+                "value": "461"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.VArCfg.Dyn.VArGraNeg",
+                "editable": true,
+                "max": 10000,
+                "min": 0.01,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.433Z",
+                "value": "1200.00"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.VArCtlWCfg.Dyn.VArTmEna",
+                "editable": true,
+                "possibleValues": [
+                    "303",
+                    "308"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.437Z",
+                "value": "308"
+            },
+            {
+                "channelId": "Parameter.Wl.AutoCfgIsOn",
+                "editable": true,
+                "possibleValues": [
+                    "1129"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:19:59.397Z",
+                "value": "1129"
+            },
+            {
+                "channelId": "Parameter.Wl.SoftAcsIsOn",
+                "editable": true,
+                "possibleValues": [
+                    "1129",
+                    "1130"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:07.174Z",
+                "value": "1129"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.VArCnstCfgDmd.VAr",
+                "editable": true,
+                "max": 50000,
+                "min": -50000,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.432Z",
+                "value": "0"
+            },
+            {
+                "channelId": "Parameter.Wl.DoAcq",
+                "editable": true,
+                "possibleValues": [
+                    "3342",
+                    "302"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-04-02T15:41:40.015Z",
+                "value": "302"
+            },
+            {
+                "channelId": "Parameter.Inverter.WCtlHzModCfg.HzFilTms",
+                "editable": true,
+                "max": 5,
+                "min": 0.01,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.444Z",
+                "value": "1.30"
+            },
+            {
+                "channelId": "Parameter.GridGuard.Cntry.GriFltMonTms",
+                "editable": true,
+                "max": 6000,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.420Z",
+                "value": "60.000"
+            },
+            {
+                "channelId": "Parameter.Inverter.WModCfg.WCtlComCfg2.Dyn.WGraPos",
+                "editable": true,
+                "max": 1000,
+                "min": 0.01,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.435Z",
+                "value": "0.50"
+            },
+            {
+                "channelId": "Parameter.Inverter.WModCfg.WCtlVolCfg.WTms",
+                "editable": true,
+                "max": 1000,
+                "min": 0.01,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.439Z",
+                "value": "3.00"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.PFCnstCfg.PFExtIn",
+                "editable": true,
+                "possibleValues": [
+                    "1041",
+                    "1042"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.433Z",
+                "value": "1042"
+            },
+            {
+                "channelId": "Parameter.Inverter.DGSModCfg.ZerCurUnVolPu",
+                "editable": true,
+                "max": 1,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.413Z",
+                "value": "0.80"
+            },
+            {
+                "channelId": "Parameter.Inverter.CtlComCfg.WCtlCom.CtlComMssMod",
+                "editable": true,
+                "possibleValues": [
+                    "2506",
+                    "2507"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.428Z",
+                "value": "2506"
+            },
+            {
+                "channelId": "Parameter.Inverter.WCtlHzModCfg.WCtlHzCfg.HzOvStop",
+                "editable": true,
+                "max": 66,
+                "min": 50,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.430Z",
+                "value": "50.200"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArMaxZerWQ4",
+                "editable": true,
+                "max": 0,
+                "min": -14850,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.450Z",
+                "value": "-14850"
+            },
+            {
+                "channelId": "Parameter.Inverter.WCtlHzModCfg.WCtlHzCfg.HzOvGra[]",
+                "editable": true,
+                "max": 0,
+                "min": -200,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.430Z",
+                "values": [
+                    "-40.000",
+                    "-40.000",
+                    "-40.000"
+                ]
+            },
+            {
+                "channelId": "Parameter.Inverter.PlntCtl.VRef",
+                "editable": true,
+                "max": 600,
+                "min": 80,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.419Z",
+                "value": "400"
+            },
+            {
+                "channelId": "Parameter.Inverter.WGraMpp",
+                "editable": true,
+                "max": 10000,
+                "min": 1,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.442Z",
+                "value": "10000"
+            },
+            {
+                "channelId": "Parameter.DcCfg.VolLim",
+                "editable": true,
+                "max": 1100,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.409Z",
+                "value": "1040.00"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.VArCtlVolCfg.Dyn.ActTms",
+                "editable": true,
+                "max": 1000,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.440Z",
+                "value": "0"
+            },
+            {
+                "channelId": "Parameter.Operation.IVCrv.MsStr[]",
+                "editable": true,
+                "possibleValues": [
+                    "1146",
+                    "973"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:30.497Z",
+                "values": [
+                    "973"
+                ]
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.VRefMod",
+                "editable": true,
+                "possibleValues": [
+                    "4520",
+                    "4521"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.444Z",
+                "value": "4520"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.VArCtlVolCfg.Crv.YVal[]",
+                "editable": true,
+                "max": 100,
+                "min": -100,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.420Z",
+                "values": [
+                    "43.600",
+                    "0.000",
+                    "0.000",
+                    "-43.600",
+                    "0.000",
+                    "0.000",
+                    "0.000",
+                    "0.000"
+                ]
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.PFCtlVolCfg.Dyn.WFilTms",
+                "editable": true,
+                "max": 1000,
+                "min": 0.01,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.442Z",
+                "value": "1.50"
+            },
+            {
+                "channelId": "Parameter.DcCfg.MPPShdw.IsOn",
+                "editable": true,
+                "possibleValues": [
+                    "1129",
+                    "1130"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.448Z",
+                "value": "1129"
+            },
+            {
+                "channelId": "Parameter.Inverter.WModCfg.WCtlVolCfg.VRefMod",
+                "editable": true,
+                "possibleValues": [
+                    "4520",
+                    "4521"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.440Z",
+                "value": "4520"
+            },
+            {
+                "channelId": "Parameter.Inverter.WCtlHzModCfg.WGraEna",
+                "editable": true,
+                "possibleValues": [
+                    "303",
+                    "308"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.457Z",
+                "value": "303"
+            },
+            {
+                "channelId": "Parameter.Inverter.CtlComCfg.WCtlCom2.FlbWMinNom",
+                "editable": true,
+                "max": 100,
+                "min": -100,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.456Z",
+                "value": "0.00"
+            },
+            {
+                "channelId": "Parameter.GridGuard.Cntry.FrqCtl.hLimTmms",
+                "editable": true,
+                "max": 1000000,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.419Z",
+                "value": "100"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.VArCfg.Crv.CrvEna",
+                "editable": true,
+                "possibleValues": [
+                    "303",
+                    "308"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.431Z",
+                "value": "303"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.PFCtlVolCfg.Dyn.WFilTmEna",
+                "editable": true,
+                "possibleValues": [
+                    "303",
+                    "308"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.441Z",
+                "value": "303"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.HystW",
+                "editable": true,
+                "max": 50000,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.444Z",
+                "value": "0"
+            },
+            {
+                "channelId": "Parameter.Nameplate.Model",
+                "editable": false,
+                "possibleValues": [
+                    "9491"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:09.849Z",
+                "value": "9491"
+            },
+            {
+                "channelId": "Parameter.GridGuard.CntrySet",
+                "editable": true,
+                "possibleValues": [
+                    "5347",
+                    "5348",
+                    "7584",
+                    "7588",
+                    "7589",
+                    "7590",
+                    "7591",
+                    "7595",
+                    "7599",
+                    "7600",
+                    "7602",
+                    "7603",
+                    "7604",
+                    "7605",
+                    "7612",
+                    "7613",
+                    "7615",
+                    "7616",
+                    "7625",
+                    "7626",
+                    "7636",
+                    "7648",
+                    "7649",
+                    "7650",
+                    "7652",
+                    "7653",
+                    "7654",
+                    "7655",
+                    "7656",
+                    "7657",
+                    "7658",
+                    "7660",
+                    "7661",
+                    "7662",
+                    "7663",
+                    "7664",
+                    "7675",
+                    "7680",
+                    "7688",
+                    "7691",
+                    "7692"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:29.653Z"
+            },
+            {
+                "channelId": "Parameter.Inverter.WLim",
+                "editable": false,
+                "max": 15000,
+                "min": 15000,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.428Z",
+                "value": "15000"
+            },
+            {
+                "channelId": "Parameter.GridGuard.Cntry.VolCtl.MinTmms",
+                "editable": true,
+                "max": 1000000,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.414Z",
+                "value": "100000"
+            },
+            {
+                "channelId": "Parameter.GridGuard.Cntry.AMaxOfsTmms",
+                "editable": true,
+                "max": 10000,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.420Z",
+                "value": "200"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.QoDEna",
+                "editable": true,
+                "possibleValues": [
+                    "303",
+                    "308"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.460Z",
+                "value": "303"
+            },
+            {
+                "channelId": "Parameter.GridGuard.Cntry.AMaxOfsNomTmms",
+                "editable": true,
+                "max": 10000,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.458Z",
+                "value": "200"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.VArCtlWCfg.Dyn.VArGraNeg",
+                "editable": true,
+                "max": 10000,
+                "min": 0.01,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.439Z",
+                "value": "100.00"
+            },
+            {
+                "channelId": "Parameter.Inverter.CtlComCfg.VArCtlCom.FlbVArNom",
+                "editable": true,
+                "max": 100,
+                "min": -100,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.428Z",
+                "value": "0.00"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.VArCnstCfgDmd.VArNom",
+                "editable": true,
+                "max": 100,
+                "min": -100,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.439Z",
+                "value": "0.0"
+            },
+            {
+                "channelId": "Parameter.Nameplate.CmpMain.SusyId",
+                "editable": false,
+                "state": "Confirmed",
+                "timestamp": "2024-04-03T12:07:59.152Z",
+                "value": "426"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.VArCtlVolCfg.Dyn.VArGraNeg",
+                "editable": true,
+                "max": 10000,
+                "min": 0.01,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.437Z",
+                "value": "100.00"
+            },
+            {
+                "channelId": "Parameter.Wl.DoWPS",
+                "editable": true,
+                "possibleValues": [
+                    "3321",
+                    "302"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:07.269Z",
+                "value": "302"
+            },
+            {
+                "channelId": "Parameter.GridGuard.Cntry.LeakAMax",
+                "editable": true,
+                "max": 0.3,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.420Z",
+                "value": "0.300"
+            },
+            {
+                "channelId": "Parameter.GridGuard.Cntry.Aid.HzMon.Stt",
+                "editable": true,
+                "possibleValues": [
+                    "303",
+                    "308"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.412Z",
+                "value": "308"
+            },
+            {
+                "channelId": "Parameter.Inverter.DGSModCfg.DGSFlCfg.FltEnd.ArStopSwellTmms",
+                "editable": true,
+                "max": 1000,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.413Z",
+                "value": "500"
+            },
+            {
+                "channelId": "Parameter.Inverter.VAMaxOut",
+                "editable": true,
+                "max": 15000,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.420Z",
+                "value": "15000"
+            },
+            {
+                "channelId": "Parameter.GridGuard.Cntry.VolCtl.lLimTmms",
+                "editable": true,
+                "max": 1000000,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.414Z",
+                "value": "3000"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.VArCtlWCfg.Trg.EnaUnVolPu",
+                "editable": true,
+                "max": 2,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.444Z",
+                "value": "0.00"
+            },
+            {
+                "channelId": "Parameter.WebConn.SwRev",
+                "editable": false,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:03.465Z",
+                "value": "1.05.0.R"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.PFCnstCfg.PFExtOut",
+                "editable": true,
+                "possibleValues": [
+                    "1041",
+                    "1042"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.433Z",
+                "value": "1042"
+            },
+            {
+                "channelId": "Parameter.Inverter.DGSModCfg.ZerCurOvVolTmms",
+                "editable": true,
+                "max": 5000,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.446Z",
+                "value": "0"
+            },
+            {
+                "channelId": "Parameter.Inverter.RplDet.NrwBndSprt.Dmp",
+                "editable": true,
+                "max": 10,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.456Z",
+                "value": "0.05"
+            },
+            {
+                "channelId": "Parameter.Inverter.CtlComCfg.WCtlCom2.GraFlbMod",
+                "editable": true,
+                "possibleValues": [
+                    "303",
+                    "5314",
+                    "5315"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.456Z",
+                "value": "303"
+            },
+            {
+                "channelId": "Parameter.Inverter.RplDet.NrwBndSprt.Gain",
+                "editable": true,
+                "max": 30,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.456Z",
+                "value": "0.00"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.PFCtlVolCfg.Crv.VolPu[]",
+                "editable": true,
+                "max": 2,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.442Z",
+                "values": [
+                    "0.940",
+                    "0.970",
+                    "1.030",
+                    "1.060"
+                ]
+            },
+            {
+                "channelId": "Parameter.SwCmp.CmpComBlt.SwRev",
+                "editable": false,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:09.696Z",
+                "value": "sma-20231121"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.PFCfg.Dyn.VArTms",
+                "editable": true,
+                "max": 1000,
+                "min": 0.01,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.433Z",
+                "value": "10.00"
+            },
+            {
+                "channelId": "Parameter.DcCfg.MPPShdw.CycTms",
+                "editable": true,
+                "max": 3600,
+                "min": 10,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.448Z",
+                "value": "360"
+            },
+            {
+                "channelId": "Parameter.Operation.ManRstr.ManRstrHz",
+                "editable": true,
+                "possibleValues": [
+                    "303",
+                    "308"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.444Z",
+                "value": "303"
+            },
+            {
+                "channelId": "Parameter.Inverter.WModCfg.WCtlVolCfg.Crv.NumPt",
+                "editable": true,
+                "max": 8,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.439Z",
+                "value": "2"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.VArModIn",
+                "editable": true,
+                "possibleValues": [
+                    "303",
+                    "1069",
+                    "1070",
+                    "1071",
+                    "1072",
+                    "1073",
+                    "1074",
+                    "1075",
+                    "1076",
+                    "4562"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.428Z",
+                "value": "303"
+            },
+            {
+                "channelId": "Parameter.Inverter.WModCfg.WCtlComCfg.Dyn.WTmEna",
+                "editable": true,
+                "possibleValues": [
+                    "303",
+                    "308"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.433Z",
+                "value": "303"
+            },
+            {
+                "channelId": "Parameter.Inverter.DGSModCfg.DGSFlCfg.VRefArMod",
+                "editable": true,
+                "possibleValues": [
+                    "303",
+                    "308"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.413Z",
+                "value": "308"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.PFCtlWCfg.Dyn.VArTmEna",
+                "editable": true,
+                "possibleValues": [
+                    "303",
+                    "308"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.437Z",
+                "value": "308"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.VArCtlWCfg.Dyn.VArGraPos",
+                "editable": true,
+                "max": 10000,
+                "min": 0.01,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.439Z",
+                "value": "100.00"
+            },
+            {
+                "channelId": "Parameter.FTPPush.IsOn",
+                "editable": true,
+                "possibleValues": [
+                    "1129",
+                    "1130"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:08.460Z",
+                "value": "1130"
+            },
+            {
+                "channelId": "Parameter.Inverter.VAMaxOutRtg",
+                "editable": false,
+                "max": 15000,
+                "min": 15000,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.426Z",
+                "value": "15000"
+            },
+            {
+                "channelId": "Parameter.Inverter.WModCfg.WCtlVolCfg.Ena",
+                "editable": true,
+                "possibleValues": [
+                    "303",
+                    "308"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.440Z",
+                "value": "303"
+            },
+            {
+                "channelId": "Parameter.Inverter.WGraMppEna",
+                "editable": true,
+                "possibleValues": [
+                    "303",
+                    "308"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.442Z",
+                "value": "303"
+            },
+            {
+                "channelId": "Parameter.Inverter.DGSModCfg.DGSFlCfg.ArGraSwell",
+                "editable": true,
+                "max": 10,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.408Z",
+                "value": "2.00"
+            },
+            {
+                "channelId": "Parameter.Internal.AST_SAPNumber",
+                "editable": false,
+                "state": "Confirmed",
+                "timestamp": "2024-04-03T12:07:59.152Z",
+                "value": "LY-MAIN-25"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.VArCtlVolCfg.Dyn.VArGraPos",
+                "editable": true,
+                "max": 10000,
+                "min": 0.01,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.437Z",
+                "value": "100.00"
+            },
+            {
+                "channelId": "Parameter.Inverter.WModCfg.WCtlComCfg2.LoPrioEna",
+                "editable": true,
+                "possibleValues": [
+                    "303",
+                    "308"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.437Z",
+                "value": "303"
+            },
+            {
+                "channelId": "Parameter.Inverter.RplDet.NrwBndSprt.Hz",
+                "editable": true,
+                "max": 10000,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.456Z",
+                "value": "1029.0"
+            },
+            {
+                "channelId": "Parameter.GridGuard.Cntry.FrqCtl.ConnMin",
+                "editable": true,
+                "max": 60,
+                "min": 44,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.446Z",
+                "value": "47.50"
+            },
+            {
+                "channelId": "Parameter.Wl.ActlIp",
+                "editable": false,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:19:59.397Z",
+                "value": "172.22.0.1"
+            },
+            {
+                "channelId": "Parameter.Inverter.DGSModCfg.DGSFlCfg.AppVolStep",
+                "editable": true,
+                "possibleValues": [
+                    "4430",
+                    "4431",
+                    "4432",
+                    "4972"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.446Z",
+                "value": "4432"
+            },
+            {
+                "channelId": "Parameter.Nameplate.CmpCom.HwVer",
+                "editable": false,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:09.706Z",
+                "value": "09"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.ImpCpn.IsOn",
+                "editable": true,
+                "possibleValues": [
+                    "1129",
+                    "1130"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.435Z",
+                "value": "1130"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArMaxZerWQ1",
+                "editable": true,
+                "max": 14850,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.450Z",
+                "value": "14850"
+            },
+            {
+                "channelId": "Parameter.Inverter.CtlComCfg.PFCtlCom.CtlComMssMod",
+                "editable": true,
+                "possibleValues": [
+                    "2506",
+                    "2507"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.428Z",
+                "value": "2507"
+            },
+            {
+                "channelId": "Parameter.Acs.PwdUsr",
+                "editable": true,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:21.799Z",
+                "value": "****"
+            },
+            {
+                "channelId": "Parameter.Inverter.PlntCtl.VRefMod",
+                "editable": true,
+                "possibleValues": [
+                    "4430",
+                    "4431"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.418Z",
+                "value": "4430"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.VArCtlVolCfg.Crv.NumPt",
+                "editable": true,
+                "max": 8,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.420Z",
+                "value": "4"
+            },
+            {
+                "channelId": "Parameter.Inverter.WCtlHzModCfg.WCtlHzCfg.HystEnaOv",
+                "editable": true,
+                "possibleValues": [
+                    "303",
+                    "308"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.430Z",
+                "value": "303"
+            },
+            {
+                "channelId": "Parameter.GridGuard.Cntry.AMaxOfsMod",
+                "editable": true,
+                "possibleValues": [
+                    "4509",
+                    "4510",
+                    "5442"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.420Z",
+                "value": "4509"
+            },
+            {
+                "channelId": "Parameter.Operation.ManRstr.ManRstrPID",
+                "editable": true,
+                "possibleValues": [
+                    "303",
+                    "308"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.444Z",
+                "value": "303"
+            },
+            {
+                "channelId": "Parameter.GridGuard.Cntry.VolCtl.llLimTmms",
+                "editable": true,
+                "max": 1000000,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.414Z",
+                "value": "300"
+            },
+            {
+                "channelId": "Parameter.Nameplate.CmpMain.SerNum",
+                "editable": false,
+                "state": "Confirmed",
+                "timestamp": "2024-04-03T12:07:59.152Z",
+                "value": "3015896629"
+            },
+            {
+                "channelId": "Parameter.Nameplate.CmpOS.SwRev",
+                "editable": false,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:09.696Z",
+                "value": "2.2.0.R"
+            },
+            {
+                "channelId": "Parameter.Inverter.WModCfg.WCtlComCfg.Dyn.WGraPos",
+                "editable": true,
+                "max": 1000,
+                "min": 0.01,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.433Z",
+                "value": "0.50"
+            },
+            {
+                "channelId": "Parameter.WebConn.IsOn",
+                "editable": true,
+                "possibleValues": [
+                    "1129",
+                    "1130"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:03.464Z",
+                "value": "1130"
+            },
+            {
+                "channelId": "Parameter.GridGuard.Cntry.FrqCtl.MaxTmms",
+                "editable": true,
+                "max": 1000000,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.419Z",
+                "value": "100000"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArMaxZerWQ2",
+                "editable": true,
+                "max": 14850,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.450Z",
+                "value": "14850"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.VArCfg.Crv.YVal[]",
+                "editable": true,
+                "max": 100,
+                "min": -100,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.432Z",
+                "values": [
+                    "33.00",
+                    "0.00",
+                    "0.00",
+                    "-33.00"
+                ]
+            },
+            {
+                "channelId": "Parameter.Inverter.CtlComCfg.WCtlCom2.CtlComMssMod",
+                "editable": true,
+                "possibleValues": [
+                    "2506",
+                    "2507"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.437Z",
+                "value": "2506"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.PFCtlVolCfg.Dyn.VArTms",
+                "editable": true,
+                "max": 1000,
+                "min": 0.01,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.441Z",
+                "value": "10.00"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArMaxQ4Rtg",
+                "editable": false,
+                "max": -14850,
+                "min": -14850,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.450Z",
+                "value": "-14850"
+            },
+            {
+                "channelId": "Parameter.Inverter.WMax",
+                "editable": true,
+                "max": 15000,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.427Z",
+                "value": "15000"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArMaxZerWQ3",
+                "editable": true,
+                "max": 0,
+                "min": -14850,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.450Z",
+                "value": "-14850"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.HystTms",
+                "editable": true,
+                "max": 20,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.428Z",
+                "value": "1.00"
+            },
+            {
+                "channelId": "Parameter.GridGuard.Cntry.Aid.AsymDet.AsymMaxTmms",
+                "editable": true,
+                "max": 10000,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.412Z",
+                "value": "5000"
+            },
+            {
+                "channelId": "Parameter.GridGuard.Cntry.VolCtl.MaxPuTmms",
+                "editable": true,
+                "max": 1000000,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.414Z",
+                "value": "100000"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.PFCtlVolCfg.Dyn.VArTmEna",
+                "editable": true,
+                "possibleValues": [
+                    "303",
+                    "308"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.441Z",
+                "value": "308"
+            },
+            {
+                "channelId": "Parameter.DcCfg.ConstVolCtl.Vset[]",
+                "editable": true,
+                "max": 1000,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.409Z",
+                "values": [
+                    "1000.00",
+                    "1000.00",
+                    "1000.00"
+                ]
+            },
+            {
+                "channelId": "Parameter.Inverter.CtlComCfg.PFCtlCom.FlbPFExt",
+                "editable": true,
+                "possibleValues": [
+                    "1041",
+                    "1042"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.428Z",
+                "value": "1041"
+            },
+            {
+                "channelId": "Parameter.Inverter.DGSModCfg.DGSFlCfg.FltEnd.AWattGraMax",
+                "editable": true,
+                "max": 5000,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.408Z",
+                "value": "2500"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.PFCtlWCfg.Trg.DsaUnVolPu",
+                "editable": true,
+                "max": 2,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.444Z",
+                "value": "0.00"
+            },
+            {
+                "channelId": "Parameter.GridGuard.Cntry.FrqCtl.MinTmms",
+                "editable": true,
+                "max": 1000000,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.419Z",
+                "value": "1000000"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.VArModZerWFlb",
+                "editable": true,
+                "possibleValues": [
+                    "303",
+                    "1069",
+                    "1071",
+                    "1073",
+                    "4583"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.435Z",
+                "value": "4583"
+            },
+            {
+                "channelId": "Parameter.Operation.LodFnc",
+                "editable": true,
+                "possibleValues": [
+                    "72",
+                    "302"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:29.444Z",
+                "value": "302"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.VArCnstCfgIn.VArNom",
+                "editable": true,
+                "max": 100,
+                "min": -100,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.439Z",
+                "value": "0.0"
+            },
+            {
+                "channelId": "Parameter.Inverter.CtlComCfg.WCtlCom.FlbWMaxNom",
+                "editable": true,
+                "max": 100,
+                "min": -100,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.456Z",
+                "value": "100.00"
+            },
+            {
+                "channelId": "Parameter.Wl.Sec.Cry",
+                "editable": true,
+                "possibleValues": [
+                    "3323",
+                    "3324",
+                    "3398"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:06.851Z",
+                "value": "3398"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.PFCtlWCfg.Dyn.VArGraNeg",
+                "editable": true,
+                "max": 10000,
+                "min": 0.01,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.437Z",
+                "value": "1200.00"
+            },
+            {
+                "channelId": "Parameter.Inverter.DGSModCfg.DGSMod",
+                "editable": true,
+                "possibleValues": [
+                    "303",
+                    "1264",
+                    "1265"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.413Z",
+                "value": "1265"
+            },
+            {
+                "channelId": "Parameter.Inverter.CtlComCfg.WCtlCom2.FlbWMaxNom",
+                "editable": true,
+                "max": 100,
+                "min": -100,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.456Z",
+                "value": "100.00"
+            },
+            {
+                "channelId": "Parameter.Inverter.DGSModCfg.AvLtTms",
+                "editable": true,
+                "max": 300,
+                "min": 5,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.412Z",
+                "value": "60"
+            },
+            {
+                "channelId": "Parameter.Inverter.WModCfg.WCtlVolCfg.LoPrioEna",
+                "editable": true,
+                "possibleValues": [
+                    "303",
+                    "308"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.448Z",
+                "value": "303"
+            },
+            {
+                "channelId": "Parameter.Metering.TotFeedTmhSet",
+                "editable": true,
+                "max": 440000,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.407Z",
+                "value": "0.0"
+            },
+            {
+                "channelId": "Parameter.Operation.ManRstr.ManRstrAID",
+                "editable": true,
+                "possibleValues": [
+                    "303",
+                    "308"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.444Z",
+                "value": "303"
+            },
+            {
+                "channelId": "Parameter.Nameplate.CmpMain.HwVer",
+                "editable": false,
+                "state": "Confirmed",
+                "timestamp": "2024-04-03T12:07:59.152Z",
+                "value": "09"
+            },
+            {
+                "channelId": "Parameter.GridGuard.Cntry.VolCtl.ConnMinPu",
+                "editable": true,
+                "max": 1,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.446Z",
+                "value": "0.850"
+            },
+            {
+                "channelId": "Parameter.Inverter.VAMaxInRtg",
+                "editable": false,
+                "max": 15000,
+                "min": 15000,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.420Z",
+                "value": "15000"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArMaxQ1",
+                "editable": true,
+                "max": 14850,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.449Z",
+                "value": "14850"
+            },
+            {
+                "channelId": "Parameter.Sys.SelfTst[]",
+                "editable": true,
+                "possibleValues": [
+                    "1146",
+                    "973"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:30.450Z",
+                "values": [
+                    "973"
+                ]
+            },
+            {
+                "channelId": "Parameter.GridGuard.Cntry.Aid.HzMon.HzMonTmms",
+                "editable": true,
+                "max": 10000,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.412Z",
+                "value": "5000"
+            },
+            {
+                "channelId": "Parameter.Inverter.WCtlHzModCfg.WCtlHzCfg.HystEnaUn",
+                "editable": true,
+                "possibleValues": [
+                    "303",
+                    "308"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.430Z",
+                "value": "303"
+            },
+            {
+                "channelId": "Parameter.GridGuard.Cntry.FrqCtl.SwMinTmms",
+                "editable": true,
+                "max": 1000000,
+                "min": 40,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.444Z",
+                "value": "1000000"
+            },
+            {
+                "channelId": "Parameter.DcCfg.StrTms",
+                "editable": true,
+                "max": 10000,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.409Z",
+                "value": "1"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.VArCtlVolCfg.Dyn.VArTmEna",
+                "editable": true,
+                "possibleValues": [
+                    "303",
+                    "308"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.437Z",
+                "value": "308"
+            },
+            {
+                "channelId": "Parameter.GridGuard.Cntry.VolCtl.hLimPu",
+                "editable": true,
+                "max": 2,
+                "min": 1,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.414Z",
+                "value": "1.250"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.VArCfg.Dyn.VArTmEna",
+                "editable": true,
+                "possibleValues": [
+                    "303",
+                    "308"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.432Z",
+                "value": "308"
+            },
+            {
+                "channelId": "Parameter.Inverter.PFMinQ2Rtg",
+                "editable": false,
+                "max": 0.4,
+                "min": 0.4,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.428Z",
+                "value": "0.4000"
+            },
+            {
+                "channelId": "Parameter.Coolsys.FanTst",
+                "editable": true,
+                "possibleValues": [
+                    "303",
+                    "211",
+                    "213"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.413Z",
+                "value": "303"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArMaxQ2",
+                "editable": true,
+                "max": 14850,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.449Z",
+                "value": "14850"
+            },
+            {
+                "channelId": "Parameter.GridGuard.Cntry.VolCtl.MinPu",
+                "editable": true,
+                "max": 1,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.414Z",
+                "value": "0.200"
+            },
+            {
+                "channelId": "Parameter.Inverter.WModCfg.WCtlComCfg2.Dyn.WTms",
+                "editable": true,
+                "max": 1000,
+                "min": 0.01,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.435Z",
+                "value": "3.00"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArGraConnEna",
+                "editable": true,
+                "possibleValues": [
+                    "303",
+                    "308"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.443Z",
+                "value": "303"
+            },
+            {
+                "channelId": "Parameter.Inverter.CtlComCfg.PFCtlCom.FlbPFExtIn",
+                "editable": true,
+                "possibleValues": [
+                    "1041",
+                    "1042"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.428Z",
+                "value": "1041"
+            },
+            {
+                "channelId": "Parameter.DevUpd.IsOn",
+                "editable": true,
+                "possibleValues": [
+                    "1129",
+                    "1130"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:08.442Z",
+                "value": "1130"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.VArCtlWCfg.Dyn.VArTms",
+                "editable": true,
+                "max": 1000,
+                "min": 0.01,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.435Z",
+                "value": "10.00"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.PFCtlVolCfg.Dyn.VArGraPos",
+                "editable": true,
+                "max": 10000,
+                "min": 0.01,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.441Z",
+                "value": "1200.00"
+            },
+            {
+                "channelId": "Parameter.Inverter.WModCfg.WCnstCfg.WNom",
+                "editable": true,
+                "max": 100,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.433Z",
+                "value": "0"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.PFCtlWCfg.Dyn.VArGraPos",
+                "editable": true,
+                "max": 10000,
+                "min": 0.01,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.437Z",
+                "value": "1200.00"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.VArModOut",
+                "editable": true,
+                "possibleValues": [
+                    "303",
+                    "1069",
+                    "1070",
+                    "1071",
+                    "1072",
+                    "1073",
+                    "1074",
+                    "1075",
+                    "1076",
+                    "4562"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.428Z",
+                "value": "303"
+            },
+            {
+                "channelId": "Parameter.Inverter.WCtlHzModCfg.RefModUn",
+                "editable": true,
+                "possibleValues": [
+                    "4354",
+                    "4443",
+                    "4444",
+                    "5249"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.442Z",
+                "value": "4354"
+            },
+            {
+                "channelId": "Parameter.Spdwr.ActlDnsSrvIp",
+                "editable": false,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:19:59.396Z",
+                "value": "192.168.2.1"
+            },
+            {
+                "channelId": "Parameter.Inverter.DGSModCfg.VRefThMod",
+                "editable": true,
+                "possibleValues": [
+                    "303",
+                    "308"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.413Z",
+                "value": "303"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.VArCtlVolCfg.VolRef.AutnAdjMod",
+                "editable": true,
+                "possibleValues": [
+                    "303",
+                    "308",
+                    "1438"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.428Z",
+                "value": "303"
+            },
+            {
+                "channelId": "Parameter.FTPPush.Login",
+                "editable": true,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:08.463Z",
+                "value": ""
+            },
+            {
+                "channelId": "Parameter.Wl.ActlGwIp",
+                "editable": false,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:19:59.397Z",
+                "value": "172.22.0.3"
+            },
+            {
+                "channelId": "Parameter.Inverter.WCtlHzModCfg.WTms",
+                "editable": true,
+                "max": 60,
+                "min": 0.01,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.430Z",
+                "value": "0.50"
+            },
+            {
+                "channelId": "Parameter.Inverter.DGSModCfg.AvStTms",
+                "editable": true,
+                "max": 5,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.412Z",
+                "value": "1.0"
+            },
+            {
+                "channelId": "Parameter.Inverter.WCtlHzModCfg.WTmEna",
+                "editable": true,
+                "possibleValues": [
+                    "303",
+                    "308"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.457Z",
+                "value": "308"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.VArCtlVolCfg.Crv.XVal[]",
+                "editable": true,
+                "max": 2,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.420Z",
+                "values": [
+                    "0.930",
+                    "0.970",
+                    "1.030",
+                    "1.070",
+                    "1.000",
+                    "1.000",
+                    "1.000",
+                    "1.000"
+                ]
+            },
+            {
+                "channelId": "Parameter.Inverter.CtlComCfg.VArCtlVolCom.CtlComMssMod",
+                "editable": true,
+                "possibleValues": [
+                    "2506",
+                    "2507"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.435Z",
+                "value": "2507"
+            },
+            {
+                "channelId": "Parameter.GridGuard.Cntry.VolCtl.MaxPu",
+                "editable": true,
+                "max": 2,
+                "min": 1,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.414Z",
+                "value": "2.000"
+            },
+            {
+                "channelId": "Parameter.Inverter.WMaxInRtg",
+                "editable": false,
+                "max": -1000,
+                "min": -1000,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.428Z",
+                "value": "-1000"
+            },
+            {
+                "channelId": "Parameter.Metering.TotkWhInSet",
+                "editable": true,
+                "max": 4000000,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.448Z",
+                "value": "0"
+            },
+            {
+                "channelId": "Parameter.Mb.TcpSrv.IsOn",
+                "editable": true,
+                "possibleValues": [
+                    "1130",
+                    "1129"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:24.290Z",
+                "value": "1129"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.VArCnstCfg.VArNom",
+                "editable": true,
+                "max": 100,
+                "min": -100,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.439Z",
+                "value": "0.0"
+            },
+            {
+                "channelId": "Parameter.GridGuard.Cntry",
+                "editable": false,
+                "possibleValues": [
+                    "27"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:38.207Z",
+                "value": "27"
+            },
+            {
+                "channelId": "Parameter.Operation.ValRsIstl[]",
+                "editable": true,
+                "possibleValues": [
+                    "973",
+                    "356"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:30.504Z",
+                "values": [
+                    "973"
+                ]
+            },
+            {
+                "channelId": "Parameter.GridGuard.Cntry.AMaxOfs",
+                "editable": true,
+                "max": 2,
+                "min": 0.02,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.420Z",
+                "value": "1.000"
+            },
+            {
+                "channelId": "Parameter.GridGuard.Cntry.LeakRisMin",
+                "editable": true,
+                "max": 3000000,
+                "min": 34000,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.408Z",
+                "value": "100000"
+            },
+            {
+                "channelId": "Parameter.Inverter.DGSModCfg.DGSFlCfg.FltEnd.ArMaxTms",
+                "editable": true,
+                "max": 300,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.412Z",
+                "value": "5.00"
+            },
+            {
+                "channelId": "Parameter.GridGuard.Cntry.GriFltTms",
+                "editable": true,
+                "max": 400,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.407Z",
+                "value": "3.000"
+            },
+            {
+                "channelId": "Parameter.SwCmp.CmpEnnexOS.Frwk.SwRev",
+                "editable": false,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:09.689Z",
+                "value": "1.42.0.R"
+            },
+            {
+                "channelId": "Parameter.Inverter.WModCfg.WCtlComCfg2.Dyn.WTmEna",
+                "editable": true,
+                "possibleValues": [
+                    "303",
+                    "308"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.435Z",
+                "value": "303"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.PFCtlWCfg.Crv.PF[]",
+                "editable": true,
+                "max": 1,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.437Z",
+                "values": [
+                    "1.0000",
+                    "0.9000",
+                    "0.9000",
+                    "0.9000"
+                ]
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.PFCtlVolCfg.Crv.NumPt",
+                "editable": true,
+                "max": 4,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.442Z",
+                "value": "4"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.PFCtlVolCfg.Dyn.VArGraNeg",
+                "editable": true,
+                "max": 10000,
+                "min": 0.01,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.441Z",
+                "value": "1200.00"
+            },
+            {
+                "channelId": "Parameter.PwrCtlMdul.GriSysPro",
+                "editable": true,
+                "possibleValues": [
+                    "303",
+                    "308"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.455Z",
+                "value": "303"
+            },
+            {
+                "channelId": "Parameter.Inverter.WGraConn",
+                "editable": true,
+                "max": 10000,
+                "min": 1,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.437Z",
+                "value": "1200"
+            },
+            {
+                "channelId": "Parameter.GridGuard.Cntry.FrqCtl.Max",
+                "editable": true,
+                "max": 66,
+                "min": 50,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.419Z",
+                "value": "66.00"
+            },
+            {
+                "channelId": "Parameter.Inverter.CtlComCfg.VArCtlCom.GraFlbMod",
+                "editable": true,
+                "possibleValues": [
+                    "303",
+                    "5314",
+                    "5315"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.456Z",
+                "value": "303"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.PFCtlVolCfg.Crv.PFExt[]",
+                "editable": true,
+                "possibleValues": [
+                    "1041",
+                    "1042"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.442Z",
+                "values": [
+                    "1041",
+                    "1041",
+                    "1042",
+                    "1042"
+                ]
+            },
+            {
+                "channelId": "Parameter.Nameplate.CmpCom.SwRev",
+                "editable": false,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:31.017Z",
+                "value": "2.0.12.R"
+            },
+            {
+                "channelId": "Parameter.Inverter.DGSModCfg.DGSFlCfg.ArGraSag",
+                "editable": true,
+                "max": 10,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.408Z",
+                "value": "2.00"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.PFCfg.Dyn.VArGraEna",
+                "editable": true,
+                "possibleValues": [
+                    "303",
+                    "308"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.433Z",
+                "value": "303"
+            },
+            {
+                "channelId": "Parameter.Inverter.DGSModCfg.DGSFlCfg.ArStrMaxTmms",
+                "editable": true,
+                "max": 60000,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.413Z",
+                "value": "60000"
+            },
+            {
+                "channelId": "Parameter.GridGuard.Cntry.FrqCtl.ReconMin",
+                "editable": true,
+                "max": 60,
+                "min": 44,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.419Z",
+                "value": "47.50"
+            },
+            {
+                "channelId": "Parameter.Inverter.PFMinQ1Rtg",
+                "editable": false,
+                "max": 0.4,
+                "min": 0.4,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.428Z",
+                "value": "0.4000"
+            },
+            {
+                "channelId": "Parameter.Inverter.GriTyp",
+                "editable": true,
+                "possibleValues": [
+                    "18007",
+                    "18011",
+                    "18012",
+                    "18030",
+                    "18023"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:44.025Z"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.PFCfg.Dyn.VArTmEna",
+                "editable": true,
+                "possibleValues": [
+                    "303",
+                    "308"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.433Z",
+                "value": "308"
+            },
+            {
+                "channelId": "Parameter.Sys.SelfTstDmd",
+                "editable": false,
+                "possibleValues": [
+                    "3585",
+                    "7517"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.458Z",
+                "value": "3585"
+            },
+            {
+                "channelId": "Parameter.Inverter.WCtlHzModCfg.Ena",
+                "editable": true,
+                "possibleValues": [
+                    "303",
+                    "308"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.430Z",
+                "value": "308"
+            },
+            {
+                "channelId": "Parameter.Inverter.CtlComCfg.WCtlCom.WGraFlb",
+                "editable": true,
+                "max": 1000,
+                "min": 0.01,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.456Z",
+                "value": "20.000"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.PFMinEna",
+                "editable": true,
+                "possibleValues": [
+                    "303",
+                    "308"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.444Z",
+                "value": "303"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.VArCfg.Dyn.VArGraEna",
+                "editable": true,
+                "possibleValues": [
+                    "303",
+                    "308"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.432Z",
+                "value": "303"
+            },
+            {
+                "channelId": "Parameter.FTPPush.Srv",
+                "editable": true,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:08.468Z",
+                "value": ""
+            },
+            {
+                "channelId": "Parameter.Spdwr.IgmpQryTx",
+                "editable": true,
+                "possibleValues": [
+                    "303",
+                    "4478",
+                    "4479"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:07.809Z",
+                "value": "4479"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.PFCtlWCfg.Dyn.WFilTms",
+                "editable": true,
+                "max": 1000,
+                "min": 0.01,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.438Z",
+                "value": "1.50"
+            },
+            {
+                "channelId": "Parameter.PvGen.PvWhSet",
+                "editable": true,
+                "max": 4000000000.0,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.407Z",
+                "value": "0"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.ImpCpn.OhmRis",
+                "editable": true,
+                "max": 10,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.435Z",
+                "value": "0.0000"
+            },
+            {
+                "channelId": "Parameter.GridGuard.Cntry.Aid.AsymDet.Stt",
+                "editable": true,
+                "possibleValues": [
+                    "303",
+                    "308"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.412Z",
+                "value": "303"
+            },
+            {
+                "channelId": "Parameter.Inverter.DGSModCfg.DGSFlCfg.FltEnd.ArStopSagTmms",
+                "editable": true,
+                "max": 1000,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.413Z",
+                "value": "500"
+            },
+            {
+                "channelId": "Parameter.Inverter.WModCfg.WCtlVolCfg.WGraPos",
+                "editable": true,
+                "max": 1000,
+                "min": 0.01,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.439Z",
+                "value": "20.00"
+            },
+            {
+                "channelId": "Parameter.Sys.DevRstr",
+                "editable": true,
+                "possibleValues": [
+                    "302",
+                    "1146"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:20.060Z",
+                "value": "302"
+            },
+            {
+                "channelId": "Parameter.Inverter.WCtlHzModCfg.WCtlHzCfg.HzUn[]",
+                "editable": true,
+                "max": 60,
+                "min": 44,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.430Z",
+                "values": [
+                    "49.800",
+                    "44.000",
+                    "44.000"
+                ]
+            },
+            {
+                "channelId": "Parameter.Inverter.CtlComCfg.WCtlCom2.TmsOut",
+                "editable": true,
+                "max": 1800,
+                "min": 1,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.437Z",
+                "value": "600.0"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.VArCtlWCfg.Crv.YVal[]",
+                "editable": true,
+                "max": 100,
+                "min": -100,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.435Z",
+                "values": [
+                    "0.000",
+                    "-5.000",
+                    "-33.000",
+                    "-33.000",
+                    "-33.000",
+                    "-33.000",
+                    "-33.000",
+                    "-33.000"
+                ]
+            },
+            {
+                "channelId": "Parameter.FTPPush.Port",
+                "editable": true,
+                "max": 65535,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:08.460Z",
+                "value": "21"
+            },
+            {
+                "channelId": "Parameter.Inverter.DGSModCfg.HystVolPu",
+                "editable": true,
+                "max": 1,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.413Z",
+                "value": "0.05"
+            },
+            {
+                "channelId": "Parameter.Operation.ManRstr.ManRstrUnVol",
+                "editable": true,
+                "possibleValues": [
+                    "303",
+                    "308"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.444Z",
+                "value": "303"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.PFCtlVolCfg.Crv.PF[]",
+                "editable": true,
+                "max": 1,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.442Z",
+                "values": [
+                    "0.80",
+                    "1.00",
+                    "1.00",
+                    "0.80"
+                ]
+            },
+            {
+                "channelId": "Parameter.IecCfg.GoCfg.GoMacId",
+                "editable": true,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:07.670Z",
+                "value": "01:0C:CD:01:00:00"
+            },
+            {
+                "channelId": "Parameter.GridGuard.Cntry.FrqCtl.lLim",
+                "editable": true,
+                "max": 60,
+                "min": 44,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.419Z",
+                "value": "47.50"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArMaxQ3",
+                "editable": true,
+                "max": 0,
+                "min": -14850,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.449Z",
+                "value": "-14850"
+            },
+            {
+                "channelId": "Parameter.Upd.AvalChkIstl",
+                "editable": true,
+                "possibleValues": [
+                    "302",
+                    "1146"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:20.015Z",
+                "value": "302"
+            },
+            {
+                "channelId": "Parameter.Wl.IsOn",
+                "editable": true,
+                "possibleValues": [
+                    "1129",
+                    "1130"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:07.053Z",
+                "value": "1129"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArModCfg.PFCtlWCfg.Dyn.WFilTmEna",
+                "editable": true,
+                "possibleValues": [
+                    "303",
+                    "308"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.437Z",
+                "value": "303"
+            },
+            {
+                "channelId": "Parameter.Sys.DevSig",
+                "editable": true,
+                "possibleValues": [
+                    "303",
+                    "878"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:21.878Z",
+                "value": "303"
+            },
+            {
+                "channelId": "Parameter.Wl.ExsNetw[]",
+                "editable": false,
+                "state": "Confirmed",
+                "timestamp": "2024-04-02T15:41:39.937Z",
+                "values": [
+                    "yoda",
+                    "13",
+                    "13-24",
+                    ""
+                ]
+            },
+            {
+                "channelId": "Parameter.Inverter.WModCfg.WCtlVolCfg.WGraNeg",
+                "editable": true,
+                "max": 1000,
+                "min": 0.01,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.439Z",
+                "value": "20.00"
+            },
+            {
+                "channelId": "Parameter.Operation.ManRstr.IsOn",
+                "editable": true,
+                "possibleValues": [
+                    "1129",
+                    "1130"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.444Z",
+                "value": "1130"
+            },
+            {
+                "channelId": "Parameter.Inverter.WModCfg.WCtlComCfg2.Dyn.WGraEna",
+                "editable": true,
+                "possibleValues": [
+                    "303",
+                    "308"
+                ],
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.435Z",
+                "value": "308"
+            },
+            {
+                "channelId": "Parameter.Mb.TcpSrv.Port",
+                "editable": true,
+                "max": 65535,
+                "min": 0,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:24.305Z",
+                "value": "502"
+            },
+            {
+                "channelId": "Parameter.Inverter.VArMaxQ4",
+                "editable": true,
+                "max": 0,
+                "min": -14850,
+                "state": "Confirmed",
+                "timestamp": "2024-03-01T09:20:32.449Z",
+                "value": "-14850"
+            }
+        ]
+    }
+]

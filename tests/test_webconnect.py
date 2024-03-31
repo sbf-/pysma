@@ -8,13 +8,14 @@ import aiohttp
 import pytest
 
 from pysma import SMA
-from pysma.definitions import device_type as device_type_sensor
+from pysma.definitions_webconnect import device_type as device_type_sensor
 from pysma.exceptions import (
     SmaAuthenticationException,
     SmaConnectionException,
     SmaReadException,
 )
 from pysma.sensor import Sensors
+from pysma.device_webconnect import SMAwebconnect
 
 from . import MOCK_DEVICE, MOCK_L10N, SMA_TESTDATA, mock_aioresponse  # noqa: F401
 
@@ -44,7 +45,7 @@ class Test_SMA_class:
             exception=aiohttp.client_exceptions.ClientConnectionError("mocked error"),
         )
         session = aiohttp.ClientSession()
-        sma = SMA(session, self.host, "pass")
+        sma = SMAwebconnect(session, self.host, "pass")
         with pytest.raises(SmaConnectionException):
             await sma._get_json("/dummy-url")
 
@@ -58,7 +59,7 @@ class Test_SMA_class:
             repeat=True,
         )
         session = aiohttp.ClientSession()
-        sma = SMA(session, self.host, "pass")
+        sma = SMAwebconnect(session, self.host, "pass")
         with pytest.raises(SmaConnectionException):
             await sma._get_json("/dummy-url")
 
@@ -70,11 +71,11 @@ class Test_SMA_class:
             repeat=True,
         )
         session = aiohttp.ClientSession()
-        sma = SMA(session, self.host, "pass")
+        sma = SMAwebconnect(session, self.host, "pass")
         with pytest.raises(SmaConnectionException):
             await sma._get_json("/dummy-url")
 
-    @patch("pysma._LOGGER.warning")
+    @patch("pysma.device_webconnect._LOGGER.warning")
     async def test_request_json_invalid_json(
         self, mock_warn, mock_aioresponse  # noqa: F811
     ):
@@ -84,13 +85,13 @@ class Test_SMA_class:
             body="THIS IS NOT A VALID JSON",
         )
         session = aiohttp.ClientSession()
-        sma = SMA(session, self.host, "pass")
+        sma = SMAwebconnect(session, self.host, "pass")
         json = await sma._get_json("/dummy-url")
         assert isinstance(json, dict)
         assert json == {}
         assert mock_warn.call_count == 1
 
-    @patch("pysma._LOGGER.warning")
+    @patch("pysma.device_webconnect._LOGGER.warning")
     async def test_read_no_password(self, mock_warn, mock_aioresponse):  # noqa: F811
         """Test read_body without password."""
         mock_aioresponse.post(
@@ -111,26 +112,26 @@ class Test_SMA_class:
             },
         )
         session = aiohttp.ClientSession()
-        sma = SMA(session, self.host)
+        sma = SMAwebconnect(session, self.host)
         sensors = Sensors(device_type_sensor)
         assert await sma.read(sensors)
         assert sensors["6800_08822000"].value == "Sunny Boy 3.6"
         assert mock_warn.call_count == 0
 
-    @patch("pysma._LOGGER.warning")
+    @patch("pysma.device_webconnect._LOGGER.warning")
     async def test_read_body_error(self, mock_warn, mock_aioresponse):  # noqa: F811
         """Test read_body with SmaReadException."""
         mock_aioresponse.post(
             f"{self.base_url}/dyn/getValues.json?sid=ABCD", payload={"err": 401}
         )
         session = aiohttp.ClientSession()
-        sma = SMA(session, self.host, "pass")
+        sma = SMAwebconnect(session, self.host, "pass")
         sma._sid = "ABCD"
         with pytest.raises(SmaReadException):
             await sma._read_body("/dyn/getValues.json", payload={"dummy": "payload"})
         assert mock_warn.call_count == 1
 
-    @patch("pysma._LOGGER.warning")
+    @patch("pysma.device_webconnect._LOGGER.warning")
     async def test_read_body_unexpected(
         self, mock_warn, mock_aioresponse  # noqa: F811
     ):
@@ -145,7 +146,7 @@ class Test_SMA_class:
             },
         )
         session = aiohttp.ClientSession()
-        sma = SMA(session, self.host, "pass")
+        sma = SMAwebconnect(session, self.host, "pass")
         sma._sid = "ABCD"
         result_body = await sma._read_body(
             "/dyn/getValues.json", payload={"dummy": "payload"}
@@ -178,7 +179,7 @@ class Test_SMA_class:
         )
 
         session = aiohttp.ClientSession()
-        sma = SMA(session, self.host)
+        sma = SMAwebconnect(session, self.host)
         read_dash_logger = await sma.read_dash_logger()
         assert read_dash_logger == {
             "7000": {
@@ -213,7 +214,7 @@ class Test_SMA_class:
         )
 
         session = aiohttp.ClientSession()
-        sma = SMA(session, self.host, "pass")
+        sma = SMAwebconnect(session, self.host, "pass")
         read_logger = await sma.read_logger(28704, 1622592000, 1622491200)
         assert read_logger == [
             {"t": 1622498400, "v": 4542749},
@@ -231,19 +232,19 @@ class Test_SMA_class:
         )
 
         session = aiohttp.ClientSession()
-        sma = SMA(session, self.host, "pass")
+        sma = SMAwebconnect(session, self.host, "pass")
 
         with pytest.raises(SmaReadException):
             await sma.read_logger(28704, 1622592000, 1622491200)
 
-    @patch("pysma._LOGGER.warning")
+    @patch("pysma.device_webconnect._LOGGER.warning")
     async def test_new_session(self, mock_warn, mock_aioresponse):  # noqa: F811
         """Test new_session."""
         mock_aioresponse.post(
             f"{self.base_url}/dyn/login.json", payload={"result": {"sid": "ABCD"}}
         )
         session = aiohttp.ClientSession()
-        sma = SMA(session, self.host, "extralongpassword")
+        sma = SMAwebconnect(session, self.host, "extralongpassword")
         assert await sma.new_session()
 
         assert mock_warn.call_count == 1
@@ -256,22 +257,22 @@ class Test_SMA_class:
         """Test new_session with invalid group."""
         session = aiohttp.ClientSession()
         with pytest.raises(KeyError):
-            SMA(session, self.host, "pass", "invalid-group")
+            SMAwebconnect(session, self.host, "pass", "invalid-group")
 
     async def test_new_session_fail(self, mock_aioresponse):  # noqa: F811
         """Test new_session with empty result."""
         mock_aioresponse.post(f"{self.base_url}/dyn/login.json", payload={"result": {}})
 
         session = aiohttp.ClientSession()
-        sma = SMA(session, self.host, "pass")
+        sma = SMAwebconnect(session, self.host, "pass")
         with pytest.raises(SmaAuthenticationException):
             await sma.new_session()
 
-    @patch("pysma._LOGGER.error")
+    @patch("pysma.device_webconnect._LOGGER.error")
     async def test_new_session_error(self, mock_error, mock_aioresponse):  # noqa: F811
         """Test new_session with error."""
         session = aiohttp.ClientSession()
-        sma = SMA(session, self.host, "pass")
+        sma = SMAwebconnect(session, self.host, "pass")
 
         mock_aioresponse.post(
             f"{self.base_url}/dyn/login.json", payload={"err": "dummy-error"}
@@ -332,7 +333,7 @@ class Test_SMA_class:
             },
         )
         session = aiohttp.ClientSession()
-        sma = SMA(session, self.host, "pass")
+        sma = SMAwebconnect(session, self.host, "pass")
         result = await sma.device_info()
         assert result
         assert result == MOCK_DEVICE
@@ -356,7 +357,7 @@ class Test_SMA_class:
             },
         )
         session = aiohttp.ClientSession()
-        sma = SMA(session, self.host, "pass")
+        sma = SMAwebconnect(session, self.host, "pass")
         assert await sma.new_session()
         result = await sma.device_info()
         assert result
@@ -376,7 +377,7 @@ class Test_SMA_class:
             payload={},
         )
         session = aiohttp.ClientSession()
-        sma = SMA(session, self.host, "pass")
+        sma = SMAwebconnect(session, self.host, "pass")
         assert await sma.new_session()
         with pytest.raises(SmaReadException):
             await sma.device_info()
@@ -431,14 +432,14 @@ class Test_SMA_class:
         )
 
         session = aiohttp.ClientSession()
-        sma = SMA(session, self.host, "pass")
+        sma = SMAwebconnect(session, self.host, "pass")
         assert len(await sma.get_sensors()) == number_of_sensors
 
     async def test_post_json(self):
         session = aiohttp.ClientSession()
-        sma = SMA(session, self.host, "pass")
+        sma = SMAwebconnect(session, self.host, "pass")
 
-        with patch("pysma.SMA._request_json") as mock_request_json:
+        with patch("pysma.SMAwebconnect._request_json") as mock_request_json:
             await sma._post_json("dummy_url")
             mock_request_json.assert_called_once_with(
                 "POST",
@@ -447,7 +448,7 @@ class Test_SMA_class:
                 headers={"content-type": "application/json"},
             )
 
-        with patch("pysma.SMA._request_json") as mock_request_json:
+        with patch("pysma.SMAwebconnect._request_json") as mock_request_json:
             await sma._post_json("dummy_url", {"data": "dummy"})
             mock_request_json.assert_called_once_with(
                 "POST",
@@ -456,7 +457,7 @@ class Test_SMA_class:
                 headers={"content-type": "application/json"},
             )
 
-    @patch("pysma._LOGGER.warning")
+    @patch("pysma.device_webconnect._LOGGER.warning")
     async def test_unsupported_lang(self, mock_warn, mock_aioresponse):  # noqa: F811
         """Test fallback lang in case requested lang is not available."""
         mock_aioresponse.get(
@@ -464,7 +465,7 @@ class Test_SMA_class:
             status=400,
         )
         session = aiohttp.ClientSession()
-        sma = SMA(session, self.host, "pass", lang="de-CH")
+        sma = SMAwebconnect(session, self.host, "pass", lang="de-CH")
         await sma._read_l10n()
         assert mock_warn.call_count == 1
         assert len(sma._l10n) > 0

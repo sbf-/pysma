@@ -18,5 +18,16 @@ e.g. the Tripower X series released in 2022
 
 See [example.py](./example.py) for a basic usage and tests
 
+## Successfully tested devices
 
+| Bereich | Gerät | Methode |
+|--|--|--|
+| Wechselrichter | Tripower X (STP XX-50)<br>(15,25) | ennexos |
+| Hybrid-Wechselrichter | Sunny Tripower Smart Energy<br>(10.0)  | webconnect |
+| Hybrid-Wechselrichter | Sunny Boy Storage<br>(SBS3.7-10, SBS5.0-10) | webconnect |
+| | | |
+| Energy Meter | Energy Meter 2<br>(EMTER 20) | speedwireEM |
+| Energy Meter | Sunny Home Manager 2<br>(SHM2) | speedwireEM |
+| | | |
+ 
 

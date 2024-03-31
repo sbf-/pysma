@@ -1,0 +1,35 @@
+# pyproject.toml
+
+[build-system]
+requires      = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pysma-plus"
+version = "0.0.2"
+description = "Library to interface SMA Devices via WebConnect, EnnexOS and Energy Meter Devices"
+readme = "README.md"
+authors = [{ name = "Sven Bursch-Osewold", email = "sb_pysma@bursch.com" },{ name = "Johann Kellerman" , email ="kellerza@gmail.com"} ]
+license = { file = "LICENSE" }
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+]
+dependencies = [
+    "aiohttp>3.3,<4",
+    "attrs>18",
+    "jmespath<2",
+]
+requires-python = ">=3.9"
+
+[tool.setuptools]
+include-package-data = false
+
+[tool.setuptools.packages.find]
+include = ["pysmaplus"]
+exclude = ["pysma/*"]
+
+
+[project.urls]
+Homepage = "https://github.com/littleyoda/pysma"

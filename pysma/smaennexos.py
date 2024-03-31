@@ -24,9 +24,9 @@ from .const import Identifier
 # TODO Identifier.voltage_l1
 ennexosSensors = [
 
-    Sensor("Coolsys.Inverter.TmpVal.1", None, factor=1, unit=None),
-    Sensor("Coolsys.Inverter.TmpVal.2", None, factor=1, unit=None),
-    Sensor("Coolsys.Inverter.TmpVal.3", None, factor=1, unit=None),
+    Sensor("Coolsys.Inverter.TmpVal.1", Identifier.temp_a, factor=1, unit="°C"),
+    Sensor("Coolsys.Inverter.TmpVal.2", Identifier.temp_b, factor=1, unit="°C"),
+    Sensor("Coolsys.Inverter.TmpVal.3", Identifier.temp_c, factor=1, unit="°C"),
     Sensor("DcMs.Amp.1", Identifier.pv_current_a, factor=1, unit="A"),
     Sensor("DcMs.Amp.2", Identifier.pv_current_b, factor=1, unit="A"),
     Sensor("DcMs.Amp.3", Identifier.pv_current_c, factor=1, unit="A"),

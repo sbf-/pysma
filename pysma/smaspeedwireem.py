@@ -22,9 +22,6 @@ from .sensor import Sensors
 from .device import Device
 
 obis2sensor= [
-    # 4 actucal / current => 8 Bytes
-    # 8 counter / sum => 12 Bytes
-
     Sensor("1:4:0", Identifier.metering_power_absorbed, factor=10, unit="W"), # p consume
     Sensor("1:8:0", Identifier.metering_total_absorbed, factor=3600000, unit="kWh"),
     Sensor("2:4:0", Identifier.metering_power_supplied, factor=10, unit="W"), # p supply
@@ -150,8 +147,7 @@ class SMAspeedwireEM(Device):
 
         for s in obis2sensor:
             if s.name is not None:
-                # TODO copy.copy missing
-                device_sensors.add(s) 
+                device_sensors.add(copy.copy(s)) 
 
         return device_sensors
 
@@ -229,7 +225,7 @@ class SMAspeedwireEM(Device):
             return None
         protocolID = int.from_bytes(p[16:18], byteorder="big")
         if (protocolID != 0x6069):
-            print("Unknown protocoll " + str(protocolID))
+            _LOGGER.debug("Unknown protocoll " + str(protocolID))
             return None
         
         data = {}
@@ -248,6 +244,8 @@ class SMAspeedwireEM(Device):
             mtariff = int.from_bytes(p[pos + 3: pos + 4], byteorder="big")
             obis = f'{mvalueindex}:{mtyp}:{mtariff}'
             if mtyp in [4,8]:
+                # 4 actucal / current => 8 Bytes
+                # 8 counter / sum => 12 Bytes
                 value = int.from_bytes(p[pos + 4 : pos + 4 + mtyp], byteorder="big")
                 pos += 4 + mtyp
             elif mchannel == 144 and mtyp == 0:
@@ -255,7 +253,7 @@ class SMAspeedwireEM(Device):
                 obis= "sw_version"
                 pos += 4 + 4
             else:
-                print(mchannel, mvalueindex, mtyp, mtariff)
+                _LOGGER.debug("Unknown packet in speedwire: " + str(mchannel) + " " + str(mvalueindex) + " " + str(mtyp) + " " + str(mtariff))
                 pos += 4 + 4
             data[obis] = value
         return data

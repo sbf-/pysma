@@ -5,34 +5,17 @@ import logging
 from typing import Any, Dict, Optional
 
 
-#import jmespath  # type: ignore
 from aiohttp import ClientSession, ClientTimeout, client_exceptions, hdrs
 from .sensor import Sensor
 from . import definitions
 from .const import (
-    DEFAULT_LANG,
     DEFAULT_TIMEOUT,
-    DEVICE_INFO,
-    ENERGY_METER_VIA_INVERTER,
-    FALLBACK_DEVICE_INFO,
-    GENERIC_SENSORS,
-    OPTIMIZERS_VIA_INVERTER,
-    URL_ALL_PARAMS,
-    URL_ALL_VALUES,
-    URL_DASH_LOGGER,
-    URL_DASH_VALUES,
-    URL_LOGGER,
-    URL_LOGIN,
-    URL_LOGOUT,
-    URL_VALUES,
-    USERS,
 )
 from .exceptions import (
     SmaAuthenticationException,
     SmaConnectionException,
     SmaReadException,
 )
-from .helpers import version_int_to_string
 from .sensor import Sensors
 from .device import Device
 from .const import Identifier
@@ -62,11 +45,11 @@ ennexosSensors = [
     Sensor("GridMs.A.phsC", Identifier.current_l3, factor=1, unit="A"),
     Sensor("GridMs.GriTyp", None, factor=1, unit=None),
     Sensor("GridMs.Hz", Identifier.frequency, factor=1, unit="Hz"),
-    Sensor("GridMs.PhV.phsA", None, factor=1, unit=None), 
+    Sensor("GridMs.PhV.phsA", Identifier.voltage_l1, factor=1, unit="V"), 
     Sensor("GridMs.PhV.phsA2B", None, factor=1, unit=None),
-    Sensor("GridMs.PhV.phsB", None, factor=1, unit=None),
+    Sensor("GridMs.PhV.phsB", Identifier.voltage_l2, factor=1, unit="V"),
     Sensor("GridMs.PhV.phsB2C", None, factor=1, unit=None),
-    Sensor("GridMs.PhV.phsC", None, factor=1, unit=None),
+    Sensor("GridMs.PhV.phsC", Identifier.voltage_l3, factor=1, unit="V"),
     Sensor("GridMs.PhV.phsC2A", None, factor=1, unit=None),
     Sensor("GridMs.TotA", Identifier.current_total, factor=1, unit="A"),
     Sensor("GridMs.TotPFEEI", None, factor=1, unit=None),
@@ -191,9 +174,9 @@ class SMAennexos(Device):
                     timeout=ClientTimeout(total=DEFAULT_TIMEOUT),
                     **parameters
                 ) as res:
-                    if ("Content-Length" in res.headers and res.headers["Content-Length"] == '0'):
+                    if (res.status == 401):
                         raise SmaAuthenticationException(
-                            f"Login failed!"
+                            f"Token failed!"
                         )
                     res = await res.json()
                    # _LOGGER.debug("Received reply %s", res)
@@ -215,30 +198,6 @@ class SMAennexos(Device):
             ) from exc
         return {}
 
-    def unit_of_measurement(self, name):
-        if (name.endswith("TmpVal")):
-            return "°C"
-        if (".W." in name):
-            return "W"
-        if (".TotWh" in name):
-            return "Wh"
-        if (name.endswith(".TotW")):
-            return "W"
-        if (name.endswith(".TotW.Pv")):
-            return "W"
-        if (name.endswith(".Watt")):
-            return "W"
-        if (".A." in name):
-            return "A"
-        if (name.endswith(".Amp")):
-            return "A"
-        if (name.endswith(".Vol")):
-            return "V"
-        if (name.endswith(".VA.")):
-            return "VA"
-    #    _LOGGER.debug("No unit of measurement for " + name)
-        return ""
-
 
     async def new_session(self) -> bool:
         """Establish a new session.
@@ -246,16 +205,16 @@ class SMAennexos(Device):
         Returns:
             bool: authentication successful
         """
-
         loginurl = self._url + '/api/v1/token'
         postdata = {'data':{'grant_type': 'password',
                 'username': self._new_session_data["user"],
                 'password': self._new_session_data["pass"],
                 }}
         ret = await self._jsonrequest(loginurl,postdata)
+        if "access_token" not in ret:
+            raise SmaAuthenticationException(f"Login failed!")
         self._token = ret["access_token"]
         self._authorization_header = { "Authorization" : "Bearer " + self._token } 
-
         _LOGGER.debug("Login successfull")
         return True
 
@@ -336,7 +295,15 @@ class SMAennexos(Device):
             bool: reading was successful
         """
         notfound = []
-        data = await self._get_livedata()
+        data = None
+        try:
+            data = await self._get_livedata()
+        except SmaAuthenticationException as e:
+            # Relogin
+            _LOGGER.debug("Re-login .. Starting new Session")
+            await self.new_session()
+            data = await self._get_livedata()
+
         for sen in sensors:
             if sen.enabled:
                 if sen.key in data:

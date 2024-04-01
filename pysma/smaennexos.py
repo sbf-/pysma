@@ -21,7 +21,6 @@ from .device import Device
 from .const import Identifier
 
 
-# TODO Identifier.voltage_l1
 ennexosSensors = [
 
     Sensor("Coolsys.Inverter.TmpVal.1", Identifier.temp_a, factor=1, unit="°C"),

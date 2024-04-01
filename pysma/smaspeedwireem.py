@@ -5,6 +5,7 @@ import copy
 import logging
 import binascii
 from typing import Any, Dict, Optional
+import datetime
 
 # https://www.unifox.at/software/sma-em-daemon/
 # https://cdn.sma.de/fileadmin/content/www.developer.sma.de/docs/EMETER-Protokoll-TI-en-10.pdf?v=1699276024
@@ -112,6 +113,12 @@ class SMAspeedwireEM(Device):
 
 
 
+    async def run(self):
+        while True:
+            await watch(self._q._connection)
+            msg = self._q.receive()
+            print(msg)
+
     async def new_session(self) -> bool:
         """Establish a new session.
 
@@ -158,6 +165,31 @@ class SMAspeedwireEM(Device):
         pass
 
 
+    def getData(self):
+        """
+
+        Hack:
+            If the function is called less frequently than the device supplies data,
+            the UDP packets will be stored in the buffer.
+            If the read instruction (sock.recv) takes only milliseconds, I assume that
+            the data came from the buffer and discard it. Otherwise outdated values would
+            be used.
+            One of my most ugly hacks.
+
+        """
+        data = None
+        tries = 4
+        while tries > 0:
+            a = datetime.datetime.now()
+            data=self._decode(self._sock.recv(608))
+            b = datetime.datetime.now()
+            if data and (b-a).total_seconds() < 0.1:
+                continue
+            if data:
+                break
+            tries -= 1
+        return data
+        # TODO raise SmaConnectionException or SmaReadException if no connection after 4 tries
 
     async def read(self, sensors: Sensors) -> bool:
         """Read a set of keys.
@@ -169,11 +201,7 @@ class SMAspeedwireEM(Device):
             bool: reading was successful
         """
         notfound = []
-        for i in range(0,4):
-            data=self._decode(self._sock.recv(608))
-            if data:
-                break
-        # TODO raise SmaConnectionException or SmaReadException if no connection after 4 tries
+        data = self.getData()
             
         for sensor in sensors:
           if (sensor.key in data):
@@ -199,10 +227,9 @@ class SMAspeedwireEM(Device):
         Returns:
             dict: dict containing serial, name, type, manufacturer and sw_version
         """
-        for i in range(0,4):
-            data=self._decode(self._sock.recv(608))
-            if data:
-                break
+        notfound = []
+        data = self.getData()
+
         device_info = {
             "serial": data["serial"],
             "name": data["device"],
@@ -224,7 +251,8 @@ class SMAspeedwireEM(Device):
         if p[0:4] != b"SMA\0":
             return None
         protocolID = int.from_bytes(p[16:18], byteorder="big")
-        if (protocolID != 0x6069):
+        
+        if (protocolID not in [0x6069, 0x6081]):
             _LOGGER.debug("Unknown protocoll " + str(protocolID))
             return None
         

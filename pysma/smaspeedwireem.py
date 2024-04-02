@@ -131,6 +131,7 @@ class SMAspeedwireEM(Device):
 
         self._sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
         self._sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        self._sock.settimeout(5)
         self._sock.bind(("", MCAST_PORT))
         try:
             mreq = struct.pack("4s4s", socket.inet_aton(MCAST_GRP), socket.inet_aton(IPBIND))
@@ -179,17 +180,21 @@ class SMAspeedwireEM(Device):
         """
         data = None
         tries = 4
-        while tries > 0:
-            a = datetime.datetime.now()
-            data=self._decode(self._sock.recv(608))
-            b = datetime.datetime.now()
-            if data and (b-a).total_seconds() < 0.1:
-                continue
-            if data:
-                break
-            tries -= 1
+        try:
+            while tries > 0:
+                a = datetime.datetime.now()
+                data=self._decode(self._sock.recv(608))
+                b = datetime.datetime.now()
+                if data and (b-a).total_seconds() < 0.1:
+                    continue
+                if data:
+                    break
+                tries -= 1
+        except TimeoutError as e:
+            raise SmaConnectionException("No speedwire packet received!") from e
+        if not data:
+            raise SmaReadException("No usable data received!")
         return data
-        # TODO raise SmaConnectionException or SmaReadException if no connection after 4 tries
 
     async def read(self, sensors: Sensors) -> bool:
         """Read a set of keys.

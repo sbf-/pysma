@@ -265,6 +265,8 @@ class SMAennexos(Device):
         """
         device_sensors = Sensors()
         ret = await self._get_livedata()
+        _LOGGER.debug("Found Sensors: %s", ret)
+
         for s in ennexosSensors:
             if s.name:
                 device_sensors.add(copy.copy(s))
@@ -334,6 +336,7 @@ class SMAennexos(Device):
              'headers': self._authorization_header
         }
         dev = await self._jsonrequest(url,requestdata, hdrs.METH_GET)
+        _LOGGER.debug("Found Device: %s", dev)
         device_info = {
             "serial": dev["serial"],
             "name": dev["product"],

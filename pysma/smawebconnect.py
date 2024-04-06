@@ -468,3 +468,6 @@ class SMAwebconnect(Device):
                         device_sensors.add(new_sensor)
 
         return device_sensors
+
+    async def get_debug(self) -> Dict:
+        return {}

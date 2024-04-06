@@ -120,7 +120,9 @@ class SMAennexos(Device):
     _url: str
     _token: str
     _authorization_header: str
-
+    _last_parameters: Any
+    _last_measurements: Any
+    _last_device: Any
 
     def __init__(
         self,
@@ -213,18 +215,56 @@ class SMAennexos(Device):
         if "access_token" not in ret:
             raise SmaAuthenticationException(f"Login failed!")
         self._token = ret["access_token"]
-        self._authorization_header = { "Authorization" : "Bearer " + self._token } 
+        self._authorization_header = { "Authorization" : "Bearer " + self._token,
+                                       "Content-Type": "application/json"
+                                       }
         _LOGGER.debug("Login successfull")
         return True
 
-    async def _get_livedata(self) -> Dict:
+    async def _get_parameter(self : str) -> Dict:
+        url = self._url + '/api/v1/parameters/search'
+        postdata = {
+             'data': '{"queryItems":[{"componentId":"IGULD:SELF"}]}',
+             'headers': self._authorization_header
+        }
+        ret = await self._jsonrequest(url, postdata)
+        data = {}
+        if (len(ret) != 1):
+            _LOGGER.warning("Uncommon length of array in parameters request: %d", len(ret))
+
+        for d in ret[0]["values"]:
+            dname = d["channelId"].replace("Parameter.","").replace("[]", "")
+            if "value" in d:
+                v = d["value"]
+                data[dname] = {
+                        "name": dname,
+                        "value": v,
+                        "origname": d["channelId"]
+                    }
+            elif "values" in d:
+                # Split Value-Arrays
+                for idx in range(0, len(d["values"])):
+                    v = d["values"][idx]
+                    idxname = dname + "." + str(idx + 1)
+                    data[idxname] = {
+                            "name": idxname,
+                            "value": v,
+                            "origname": d["channelId"]
+                    }
+            else:
+                # Value current not available // night?
+                # TODO
+                pass
+        return data
+
+    async def _get_livedata(self : str) -> Dict:
         liveurl = self._url + '/api/v1/measurements/live'
         postdata = { 
              'data': '[{"componentId":"IGULD:SELF"}]',
              'headers': self._authorization_header
         }
         ret = await self._jsonrequest(liveurl,postdata)
-        device_sensors = Sensors()
+        self._last_measurements = ret
         data = {}
         for d in ret:
             dname = d["channelId"].replace("Measurement.","").replace("[]", "")
@@ -235,7 +275,7 @@ class SMAennexos(Device):
                 data[dname] = {
                         "name": dname,
                         "value": v,
-                        "origname": d["channelId"] 
+                        "origname": d["channelId"]
                     }
             elif "values" in d["values"][0]:
                 # Split Value-Arrays
@@ -247,7 +287,7 @@ class SMAennexos(Device):
                     data[idxname] = {
                             "name": idxname,
                             "value": v,
-                            "origname": d["channelId"] 
+                            "origname": d["channelId"]
                     }
             else:
                 # Value current not available // night?
@@ -336,6 +376,8 @@ class SMAennexos(Device):
              'headers': self._authorization_header
         }
         dev = await self._jsonrequest(url,requestdata, hdrs.METH_GET)
+        self._last_device = dev
+        self._last_parameters = await self._get_parameter()
         _LOGGER.debug("Found Device: %s", dev)
         device_info = {
             "serial": dev["serial"],
@@ -345,3 +387,10 @@ class SMAennexos(Device):
             "sw_version": dev["firmwareVersion"],
         }
         return device_info
+
+    async def get_debug(self) -> Dict:
+        return {
+            "device": self._last_device,
+            "measurements": self._last_measurements,
+            "parameters": self._last_parameters
+        }

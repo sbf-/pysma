@@ -1,3 +1,4 @@
+import base64
 import socket
 import struct
 import asyncio
@@ -98,6 +99,7 @@ class SMAspeedwireEM(Device):
     """Class to connect to the ennexos based SMA inverters. (e.g. Tripower X Devices)"""
     _sock: socket
     _susyid: Dict[int, Any] = {270: "Energy Meter", 349: "Energy Meter 2", 372: "Sunny Home Manager 2"}
+    _last_packet: bytes = None
 
     def __init__(self):
         """Init SMA connection.
@@ -183,7 +185,8 @@ class SMAspeedwireEM(Device):
         try:
             while tries > 0:
                 a = datetime.datetime.now()
-                data=self._decode(self._sock.recv(608))
+                self._last_packet = self._sock.recv(608)
+                data=self._decode(self._last_packet)
                 b = datetime.datetime.now()
                 if data and (b-a).total_seconds() < 0.1:
                     continue
@@ -290,3 +293,7 @@ class SMAspeedwireEM(Device):
                 pos += 4 + 4
             data[obis] = value
         return data
+
+    async def get_debug(self) -> Dict:
+        encoded = base64.b64encode(self._last_packet)
+        return { "packet": encoded.decode('ascii')}

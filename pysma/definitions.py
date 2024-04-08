@@ -15,7 +15,7 @@ status = Sensor("6180_08214800", "status", path=JMESPATHS_TAG, l10n_translate=Tr
 #: General operating status
 operating_status_general = Sensor(
     "6180_08412800",
-    "operating_status_general",
+    Identifier.operating_status_genereal,
     path=JMESPATHS_TAG,
     l10n_translate=True,
     enabled=False,
@@ -23,7 +23,7 @@ operating_status_general = Sensor(
 #: Operating status
 operating_status = Sensor(
     "6180_08412B00",
-    "operating_status",
+    Identifier.operating_status,
     path=JMESPATHS_TAG,
     l10n_translate=True,
     enabled=False,
@@ -32,7 +32,7 @@ operating_status = Sensor(
 #: General operating status
 inverter_condition = Sensor(
     "6180_08414C00",
-    "inverter_condition",
+    Identifier.inverter_condition,
     path=JMESPATHS_TAG,
     l10n_translate=True,
     enabled=False,
@@ -40,7 +40,7 @@ inverter_condition = Sensor(
 #: Inverter Condition
 inverter_system_init = Sensor(
     "6800_08811F00",
-    "inverter_system_init",
+    Identifier.inverter_system_init,
     path=JMESPATHS_TAG,
     l10n_translate=True,
     enabled=False,
@@ -48,7 +48,7 @@ inverter_system_init = Sensor(
 #: Grid connection status
 grid_connection_status = Sensor(
     "6180_0846A700",
-    "grid_connection_status",
+    Identifier.grid_connection_status,
     path=JMESPATHS_TAG,
     l10n_translate=True,
     enabled=False,
@@ -56,7 +56,7 @@ grid_connection_status = Sensor(
 #: Grid relay status
 grid_relay_status = Sensor(
     "6180_08416400",
-    "grid_relay_status",
+    Identifier.grid_relay_status,
     path=JMESPATHS_TAG,
     l10n_translate=True,
     enabled=False,
@@ -92,7 +92,7 @@ pv_current_c = Sensor(
 #: Isolation Resistance
 pv_isolation_resistance = Sensor(
     "6102_00254F00_0",
-    "pv_isolation_resistance",
+    Identifier.pv_isolation_resistance,
     unit="kOhm",
     factor=1000,
     enabled=False,
@@ -167,7 +167,7 @@ grid_power_factor = Sensor(
 #: Grid Power factor excitation
 grid_power_factor_excitation = Sensor(
     "6180_08465A00",
-    "grid_power_factor_excitation",
+    Identifier.grid_power_factor_excitation,
     path=JMESPATHS_TAG,
     l10n_translate=True,
     enabled=False,
@@ -277,7 +277,7 @@ metering_current_consumption = Sensor(
 #: Total power consumption measured by energy meter
 metering_total_consumption = Sensor(
     "6400_00543A00",
-    "metering_total_consumption",
+    Identifier.metering_total_consumption,
     unit="kWh",
     factor=1000,
     enabled=False,
@@ -360,7 +360,7 @@ battery_temp_c = Sensor("6100_40495B00_2", Identifier.battery_temp_c, unit="°C"
 #: Battery status operating mode
 battery_status_operating_mode = Sensor(
     "6180_08495E00",
-    "battery_status_operating_mode",
+    Identifier.battery_status_operating_mode,
     path=JMESPATHS_TAG,
     l10n_translate=True,
 )

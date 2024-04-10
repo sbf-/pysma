@@ -1,0 +1,22 @@
+{
+   "_links" : {
+      "ui_DeviceRecovery" : [],
+      "ui_Edit_DeviceFactoryReset" : [],
+      "ui_Edit_DeviceProperties" : [],
+      "ui_Universe_Manual_Update_Upload" : [],
+      "ui_View_DeviceProperties" : []
+   },
+   "clusterType" : "Secondary",
+   "deviceId" : "IGULD:SELF",
+   "firmwareVersion" : "03.06.15.R",
+   "generatorPower" : 15000,
+   "ipAddress" : "192.168.1.2",
+   "name" : "WR X15",
+   "plantId" : "Plant:1",
+   "product" : "Sunny Tripower X 15",
+   "productGroupTagId" : 8001,
+   "productTagId" : 9491,
+   "serial" : "3016259999",
+   "vendor" : "SMA",
+   "wifiIpAddress" : "172.22.0.1"
+}

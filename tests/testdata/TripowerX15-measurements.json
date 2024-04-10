@@ -1,0 +1,928 @@
+[
+    {
+        "channelId": "Measurement.Coolsys.Inverter.TmpVal[]",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T12:07:59.374Z",
+                "values": [
+                    43.0784797668457,
+                    43.7033576965332,
+                    42.18841552734375
+                ]
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.DcMs.Amp[]",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T12:07:59.374Z",
+                "values": [
+                    1.8562802076339722,
+                    1.6070905923843384,
+                    1.5880577564239502
+                ]
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.DcMs.TotDcEnCntWh[]",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T12:07:59.375Z",
+                "values": [
+                    359115.5373608734,
+                    282151.539183803,
+                    284370.7491031708
+                ]
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.DcMs.Vol[]",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T12:07:59.374Z",
+                "values": [
+                    538.7156982421875,
+                    406.184326171875,
+                    414.0189514160156
+                ]
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.DcMs.Watt[]",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T12:07:59.374Z",
+                "values": [
+                    1002.5647583007812,
+                    655.740966796875,
+                    657.0332641601562
+                ]
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.GridGuard.Cntry",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-03-01T09:20:38.207Z",
+                "value": 27
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.GridMs.A.phsA",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T12:07:59.375Z",
+                "value": 3.488025665283203
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.GridMs.A.phsB",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T12:07:59.375Z",
+                "value": 3.49516224861145
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.GridMs.A.phsC",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T12:07:59.375Z",
+                "value": 3.451599597930908
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.GridMs.GriTyp",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-03-01T09:20:44.027Z",
+                "value": 18007
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.GridMs.Hz",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T12:07:59.375Z",
+                "value": 49.98290252685547
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.GridMs.PhV.phsA",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T12:07:59.375Z",
+                "value": 235.37158203125
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.GridMs.PhV.phsA2B",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T12:07:59.375Z",
+                "value": 407.6067199707031
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.GridMs.PhV.phsB",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T12:07:59.375Z",
+                "value": 235.9194793701172
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.GridMs.PhV.phsB2C",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T12:07:59.375Z",
+                "value": 408.5845947265625
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.GridMs.PhV.phsC",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T12:07:59.375Z",
+                "value": 235.80242919921875
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.GridMs.PhV.phsC2A",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T12:07:59.375Z",
+                "value": 408.5014343261719
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.GridMs.TotA",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T12:07:59.375Z",
+                "value": 10.43478775024414
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.GridMs.TotPFEEI",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T12:07:59.375Z",
+                "value": -0.999999463558197
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.GridMs.TotPFExt",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T12:07:59.375Z",
+                "value": 1042
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.GridMs.TotPFPrc",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T12:07:59.375Z",
+                "value": 0.999999463558197
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.GridMs.TotVA",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T12:07:59.375Z",
+                "value": 2459.45458984375
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.GridMs.TotVAr",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T12:07:59.375Z",
+                "value": -2.438775062561035
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.GridMs.TotW",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T12:07:59.375Z",
+                "value": 2313.833740234375
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.GridMs.TotW.Pv",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T12:07:59.375Z",
+                "value": 2313.833740234375
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.GridMs.VA.phsA",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T12:07:59.375Z",
+                "value": 820.98095703125
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.GridMs.VA.phsB",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T12:07:59.375Z",
+                "value": 824.5772094726562
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.GridMs.VA.phsC",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T12:07:59.375Z",
+                "value": 813.8958740234375
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.GridMs.VAr.phsA",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T12:07:59.375Z",
+                "value": -2.5052361488342285
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.GridMs.VAr.phsB",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T12:07:59.375Z",
+                "value": -0.10727408528327942
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.GridMs.VAr.phsC",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T12:07:59.375Z",
+                "value": 0.1737358272075653
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.GridMs.W.phsA",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T12:07:59.375Z",
+                "value": 771.0770874023438
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.GridMs.W.phsB",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T12:07:59.375Z",
+                "value": 771.7919311523438
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.GridMs.W.phsC",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T12:07:59.375Z",
+                "value": 770.96484375
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.InOut.GI1",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T12:07:59.295Z",
+                "value": 48
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.Inverter.VArModCfg.PFCtlVolCfg.Stt",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T12:07:59.375Z",
+                "value": 303
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.Isolation.FltA",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T12:07:59.375Z",
+                "value": 0.010782657191157341
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.Isolation.LeakRis",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T12:07:59.375Z",
+                "value": 747784.8125
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.Metering.TotFeedTms",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T12:07:59.375Z",
+                "value": 17143311.27655325
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.Metering.TotOpTms",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T12:07:59.375Z",
+                "value": 18868589.811810024
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.Metering.TotWhOut",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T12:07:59.375Z",
+                "value": 13435693.85904506
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.Metering.TotWhOut.Pv",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T12:07:59.375Z",
+                "value": 13435693.85904506
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.Operation.BckStt",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T12:07:59.375Z",
+                "value": 1440
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.Operation.DrtStt",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T12:07:59.375Z",
+                "value": 884
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.Operation.Evt.Dsc",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-03-05T07:08:05.059Z",
+                "value": 302
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.Operation.Evt.EvtNo",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-03-05T07:13:05.051Z",
+                "value": 8708
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.Operation.Evt.Msg",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-03-05T07:08:05.056Z",
+                "value": 302
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.Operation.EvtCntIstl",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-03-01T09:19:57.669Z",
+                "value": 3056
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.Operation.EvtCntUsr",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-03-01T09:19:57.667Z",
+                "value": 3059
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.Operation.GriSwCnt",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T12:07:59.375Z",
+                "value": 444
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.Operation.GriSwStt",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T12:07:59.375Z",
+                "value": 51
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.Operation.Health",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-03-01T09:20:09.690Z",
+                "value": 307
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.Operation.HealthStt.Alm",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-03-01T09:20:21.970Z",
+                "value": 0
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.Operation.HealthStt.Ok",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-03-01T09:20:32.427Z",
+                "value": 15000
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.Operation.HealthStt.Wrn",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-03-01T09:20:21.970Z",
+                "value": 0
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.Operation.OpStt",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T12:07:59.375Z",
+                "value": 569
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.Operation.PvGriConn",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T12:07:59.375Z",
+                "value": 1780
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.Operation.RstrLokStt",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T12:07:59.375Z",
+                "value": 16777213.0
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.Operation.RunStt",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T12:07:59.375Z",
+                "value": 295
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.Operation.StandbyStt",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T12:07:59.375Z",
+                "value": 16777213.0
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.Operation.VArCtl.VArModAct",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T12:07:59.375Z",
+                "value": 4396
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.Operation.VArCtl.VArModStt",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T12:07:59.375Z",
+                "value": 303
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.Operation.WMaxLimSrc",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T12:07:59.375Z",
+                "value": 302
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.Operation.WMinLimSrc",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T12:07:59.375Z",
+                "value": 302
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.PvGen.PvW",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T12:07:59.375Z",
+                "value": 2313.833740234375
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.PvGen.PvWh",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T12:07:59.375Z",
+                "value": 13669565.378554901
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.Spdwr.ComSocA.Stt",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-03-01T09:19:59.397Z",
+                "value": 307
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.SunSpecSig.SunSpecTx[]",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T12:07:59.375Z",
+                "values": [
+                    1130
+                ]
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.Upd.Stt",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-03-01T09:19:55.893Z",
+                "value": 302
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.WebConn.Stt",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-03-01T09:20:03.473Z",
+                "value": 303
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.Wl.AcqStt",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-02T15:41:40.015Z",
+                "value": 3369
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.Wl.AntMod",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-03-01T09:20:07.325Z",
+                "value": 3326
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.Wl.ConnStt",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-03-01T09:20:07.324Z",
+                "value": 1725
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.Wl.SigPwr",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-03-01T09:20:07.324Z",
+                "value": 0
+            }
+        ]
+    },
+    {
+        "channelId": "Measurement.Wl.SoftAcsConnStt",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-03-01T09:20:07.217Z",
+                "value": 308
+            }
+        ]
+    },
+    {
+        "channelId": "Setpoint.PlantControl.InOut.GO1",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-03-01T09:20:42.619Z",
+                "value": 0
+            }
+        ]
+    },
+    {
+        "channelId": "Setpoint.PlantControl.Inverter.FstStop",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T04:27:58.065Z"
+            }
+        ]
+    },
+    {
+        "channelId": "Setpoint.PlantControl.Inverter.HzLimRed",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T04:27:58.064Z"
+            }
+        ]
+    },
+    {
+        "channelId": "Setpoint.PlantControl.Inverter.VArModCfg.PFCtlComCfg.PF",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T04:27:58.068Z"
+            }
+        ]
+    },
+    {
+        "channelId": "Setpoint.PlantControl.Inverter.VArModCfg.PFCtlComCfg.PFExt",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T04:27:58.067Z"
+            }
+        ]
+    },
+    {
+        "channelId": "Setpoint.PlantControl.Inverter.VArModCfg.PFCtlComCfg.PFExtIn",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T04:27:58.068Z"
+            }
+        ]
+    },
+    {
+        "channelId": "Setpoint.PlantControl.Inverter.VArModCfg.PFCtlComCfg.PFIn",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T04:27:58.066Z"
+            }
+        ]
+    },
+    {
+        "channelId": "Setpoint.PlantControl.Inverter.VArModCfg.VArCtlComCfg.VArNom",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T04:27:58.067Z"
+            }
+        ]
+    },
+    {
+        "channelId": "Setpoint.PlantControl.Inverter.VArModCfg.VArCtlVolCfg.VolRef.VolRefPu",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T04:27:58.065Z"
+            }
+        ]
+    },
+    {
+        "channelId": "Setpoint.PlantControl.Inverter.WModCfg.WCtlComCfg.W",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T04:27:58.066Z"
+            }
+        ]
+    },
+    {
+        "channelId": "Setpoint.PlantControl.Inverter.WModCfg.WCtlComCfg.WMaxIn",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T04:27:58.066Z"
+            }
+        ]
+    },
+    {
+        "channelId": "Setpoint.PlantControl.Inverter.WModCfg.WCtlComCfg.WMaxInNomPrc",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T04:27:58.064Z"
+            }
+        ]
+    },
+    {
+        "channelId": "Setpoint.PlantControl.Inverter.WModCfg.WCtlComCfg.WNom",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T04:27:58.064Z"
+            }
+        ]
+    },
+    {
+        "channelId": "Setpoint.PlantControl.Inverter.WModCfg.WCtlComCfg.WSptMax",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T04:27:58.065Z"
+            }
+        ]
+    },
+    {
+        "channelId": "Setpoint.PlantControl.Inverter.WModCfg.WCtlComCfg.WSptMaxNom",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T04:27:58.063Z"
+            }
+        ]
+    },
+    {
+        "channelId": "Setpoint.PlantControl.Inverter.WModCfg.WCtlComCfg.WSptMin",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T04:27:58.067Z"
+            }
+        ]
+    },
+    {
+        "channelId": "Setpoint.PlantControl.Inverter.WModCfg.WCtlComCfg.WSptMinNom",
+        "componentId": "IGULD:SELF",
+        "values": [
+            {
+                "time": "2024-04-03T04:27:58.066Z"
+            }
+        ]
+    }
+]

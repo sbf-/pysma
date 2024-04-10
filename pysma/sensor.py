@@ -6,7 +6,7 @@ from typing import Any, Iterator, List, Optional, Union
 import attr
 import jmespath  # type: ignore
 
-from .const import JMESPATH_VAL, JMESPATH_VAL_IDX, JMESPATH_VAL_STR
+from .const_webconnect import JMESPATH_VAL, JMESPATH_VAL_IDX, JMESPATH_VAL_STR
 
 _LOGGER = logging.getLogger(__name__)
 

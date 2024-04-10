@@ -1,11 +1,9 @@
 import base64
 import socket
 import struct
-import asyncio
 import copy
 import logging
-import binascii
-from typing import Any, Dict, Optional
+from typing import Any, Dict
 import datetime
 
 # https://www.unifox.at/software/sma-em-daemon/
@@ -19,7 +17,6 @@ from .exceptions import (
     SmaConnectionException,
     SmaReadException,
 )
-from .helpers import version_int_to_string
 from .sensor import Sensors
 from .device import Device
 
@@ -113,14 +110,6 @@ class SMAspeedwireEM(Device):
         """
         pass
 
-
-
-    async def run(self):
-        while True:
-            await watch(self._q._connection)
-            msg = self._q.receive()
-            print(msg)
-
     async def new_session(self) -> bool:
         """Establish a new session.
 
@@ -140,7 +129,7 @@ class SMAspeedwireEM(Device):
             self._sock.setsockopt(socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, mreq)
         except BaseException as exc:
             raise SmaConnectionException(
-                f"Could not start multicast"
+                "Could not start multicast"
             ) from exc
 
 
@@ -164,11 +153,12 @@ class SMAspeedwireEM(Device):
 
     async def close_session(self) -> None:
         """Close the session login."""
-        # TODO
-        pass
+        self._sock.close()
 
+    def _recv(self):
+        return self._sock.recv(608)
 
-    def getData(self):
+    def _getData(self):
         """
 
         Hack:
@@ -181,18 +171,18 @@ class SMAspeedwireEM(Device):
 
         """
         data = None
-        tries = 4
+        tries = 50
         try:
             while tries > 0:
+                tries -= 1
                 a = datetime.datetime.now()
-                self._last_packet = self._sock.recv(608)
+                self._last_packet = self._recv()
                 data=self._decode(self._last_packet)
                 b = datetime.datetime.now()
                 if data and (b-a).total_seconds() < 0.1:
                     continue
                 if data:
                     break
-                tries -= 1
         except TimeoutError as e:
             raise SmaConnectionException("No speedwire packet received!") from e
         if not data:
@@ -209,7 +199,7 @@ class SMAspeedwireEM(Device):
             bool: reading was successful
         """
         notfound = []
-        data = self.getData()
+        data = self._getData()
             
         for sensor in sensors:
           if (sensor.key in data):
@@ -235,8 +225,7 @@ class SMAspeedwireEM(Device):
         Returns:
             dict: dict containing serial, name, type, manufacturer and sw_version
         """
-        notfound = []
-        data = self.getData()
+        data = self._getData()
 
         device_info = {
             "serial": data["serial"],

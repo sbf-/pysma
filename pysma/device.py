@@ -1,6 +1,5 @@
 from abc import ABC, abstractmethod
 from typing import Dict
-from .sensor import Sensor
 from .sensor import Sensors
 
 class Device(ABC):

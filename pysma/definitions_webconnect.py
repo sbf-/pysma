@@ -1,5 +1,5 @@
 """Sensor definitions for SMA WebConnect library for Python."""
-from .const import (
+from .const_webconnect import (
     DEVICE_INFO,
     ENERGY_METER_VIA_INVERTER,
     GENERIC_SENSORS,
@@ -11,7 +11,7 @@ from .const import Identifier
 
 # Status - Operation
 #: Status of the device
-status = Sensor("6180_08214800", "status", path=JMESPATHS_TAG, l10n_translate=True)
+status = Sensor("6180_08214800", Identifier.status, path=JMESPATHS_TAG, l10n_translate=True)
 #: General operating status
 operating_status_general = Sensor(
     "6180_08412800",

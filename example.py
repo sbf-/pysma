@@ -34,7 +34,6 @@ async def main_loop(user, password, url, accessmethod):
         _LOGGER.debug(f"MainLoop called! Url: {url} User/Group: {user} Accessmethod: {accessmethod}")
         #VAR["sma"] = pysma.SMA(session, url, password=password, group=user)
         VAR["sma"] = pysma.getDevice(session, url, password, user, accessmethod)
-        print(type(VAR["sma"]))
         try:
             await VAR["sma"].new_session()
         except pysma.exceptions.SmaAuthenticationException:
@@ -47,9 +46,9 @@ async def main_loop(user, password, url, accessmethod):
         # We should not get any exceptions, but if we do we will close the session.
         try:
             VAR["running"] = True
-            cnt = 1
-            sensors = await VAR["sma"].get_sensors()
+            cnt = 5
             device_info = await VAR["sma"].device_info()
+            sensors = await VAR["sma"].get_sensors()
 
             for name, value in device_info.items():
                print("{:>15}{:>25}".format(name, value))

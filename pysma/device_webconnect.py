@@ -1,3 +1,9 @@
+"""SMA WebConnect library for Python.
+
+See: http://www.sma.de/en/products/monitoring-control/webconnect.html
+
+Source: http://www.github.com/kellerza/pysma
+"""
 import asyncio
 import copy
 import json
@@ -6,9 +12,8 @@ from typing import Any, Dict, Optional
 
 import jmespath  # type: ignore
 from aiohttp import ClientSession, ClientTimeout, client_exceptions, hdrs
-from .sensor import Sensor
-from . import definitions
-from .const import (
+from . import definitions_webconnect
+from .const_webconnect import (
     DEFAULT_LANG,
     DEFAULT_TIMEOUT,
     DEVICE_INFO,
@@ -91,7 +96,7 @@ class SMAwebconnect(Device):
         self._lang = lang
         self._l10n = None
         self._devclass = None
-        self._device_info_sensors = Sensors(definitions.sensor_map[DEVICE_INFO])
+        self._device_info_sensors = Sensors(definitions_webconnect.sensor_map[DEVICE_INFO])
 
     async def _request_json(
         self, method: str, url: str, **kwargs: Dict[str, Any]
@@ -405,7 +410,7 @@ class SMAwebconnect(Device):
 
         _LOGGER.debug("Matching generic sensors")
 
-        for sensor in definitions.sensor_map[GENERIC_SENSORS]:
+        for sensor in definitions_webconnect.sensor_map[GENERIC_SENSORS]:
             if sensor.key in sensor_keys:
                 if isinstance(all_sensors[sensor.key], list):
                     # SB1.5 multi value
@@ -430,7 +435,7 @@ class SMAwebconnect(Device):
 
         _LOGGER.debug("Checking if Energy Meter is present...")
         # Detect and add Energy Meter sensors
-        em_sensor = copy.copy(definitions.energy_meter)
+        em_sensor = copy.copy(definitions_webconnect.energy_meter)
         em_sensor.extract_value(all_sensors)
 
         if em_sensor.value:
@@ -441,14 +446,14 @@ class SMAwebconnect(Device):
             device_sensors.add(
                 [
                     sensor
-                    for sensor in definitions.sensor_map[ENERGY_METER_VIA_INVERTER]
+                    for sensor in definitions_webconnect.sensor_map[ENERGY_METER_VIA_INVERTER]
                     if sensor not in device_sensors
                 ]
             )
 
         _LOGGER.debug("Finding connected optimizers...")
         # Detect and add Optimizer Sensors
-        optimizers = all_sensors.get(definitions.optimizer_serial.key)
+        optimizers = all_sensors.get(definitions_webconnect.optimizer_serial.key)
         if optimizers:
             serials = optimizers.popitem()[1]
 
@@ -459,7 +464,7 @@ class SMAwebconnect(Device):
                         idx,
                         serial,
                     )
-                    for sensor_definition in definitions.sensor_map[
+                    for sensor_definition in definitions_webconnect.sensor_map[
                         OPTIMIZERS_VIA_INVERTER
                     ]:
                         new_sensor = copy.copy(sensor_definition)

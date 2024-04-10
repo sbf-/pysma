@@ -99,7 +99,7 @@ class Test_SMA_class:
         await session.close()        
 
 
-    async def test_device_info(self, mock_aioresponse):  
+    async def test_known_device(self, mock_aioresponse):
         mock_aioresponse.post(
             f"https://localhost/api/v1/token",
             payload={ "access_token": "sample"}
@@ -135,6 +135,51 @@ class Test_SMA_class:
 
         debug = await sma.get_debug()
         await session.close()        
+
+
+    def createUnknownDeviceInfo(self, filename: str):
+        data = self.loadJson(filename)
+        data["product"] = "Unknown"
+        data["vendor"] = "SomeoneElse"
+        return data
+
+    async def test_unknown_device(self, mock_aioresponse):
+        mock_aioresponse.post(
+            f"https://localhost/api/v1/token",
+            payload={ "access_token": "sample"}
+        )
+        mock_aioresponse.get(
+            f"https://localhost/api/v1/plants/Plant:1/devices/IGULD:SELF",
+            payload= self.createUnknownDeviceInfo("TripowerX15-deviceinfo.json")
+        )
+        mock_aioresponse.post(
+            f"https://localhost/api/v1/parameters/search",
+            payload= self.loadJson("TripowerX15-parameters.json")
+        )
+        mock_aioresponse.post(
+            f"https://localhost/api/v1/measurements/live",
+            payload= self.loadJson("TripowerX15-measurements.json"),
+            repeat = True
+        )
+        session = aiohttp.ClientSession()
+        sma = SMAennexos(session, "localhost", "pass", "user")
+        await sma.new_session()
+
+        device_info = await sma.device_info()
+        assert isinstance(device_info, dict)
+        for key in ["manufacturer", "name", "serial", "sw_version", "type" ]:
+            assert key in device_info
+            assert len(device_info[key]) > 0
+
+        # No Sensors should be exported
+        sensors = await sma.get_sensors()
+        assert len(sensors) == 0
+
+        ret = await sma.read(sensors)
+        assert ret == True
+
+        debug = await sma.get_debug()
+        await session.close()
 
 
     async def test_isfloat(self):

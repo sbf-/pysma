@@ -348,7 +348,7 @@ class SMAennexos(Device):
             if (self._device_info["name"].startswith(devname)):
                 sensors = ennexosSensorProfiles[devname]
         if (len(sensors) == 0):
-            _LOGGER.warn(f'Unknown Device: {self._device_info["name"]} {self._device_info["type"]}')
+            _LOGGER.warning(f'Unknown Device: {self._device_info["name"]} {self._device_info["type"]}')
         
         # Add Sensors from profile
         for s in sensors:

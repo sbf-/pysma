@@ -136,13 +136,6 @@ class Test_SMA_class:
         debug = await sma.get_debug()
         await session.close()        
 
-
-    def createUnknownDeviceInfo(self, filename: str):
-        data = self.loadJson(filename)
-        data["product"] = "Unknown"
-        data["vendor"] = "SomeoneElse"
-        return data
-
     async def test_unknown_device(self, mock_aioresponse):
         mock_aioresponse.post(
             f"https://localhost/api/v1/token",
@@ -150,7 +143,7 @@ class Test_SMA_class:
         )
         mock_aioresponse.get(
             f"https://localhost/api/v1/plants/Plant:1/devices/IGULD:SELF",
-            payload= self.createUnknownDeviceInfo("TripowerX15-deviceinfo.json")
+            payload= self.changeExistingDeviceInfo("TripowerX15-deviceinfo.json", {"product": "Unknown", "vendor": "SomeoneElse" })
         )
         mock_aioresponse.post(
             f"https://localhost/api/v1/parameters/search",
@@ -184,6 +177,58 @@ class Test_SMA_class:
 
     async def test_isfloat(self):
         assert SMAennexos._isfloat(None, "9.44")
-        assert SMAennexos._isfloat(None, "9")
+        assert not SMAennexos._isfloat(None, "9")
         assert not SMAennexos._isfloat(None, "not a number")
+
+
+
+    def changeExistingDeviceInfo(self, filename: str, replace: dict[str:str]):
+        data = self.loadJson(filename)
+        for v in replace.items():
+            print(v)
+            data[v[0]] = v[1]
+        return data
+
+
+    async def test_evcharger_device(self, mock_aioresponse):
+        mock_aioresponse.post(
+            f"https://localhost/api/v1/token",
+            payload={ "access_token": "sample"}
+        )
+        mock_aioresponse.get(
+            f"https://localhost/api/v1/plants/Plant:1/devices/IGULD:SELF",
+            payload= self.changeExistingDeviceInfo("TripowerX15-deviceinfo.json", {"product": "SMA EV Charger "})
+        )
+        mock_aioresponse.post(
+            f"https://localhost/api/v1/parameters/search",
+            payload= [ {"values" : []} ]
+        )
+        mock_aioresponse.post(
+            f"https://localhost/api/v1/measurements/live",
+            payload= self.loadJson("EVCharger-measurements.json"),
+            repeat = True
+        )
+        session = aiohttp.ClientSession()
+        sma = SMAennexos(session, "localhost", "pass", "user")
+        await sma.new_session()
+
+        device_info = await sma.device_info()
+        assert isinstance(device_info, dict)
+        for key in ["manufacturer", "name", "serial", "sw_version", "type" ]:
+            assert key in device_info
+            assert len(device_info[key]) > 0
+
+        # No Sensors should be exported
+        sensors = await sma.get_sensors()
+        # for i in sensors:
+        #     print(i)
+        assert len(sensors) == 13
+
+        ret = await sma.read(sensors)
+        assert ret == True
+        # for s in sensors:
+        #     print(f"{s.key} {s.value} {s.unit} {s.mapped_value if s.mapped_value else '' }")
+
+        debug = await sma.get_debug()
+        await session.close()
 

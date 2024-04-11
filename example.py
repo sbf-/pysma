@@ -23,7 +23,7 @@ def print_table(sensors):
         if sen.value is None:
             print("{:>25}".format(sen.name))
         else:
-            print("{:>25}{:>15} {}".format(sen.name, str(sen.value), sen.unit))
+            print("{:>25}{:>15} {} {}".format(sen.name, str(sen.value), sen.unit, sen.mapped_value if sen.mapped_value else "" ))
 
 
 async def main_loop(user, password, url, accessmethod):

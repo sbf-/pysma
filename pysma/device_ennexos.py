@@ -18,127 +18,8 @@ from .exceptions import (
 from .sensor import Sensors
 from .device import Device
 from .const import Identifier
+from .definitions_ennexos import ennexosSensorProfiles
 
-
-ennexosSensorProfiles = {
-    "Sunny Tripower X ": [
-        Sensor("Coolsys.Inverter.TmpVal.1", Identifier.temp_a, factor=1, unit="°C"),
-        Sensor("Coolsys.Inverter.TmpVal.2", Identifier.temp_b, factor=1, unit="°C"),
-        Sensor("Coolsys.Inverter.TmpVal.3", Identifier.temp_c, factor=1, unit="°C"),
-        Sensor("DcMs.Amp.1", Identifier.pv_current_a, factor=1, unit="A"),
-        Sensor("DcMs.Amp.2", Identifier.pv_current_b, factor=1, unit="A"),
-        Sensor("DcMs.Amp.3", Identifier.pv_current_c, factor=1, unit="A"),
-        Sensor("DcMs.TotDcEnCntWh.1", None, factor=1, unit=None),
-        Sensor("DcMs.TotDcEnCntWh.2", None, factor=1, unit=None),
-        Sensor("DcMs.TotDcEnCntWh.3", None, factor=1, unit=None),
-        Sensor("DcMs.Vol.1", Identifier.pv_voltage_a, factor=1, unit="V"),
-        Sensor("DcMs.Vol.2", Identifier.pv_voltage_b, factor=1, unit="V"),
-        Sensor("DcMs.Vol.3", Identifier.pv_voltage_c, factor=1, unit="V"),
-        Sensor("DcMs.Watt.1", Identifier.pv_power_a, factor=1, unit="W"),
-        Sensor("DcMs.Watt.2", Identifier.pv_power_b, factor=1, unit="W"),
-        Sensor("DcMs.Watt.3", Identifier.pv_power_c, factor=1, unit="W"),
-        Sensor("GridGuard.Cntry", None, factor=1, unit=None),
-        Sensor("GridMs.A.phsA", Identifier.current_l1, factor=1, unit="A"),
-        Sensor("GridMs.A.phsB", Identifier.current_l2, factor=1, unit="A"),
-        Sensor("GridMs.A.phsC", Identifier.current_l3, factor=1, unit="A"),
-        Sensor("GridMs.GriTyp", None, factor=1, unit=None),
-        Sensor("GridMs.Hz", Identifier.frequency, factor=1, unit="Hz"),
-        Sensor("GridMs.PhV.phsA", Identifier.voltage_l1, factor=1, unit="V"),
-        Sensor("GridMs.PhV.phsA2B", None, factor=1, unit=None),
-        Sensor("GridMs.PhV.phsB", Identifier.voltage_l2, factor=1, unit="V"),
-        Sensor("GridMs.PhV.phsB2C", None, factor=1, unit=None),
-        Sensor("GridMs.PhV.phsC", Identifier.voltage_l3, factor=1, unit="V"),
-        Sensor("GridMs.PhV.phsC2A", None, factor=1, unit=None),
-        Sensor("GridMs.TotA", Identifier.current_total, factor=1, unit="A"),
-        Sensor("GridMs.TotPFEEI", None, factor=1, unit=None),
-        Sensor("GridMs.TotPFExt", None, factor=1, unit=None),
-        Sensor("GridMs.TotPFPrc", None, factor=1, unit=None),
-        Sensor("GridMs.TotVA", Identifier.grid_apparent_power, factor=1, unit="VA"),
-        Sensor("GridMs.TotVAr", Identifier.grid_reactive_power, factor=1, unit="var"),
-        Sensor("GridMs.TotW", Identifier.grid_power, factor=1, unit="W"),
-        Sensor("GridMs.TotW.Pv", Identifier.pv_power, factor=1, unit="W"),
-        Sensor("GridMs.VA.phsA", Identifier.grid_apparent_power_l1, factor=1, unit="VA"),
-        Sensor("GridMs.VA.phsB", Identifier.grid_apparent_power_l2, factor=1, unit="VA"),
-        Sensor("GridMs.VA.phsC", Identifier.grid_apparent_power_l3, factor=1, unit="VA"),
-        Sensor("GridMs.VAr.phsA", Identifier.grid_reactive_power_l1, factor=1, unit="var"),
-        Sensor("GridMs.VAr.phsB", Identifier.grid_reactive_power_l2, factor=1, unit="var"),
-        Sensor("GridMs.VAr.phsC", Identifier.grid_reactive_power_l3, factor=1, unit="var"),
-        Sensor("GridMs.W.phsA", Identifier.power_l1, factor=1, unit="W"),
-        Sensor("GridMs.W.phsB", Identifier.power_l2, factor=1, unit="W"),
-        Sensor("GridMs.W.phsC", Identifier.power_l3, factor=1, unit="W"),
-        Sensor("InOut.GI1", None, factor=1, unit=None),
-        Sensor("Inverter.VArModCfg.PFCtlVolCfg.Stt", None, factor=1, unit=None),
-        Sensor("Isolation.FltA", Identifier.insulation_residual_current, factor=1000, unit="mA"),
-        Sensor("Isolation.LeakRis", None, factor=1, unit="kOhm"), # TODO "pv_isolation_resistance"
-        Sensor("Metering.TotFeedTms", None, factor=1, unit=None),
-        Sensor("Metering.TotOpTms", None, factor=1, unit=None),
-        Sensor("Metering.TotWhOut", Identifier.total_yield, factor=1000, unit="kWh"),
-        Sensor("Metering.TotWhOut.Pv", Identifier.pv_gen_meter, factor=1000, unit="kWh"),
-        Sensor("Operation.BckStt", None, factor=1, unit=None),
-        Sensor("Operation.DrtStt", None, factor=1, unit=None),
-        Sensor("Operation.Evt.Dsc", None, factor=1, unit=None),
-        Sensor("Operation.Evt.EvtNo", None, factor=1, unit=None),
-        Sensor("Operation.Evt.Msg", None, factor=1, unit=None),
-        Sensor("Operation.EvtCntIstl", None, factor=1, unit=None),
-        Sensor("Operation.EvtCntUsr", None, factor=1, unit=None),
-        Sensor("Operation.GriSwCnt", None, factor=1, unit=None),
-        Sensor("Operation.GriSwStt", None, factor=1, unit=None),
-        Sensor("Operation.Health", None, factor=1, unit=None),
-        Sensor("Operation.HealthStt.Alm", None, factor=1, unit=None),
-        Sensor("Operation.HealthStt.Ok", None, factor=1, unit=None),
-        Sensor("Operation.HealthStt.Wrn", None, factor=1, unit=None),
-        Sensor("Operation.OpStt", None, factor=1, unit=None),
-        Sensor("Operation.PvGriConn", None, factor=1, unit=None),
-        Sensor("Operation.RstrLokStt", None, factor=1, unit=None),
-        Sensor("Operation.RunStt", None, factor=1, unit=None),
-        Sensor("Operation.StandbyStt", None, factor=1, unit=None),
-        Sensor("Operation.VArCtl.VArModAct", None, factor=1, unit=None),
-        Sensor("Operation.VArCtl.VArModStt", None, factor=1, unit=None),
-        Sensor("Operation.WMaxLimSrc", None, factor=1, unit=None),
-        Sensor("Operation.WMinLimSrc", None, factor=1, unit=None),
-        Sensor("PvGen.PvW", None, factor=1, unit=None),
-        Sensor("PvGen.PvWh", None, factor=1, unit=None),
-        Sensor("Spdwr.ComSocA.Stt", None, factor=1, unit=None),
-        Sensor("SunSpecSig.SunSpecTx.1", None, factor=1, unit=None),
-        Sensor("Upd.Stt", None, factor=1, unit=None),
-        Sensor("WebConn.Stt", None, factor=1, unit=None),
-        Sensor("Wl.AcqStt", None, factor=1, unit=None),
-        Sensor("Wl.AntMod", None, factor=1, unit=None),
-        Sensor("Wl.ConnStt", None, factor=1, unit=None),
-        Sensor("Wl.SigPwr", None, factor=1, unit=None),
-        Sensor("Wl.SoftAcsConnStt", None, factor=1, unit=None),
-        Sensor("Setpoint.PlantControl.InOut.GO1", None, factor=1, unit=None)
-    ],
-    "SMA EV Charger ": [
-        Sensor("ChaSess.WhIn", None, factor=1, unit=None), # charging_session_energy
-        Sensor("Chrg.ModSw", None, factor=1, unit=None), # position_of_rotary_switch
-        Sensor("GridMs.A.phsA", Identifier.current_l1, factor=1, unit="A"), #Netzstrom Phase L1
-        Sensor("GridMs.A.phsB", Identifier.current_l2, factor=1, unit="A"),
-        Sensor("GridMs.A.phsC", Identifier.current_l3, factor=1, unit="A"),
-        Sensor("GridMs.Hz", Identifier.frequency, factor=1, unit="Hz"),
-        Sensor("GridMs.PhV.phsA", Identifier.voltage_l1, factor=1, unit="V"),#Netzspannung Phase L1
-        Sensor("GridMs.PhV.phsB", Identifier.voltage_l2, factor=1, unit="V"),
-        Sensor("GridMs.PhV.phsC", Identifier.voltage_l3, factor=1, unit="V"),
-        Sensor("GridMs.TotPF", None, factor=1, unit=None),
-        Sensor("GridMs.TotVA", Identifier.grid_apparent_power, factor=1, unit="VA"),
-        Sensor("GridMs.TotVAr", Identifier.grid_reactive_power, factor=1, unit="var"),
-        Sensor("InOut.GI1", None, factor=1, unit=None),
-        Sensor("Metering.GridMs.TotWIn", None, factor=1, unit=None),
-        Sensor("Metering.GridMs.TotWIn.ChaSta", None, factor=1, unit=None), # charging_station_power
-        Sensor("Metering.GridMs.TotWhIn", None, factor=1, unit=None),
-        Sensor("Metering.GridMs.TotWhIn.ChaSta", None, factor=1, unit=None), # charging_station_meter_reading
-        Sensor("Operation.EVeh.ChaStt", None, factor=1, unit=None), # charging_session_status
-        Sensor("Operation.EVeh.Health", None, factor=1, unit=None), # connected_vehicle_status
-        Sensor("Operation.Evt.Msg", None, factor=1, unit=None),
-        Sensor("Operation.Health", None, factor=1, unit=None), # charging_station_status
-        Sensor("Operation.WMaxLimNom", None, factor=1, unit=None),
-        Sensor("Operation.WMaxLimSrc", None, factor=1, unit=None),
-        Sensor("Wl.AcqStt", None, factor=1, unit=None),
-        Sensor("Wl.ConnStt", None, factor=1, unit=None),
-        Sensor("Wl.SigPwr", None, factor=1, unit=None),
-        Sensor("Wl.SoftAcsConnStt", None, factor=1, unit=None),
-    ]
-}
 _LOGGER = logging.getLogger(__name__)
 class SMAennexos(Device):
     """Class to connect to the ennexos based SMA inverters. (e.g. Tripower X Devices)"""
@@ -252,7 +133,13 @@ class SMAennexos(Device):
         _LOGGER.debug("Login successfull")
         return True
 
-    async def _get_parameter(self : str) -> Dict:
+    async def _get_parameter(self) -> Dict:
+        """Get all parameters from the device
+
+        Returns:
+            Dict: Return a dict with all parameters
+
+        """
         url = self._url + '/api/v1/parameters/search'
         postdata = {
              'data': '{"queryItems":[{"componentId":"IGULD:SELF"}]}',
@@ -288,7 +175,13 @@ class SMAennexos(Device):
                 pass
         return data
 
-    async def _get_livedata(self : str) -> Dict:
+    async def _get_livedata(self) -> Dict:
+        """Get the sensors reading from the device
+
+        Returns:
+            Dict: Return a dict with all measurements
+
+        """
         liveurl = self._url + '/api/v1/measurements/live'
         postdata = { 
              'data': '[{"componentId":"IGULD:SELF"}]',
@@ -360,7 +253,25 @@ class SMAennexos(Device):
     async def close_session(self) -> None:
         pass
 
-    def _isfloat(self,num):
+    def _isfloat(self,num: Any):
+        """Test if num is a float
+            
+            Tests for type float or a string with a dot is is float
+        
+        Args:
+            num: number to check
+
+        Returns:
+            bool: true, if num is from type float or a string with a dot
+        """
+        if isinstance(num, float):
+            return True
+        if isinstance(num, int):
+            return False
+        if not isinstance(num, str):
+            raise TypeError("Value is not a string, float or int!")
+        if ("." not in num):
+            return False
         try:
             float(num)
             return True
@@ -391,7 +302,9 @@ class SMAennexos(Device):
             if sen.enabled:
                 if sen.key in data:
                     value = data[sen.key]["value"]
-                    if (sen.factor):
+                    if (sen.mapper):
+                        sen.mapped_value = sen.mapper.get(value, str(value))
+                    if (sen.factor and sen.factor != 1):
                         value = round(value/sen.factor,4)
                     sen.value = value
                     continue
@@ -431,6 +344,7 @@ class SMAennexos(Device):
         return self._device_info
 
     async def get_debug(self) -> Dict:
+        """ Collect all Debug Information """
         return {
             "device": self._last_device,
             "measurements": self._last_measurements,

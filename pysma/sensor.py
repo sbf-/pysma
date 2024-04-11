@@ -26,6 +26,8 @@ class Sensor:
     l10n_translate: bool = attr.ib(default=False)
     value: Any = attr.ib(default=None, init=False)
     key_idx: int = attr.ib(default=0, repr=False, init=False)
+    mapper: dict[int, str] = attr.ib(default=None)
+    mapped_value: Any = attr.ib(default=None, init=False)
 
     def __attrs_post_init__(self) -> None:
         """Post init Sensor."""

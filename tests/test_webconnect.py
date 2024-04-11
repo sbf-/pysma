@@ -81,7 +81,7 @@ class Test_SMA_class:
     ):
         """Test request_json with invalid json."""
         mock_aioresponse.get(
-            f"{self.base_url}f/dummy-url",
+            f"{self.base_url}/dummy-url",
             body="THIS IS NOT A VALID JSON",
         )
         session = aiohttp.ClientSession()

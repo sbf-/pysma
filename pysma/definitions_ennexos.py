@@ -121,6 +121,8 @@ ennexMapper: Dict[int, str] = {
     8001: "Solar Inveters",
     8008: "SMAEVCharger",
 
+    9489: "STP-20-50",
+    9491: "STP-15-50",
     9492: "STP-12-50",
     9484: "EVC22-3AC-10",
 

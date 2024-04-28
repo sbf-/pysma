@@ -10,6 +10,7 @@ from typing import Optional
 from aiohttp import ClientSession
 from .device_webconnect import SMAwebconnect
 from .device_ennexos import SMAennexos
+from .device_speedwire import SMAspeedwireINV
 from .device_em import SMAspeedwireEM
 from .device import Device
 _LOGGER = logging.getLogger(__name__)
@@ -31,7 +32,9 @@ def getDevice(session: ClientSession,
             return SMAwebconnect(session, url, password=password, group=groupuser)
         elif (accessmethod == "ennexos"):
             return SMAennexos(session, url, password=password, group=groupuser)
-        elif (accessmethod == "speedwire"):
+        elif (accessmethod == "speedwire") or (accessmethod == "speedwireem"):
               return SMAspeedwireEM()
+        elif (accessmethod == "speedwireinv"):
+              return SMAspeedwireINV(host = url, password= password, group=groupuser)
         else:
              return None

@@ -5,7 +5,7 @@ import asyncio
 import logging
 import signal
 import sys
-
+import json
 import aiohttp
 
 import pysmaplus as pysma
@@ -19,11 +19,15 @@ VAR = {}
 
 def print_table(sensors):
     """Print sensors formatted as table."""
+    if (len(sensors) == 0):
+        print("No Sensors found!")
     for sen in sensors:
         if sen.value is None:
             print("{:>25}".format(sen.name))
+        elif sen.name is None:
+            print("{:>25}{:>15} {} {}".format(sen.key, str(sen.value), sen.unit if sen.unit else "", sen.mapped_value if sen.mapped_value else "" ))
         else:
-            print("{:>25}{:>15} {} {}".format(sen.name, str(sen.value), sen.unit, sen.mapped_value if sen.mapped_value else "" ))
+            print("{:>25}{:>15} {} {}".format(sen.name, str(sen.value), sen.unit if sen.unit else "", sen.mapped_value if sen.mapped_value else "" ))
 
 
 async def main_loop(user, password, url, accessmethod):
@@ -46,12 +50,13 @@ async def main_loop(user, password, url, accessmethod):
         # We should not get any exceptions, but if we do we will close the session.
         try:
             VAR["running"] = True
-            cnt = 5
+            cnt = 2
             device_info = await VAR["sma"].device_info()
             sensors = await VAR["sma"].get_sensors()
 
             for name, value in device_info.items():
                print("{:>15}{:>25}".format(name, value))
+            print("=====================================================================================")
 
             # enable all sensors
             for sensor in sensors:
@@ -63,15 +68,19 @@ async def main_loop(user, password, url, accessmethod):
                 cnt -= 1
                 if cnt == 0:
                     break
-                await asyncio.sleep(2)
+                await asyncio.sleep(1)
+                print("=====================================================================================")
         finally:
             _LOGGER.info("Closing Session...")
+            #print(json.dumps(await VAR["sma"].get_debug(), indent=4))
+            f = open("example.log", "w")
+            f.write(json.dumps(await VAR["sma"].get_debug(), indent=4))
             await VAR["sma"].close_session()
 
 
 async def main():
     """Run example."""
-    logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
+#    logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
     parser = argparse.ArgumentParser(description="Test the SMA webconnect library.")
     parser.add_argument(
@@ -80,9 +89,9 @@ async def main():
         help="Web address of the Webconnect module (http://ip-address or https://ip-address)",
     )
 #    parser.add_argument("user", choices=["user", "installer"], help="Login username")
-    parser.add_argument("user", help="Login Group- or Username (user or installer for Webconnect)")
+    parser.add_argument("user", help="Login Group- or Username (user or installer for Webconnect and Speedwire)")
     parser.add_argument("password", help="Login password")
-    parser.add_argument("access", choices=["webconnect", "ennexos","speedwire"], help="Login password")
+    parser.add_argument("access", choices=["webconnect", "ennexos","speedwire","speedwireinv"], help="Login password")
 
     args = parser.parse_args()
 

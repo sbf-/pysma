@@ -348,6 +348,7 @@ class SMAennexos(Device):
         return {
             "device": self._last_device,
             "measurements": self._last_measurements,
-            "parameters": self._last_parameters
+            "parameters": self._last_parameters,
+            "device_info": self._device_info
         }
 

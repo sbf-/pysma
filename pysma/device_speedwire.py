@@ -231,7 +231,7 @@ class SpeedwireFrame:
 
 class SMAClientProtocol(DatagramProtocol):
 
-    useDummyData = True    
+    useDummyData = False
     debug = {
         "msg": collections.deque(maxlen=30),
         "data": {},
@@ -484,11 +484,12 @@ class SMAspeedwireINV(Device):
         try:
             await asyncio.wait_for(fut, timeout=5)
         except TimeoutError:
+            _LOGGER.warning("Timeout in device_info")
             if "error" in self._protocol.inverter["data"] and self._protocol.inverter["data"]["error"] == 0:
                 raise SmaReadException("Reply for request not received")
             else:
                 raise SmaConnectionException("No connection to device")
-
+        print(self._protocol.inverter["data"])
         data = self._inverter["data"]
 
         invcnr = self._inverter["data"].get("inverter_class",0)
@@ -524,8 +525,7 @@ class SMAspeedwireINV(Device):
 
 
     async def close_session(self) -> None:
-        pass
-
+        self._transport.close()
 
     async def get_debug(self) -> Dict:
         return {

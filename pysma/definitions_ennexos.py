@@ -66,12 +66,12 @@ ennexosSensorProfiles = {
         Sensor("Operation.EvtCntIstl", None, factor=1, unit=None),
         Sensor("Operation.EvtCntUsr", None, factor=1, unit=None),
         Sensor("Operation.GriSwCnt", None, factor=1, unit=None),
-        Sensor("Operation.GriSwStt", None, factor=1, unit=None),
+        Sensor("Operation.GriSwStt", Identifier.grid_relay_status, unit=None,  mapper=SMATagList), 
         Sensor("Operation.Health", Identifier.status, factor=1, unit=None, mapper=SMATagList),
         Sensor("Operation.HealthStt.Alm", None, factor=1, unit=None),
         Sensor("Operation.HealthStt.Ok", None, factor=1, unit=None),
         Sensor("Operation.HealthStt.Wrn", None, factor=1, unit=None),
-        Sensor("Operation.OpStt", None, factor=1, unit=None),
+        Sensor("Operation.OpStt", Identifier.operating_status_genereal, unit=None, mapper=SMATagList),
         Sensor("Operation.PvGriConn", None, factor=1, unit=None),
         Sensor("Operation.RstrLokStt", None, factor=1, unit=None),
         Sensor("Operation.RunStt", None, factor=1, unit=None),
@@ -109,7 +109,7 @@ ennexosSensorProfiles = {
         Sensor("InOut.GI1", None, factor=1, unit=None),
         Sensor("Metering.GridMs.TotWIn", Identifier.metering_power_absorbed, factor=1, unit="W"), #
         Sensor("Metering.GridMs.TotWIn.ChaSta", None, factor=1, unit=None), # same as Metering.GridMs.TotWIn
-        Sensor("Metering.GridMs.TotWhIn", Identifier.metering_total_absorbed, factor=1, unit="Wh"), # charging_station_meter_reading
+        Sensor("Metering.GridMs.TotWhIn", Identifier.metering_total_absorbed, factor=1000, unit="kWh"), # charging_station_meter_reading
         Sensor("Metering.GridMs.TotWhIn.ChaSta", None, factor=1, unit=None), # same as Metering.GridMs.TotWhIn 
         Sensor("Operation.EVeh.ChaStt", Identifier.operating_status, factor=1, unit=None, mapper=SMATagList), # charging_session_status
         Sensor("Operation.EVeh.Health", Identifier.status, factor=1, unit=None, mapper=SMATagList), 

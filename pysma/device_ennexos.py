@@ -19,6 +19,8 @@ from .sensor import Sensors
 from .device import Device
 from .const import Identifier
 from .definitions_ennexos import ennexosSensorProfiles
+from .const import SMATagList
+
 
 _LOGGER = logging.getLogger(__name__)
 class SMAennexos(Device):
@@ -352,3 +354,25 @@ class SMAennexos(Device):
             "device_info": self._device_info
         }
 
+    async def detect(self, ip):
+        rets = []
+        for prefix in ["https", "http"]:
+            url = f"{prefix}://{ip}/api/v1/system/info"
+            ret = (await super().detect(ip))[0]
+            rets.append(ret)
+            ret["testedEndpoints"] = url
+            ret["remark"] = prefix
+            try:
+                dev = await self._jsonrequest(url,{}, hdrs.METH_GET)
+                if ("productFriendlyNameTagId" in dev):
+                    fallback = "Unkown: "+ str(dev["productFriendlyNameTagId"])
+                    ret["device"] = SMATagList.get(dev["productFriendlyNameTagId"], fallback)
+                    ret["status"] = "found"
+                    break
+                else:
+                    ret["status"] = "failed"
+                    ret["exception"] = dev
+            except Exception as e:
+                ret["status"] = "failed"
+                ret["exception"] = e
+        return rets

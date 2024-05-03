@@ -151,6 +151,7 @@ SMATagList: Dict[int, str] = {
     433: "Contant voltage",
     455: "Warning",
     461: "SMA",
+    569: "activated",
     887: "No recommended action",
     1041: "leading / overexcited",
     1042: "lagging / underexcited",
@@ -169,6 +170,7 @@ SMATagList: Dict[int, str] = {
     1130: "No",
     1264: "Full dynamic grid support",
     1265: "Limited dynamic grid support",
+#    1295:
     1387: "Reactive power Q, setpoint via analog input",
     1388: "cos φ, setpoint via analog input",
     1389: "Reactive power / voltage characteristic curve Q(U) with hysteresis and deadband",
@@ -197,6 +199,10 @@ SMATagList: Dict[int, str] = {
     1479: "Wait after grid interruption",
     1480: "Wait for electric utility company",
     1749: "Full Stop",
+    1779: "disconnected",
+    1780: "public grid",
+    1781: "off-Grid",
+    1795: "locked",
     # 2055: "Status digital inlet: DI1",
     # 2056: "Status digital inlet: DI1, DI2",
     # 2057: "Status digital inlet: DI1, DI2, DI3",
@@ -233,10 +239,15 @@ SMATagList: Dict[int, str] = {
 
 
 
-    # DevClass
-    8001: "Solar Inveters",
-    8008: "SMAEVCharger",
+    # Device Classes
+    8000: "All Devices",
+    8001: "Solar Inverters",
+    8002: "Wind Turbine Inverter",
+    8007: "Batterie Inverters",
+    8008: "EV Chargers",
+    8009: "Hybrid Inverters",
 
+    # Inverter Classes
     9000: "SWR 700",
     9001: "SWR 850",
     9002: "SWR 850E",
@@ -541,6 +552,6 @@ SMATagList: Dict[int, str] = {
     200111: "Not connected", # EV-Charger
     200112: "Sleep Mode", # EV-Charger
     200113: "Active Mode", # EV-Charger
-
+    
     16777213: "Information not available",
 }

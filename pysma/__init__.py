@@ -6,7 +6,7 @@ Source: http://www.github.com/kellerza/pysma
 """
 import logging
 from typing import Optional
-
+import asyncio
 from aiohttp import ClientSession
 from .device_webconnect import SMAwebconnect
 from .device_ennexos import SMAennexos
@@ -38,3 +38,31 @@ def getDevice(session: ClientSession,
               return SMAspeedwireINV(host = url, password= password, group=groupuser)
         else:
              return None
+
+async def _runDetect(accessmethod: str, session: ClientSession, ip):
+        sma = None
+        if (accessmethod == "webconnect"):
+            sma = SMAwebconnect(session, ip, password="", group="user")
+        elif (accessmethod == "ennexos"):
+            sma = SMAennexos(session, ip, password=None, group=None)
+        elif (accessmethod == "speedwireinv"):
+            sma = SMAspeedwireINV(host=ip, password="", group="user")
+        ret = await sma.detect(ip)
+        for i in ret:
+            i["access"] = accessmethod
+        try:
+             await sma.close_session()
+        except Exception:
+             pass
+        return ret
+
+async def autoDetect(session: ClientSession, ip:str):
+    ret = await asyncio.gather(
+        _runDetect("ennexos", session, ip),
+        _runDetect("speedwireinv", session, ip),
+        _runDetect("webconnect", session, ip)
+    )
+    results = []
+    for r in ret:
+         results.extend(r)
+    return results

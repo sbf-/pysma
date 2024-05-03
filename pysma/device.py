@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Dict
+from typing import Dict, List
 from .sensor import Sensors
 
 class Device(ABC):
@@ -23,6 +23,16 @@ class Device(ABC):
     @abstractmethod
     async def close_session(self) -> None:
         pass
+
+    async def detect(self, ip) -> List:
+        return [{
+            "testedEndpoints": "",
+            "status": "failed",
+            "access": "",
+            "device": "",
+            "exception": "",
+            "remark": ""
+        }]
 
     @abstractmethod
     async def get_debug(self) -> Dict:

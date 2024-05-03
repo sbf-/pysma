@@ -30,7 +30,20 @@ def print_table(sensors):
             print("{:>25}{:>15} {} {}".format(sen.name, str(sen.value), sen.unit if sen.unit else "", sen.mapped_value if sen.mapped_value else "" ))
 
 
-async def main_loop(user, password, url, accessmethod, delay, cnt, savedebug):
+async def identify(url: str, savedebug: bool):
+    async with aiohttp.ClientSession(
+        connector=aiohttp.TCPConnector(ssl=False)
+    ) as session:
+        ret = await pysma.autoDetect(session, url)
+        print("{:>15}{:>10}    {}".format("Access", "", "Remarks"))
+        for r in ret:
+               print("{:>15}{:>10}    {}".format(r["access"], r["status"], (r["remark"] + " " +  r["device"]).strip()))
+        if savedebug:
+            f = open("example.log", "w")
+            f.write(json.dumps(ret ,default=lambda o: str(o), indent=4))
+
+
+async def main_loop(user: str, password, url: str, accessmethod: str, delay: float, cnt: int, savedebug: bool):
     """Run main loop."""
     async with aiohttp.ClientSession(
         connector=aiohttp.TCPConnector(ssl=False)
@@ -93,18 +106,17 @@ async def main():
     parser_a.add_argument('url', type=str, help='Url or IP-Address')
     parser_a.set_defaults(accessmethod="webconnect")
 
-    parser_b = subparsers.add_parser('speedwire', help='Devices with Speedwire interface')
+    parser_b = subparsers.add_parser('speedwire', help='Devices with Speedwire interface (unencrypted only)')
     parser_b.add_argument("user", choices=["user", "installer"], help="Login username")
     parser_b.add_argument("password", help="Login password")
     parser_b.add_argument('url', type=str, help='Url or IP-Address')
     parser_b.set_defaults(accessmethod="speedwireinv")
 
-    parser_c = subparsers.add_parser('ennoxos', help='EnnexOs based Devices')
-    parser_c.set_defaults(accessmethod="ennoxos")
+    parser_c = subparsers.add_parser('ennexos', help='EnnexOs based Devices')
+    parser_c.set_defaults(accessmethod="ennexos")
     parser_c.add_argument("user", help="Username")
     parser_c.add_argument("password", help="Login password")
     parser_c.add_argument('url', type=str, help='Hostname or IP-Address')
-    parser_c.set_defaults(accessmethod="ennexos")
 
     parser_d = subparsers.add_parser('energymeter', help='Energy Meters')
     parser_d.set_defaults(user="")
@@ -112,16 +124,29 @@ async def main():
     parser_d.set_defaults(url="")
     parser_d.set_defaults(accessmethod="speedwireem")
 
+    parser_e = subparsers.add_parser('identify', help='Tries to identify the available interfaces')
+    parser_e.set_defaults(user="")
+    parser_e.set_defaults(password="")
+    parser_e.add_argument('url', type=str, help='Hostname or IP-Address')
+    parser_e.set_defaults(accessmethod="identify")
+
+
     args = parser.parse_args(args=None if sys.argv[1:] else ['--help'])
     if args.verbose:
         logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
-    def _shutdown(*_):
-        VAR["running"] = False
 
-    signal.signal(signal.SIGINT, _shutdown)
-    await main_loop(user=args.user, password=args.password, url=args.url, accessmethod=args.accessmethod,
-                    delay=args.delay, cnt=args.count, savedebug = args.save)
+    if args.accessmethod == "identify":
+        print("Identification can take up to 30 seconds...\n")
+        if not args.verbose:
+            logging.basicConfig(stream=sys.stdout, level=logging.FATAL)
+        await identify(args.url, args.save)
+    else:
+        def _shutdown(*_):
+            VAR["running"] = False
+        signal.signal(signal.SIGINT, _shutdown)
+        await main_loop(user=args.user, password=args.password, url=args.url, accessmethod=args.accessmethod,
+                        delay=args.delay, cnt=args.count, savedebug = args.save)
 
 
 if __name__ == "__main__":

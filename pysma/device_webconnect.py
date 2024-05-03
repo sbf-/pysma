@@ -476,3 +476,26 @@ class SMAwebconnect(Device):
 
     async def get_debug(self) -> Dict:
         return {}
+
+
+    async def detect(self, ip) -> bool:
+        results = []
+        for urls in ["https://" + ip, "http://" + ip]:
+            self._url = urls
+            ret = await super().detect(ip)
+            ret[0]["remark"] = urls
+            try:
+                ret[0]["testedEndpoints"] = self._url
+                await self.new_session()
+            except SmaAuthenticationException as e:
+                if self._sid:
+                    ret[0]["status"] = "found"
+                    ret[0]["exception"] = e
+                else:
+                    ret[0]["status"] = "failed"
+                    ret[0]["exception"] = e
+            except Exception as e:
+                ret[0]["status"] = "failed"
+                ret[0]["exception"] = e
+            results.extend(ret)
+        return results

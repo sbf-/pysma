@@ -1,4 +1,4 @@
-#based on https://github.com/Wired-Square/sma-query/blob/main/src/sma_query_sw/protocol.py
+# based on https://github.com/Wired-Square/sma-query/blob/main/src/sma_query_sw/protocol.py
 import logging
 import time
 import ctypes
@@ -535,3 +535,27 @@ class SMAspeedwireINV(Device):
             "unfinished": list(self._protocol.debug["unfinished"])
        }
 
+
+    async def detect(self, ip) -> bool:
+        ret = await super().detect(ip)
+        try:
+            ret[0]["testedEndpoints"] = str(ip) + ":9522"
+            await self.new_session()
+            fut = asyncio.get_running_loop().create_future()
+            self._protocol.start_query(["TypeLabel"], fut, self._group)
+            try:
+                await asyncio.wait_for(fut, timeout=5)
+            except TimeoutError:
+                _LOGGER.warning("Timeout in device_info")
+            if "error" in self._protocol.inverter["data"] and self._protocol.inverter["data"]["error"] == 0:
+                raise SmaReadException("Reply for request not received")
+            else:
+                raise SmaConnectionException("No connection to device")
+        except SmaAuthenticationException as e:
+            ret[0]["status"] = "maybe"
+            ret[0]["exception"] = e
+            ret[0]["remark"] = "only unencrypted Speedwire is supported"
+        except Exception as e:
+            ret[0]["status"] = "failed"
+            ret[0]["exception"] = e
+        return ret

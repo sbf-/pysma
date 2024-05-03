@@ -1,4 +1,6 @@
 # based on https://github.com/Wired-Square/sma-query/blob/main/src/sma_query_sw/commands.py
+# improved with https://github.com/mhop/fhem-mirror/blob/master/fhem/FHEM/76_SMAInverter.pm  
+
 from .const import Identifier
 from .sensor import Sensor
 from .const import SMATagList
@@ -8,21 +10,13 @@ commands = {
               "response": 0xFFFD040D,
               "first": 0x0030CB00,
               "last": 0x0030CB00,
-
-                "registers": [
+              "registers": [
                     {"name": "susyid", "format": "H", "offset": 20},
                     {"name": "serial", "format": "uint","offset": 22},
                     {"name": "pkt_ID", "format": "H","offset": 40},
                     {"name": "cmdid", "format": "H","offset": 42},
                     {"name": "error", "format": "uint","offset": 36},
                 ]   
-              
-        #               my $r_susyid = unpack("v*", substr $data, 20, 2);
-        # my $r_serial = unpack("V*", substr $data, 22, 4);
-        # my $r_pkt_ID = unpack("v*", substr $data, 40, 2);
-        # my $r_cmd_ID = unpack("V*", substr $data, 42, 4);
-        # my $r_error  = unpack("V*", substr $data, 36, 4);
-
               },
     "logoff": {"command": 0xFFFD010E, "response": 0xFFFD010F},
     "TypeLabel": {
@@ -33,8 +27,6 @@ commands = {
         "registers": [
             {"name": "inverter_class", "offset": 102, "mask": 0x00FFFFFF},
             {"name": "inverter_type", "format": "list", "offset": 142},
-            #$temp = unpack("V*", substr $data, $i, 4);
-
         ],
     },
     "EnergyProduction": {
@@ -370,19 +362,16 @@ commands = {
                 "name": "MaxACPower1",
                 "offset": 62,
                 "invalid": 0x80000000,
-                #     "sensor": Sensor("battery_current_a", Identifier.battery_current_a, unit="A", factor=1000)
             },
             {
                 "name": "MaxACPower2",
                 "offset": 90,
                 "invalid": 0x80000000,
-                # "sensor": Sensor("battery_current_b", Identifier.battery_current_b, unit="A", factor=1000)
             },
             {
                 "name": "MaxACPower3",
                 "offset": 118,
                 "invalid": 0x80000000,
-                # "sensor": Sensor("battery_current_b", Identifier.battery_current_b, unit="A", factor=1000)
             },
         ],
     },
@@ -398,7 +387,8 @@ commands = {
         "first": 0x00416400,
         "last": 0x004164FF,
         "registers": [
-            {"name": "grid_relay_status", "offset": 62, "invalid": 0x80000000}
+            {"name": "grid_relay_status", "format": "list", "offset": 62, "invalid": 0x80000000,
+             "sensor":  Sensor("GridRelayStatus", Identifier.grid_relay_status, unit=None, mapper = SMATagList)}
         ],
     },
     "BackupRelayStatus": {
@@ -409,12 +399,12 @@ commands = {
     },
     "GridConection": {
         "command": 0x51800200,
-        "response": 0x0846A600,
-        "first": 0x0846A600,
-        "last": 0x0846A6FF,
-        # "registers": [
-        #     {"name": "GridConection", "format": "list", "offset": 62},
-        # ],
+        "response": 0x0046A600,
+        "first": 0x0046A600,
+        "last": 0x0046A6FF,
+         "registers": [
+             {"name": "GridConection", "format": "list", "offset": 62},
+         ],
     },
     "OperatingStatus": {
         "command": 0x51800200,
@@ -424,12 +414,16 @@ commands = {
     },
     "GeneralOperatingStatus": {
         "command": 0x51800200,
-        "response": 0x08412800,
-        "first": 0x08412800,
-        "last": 0x084128FF,
-        #"registers": [
-        #    {"name": "GeneralOperatingStatus", "format": "list", "offset": 142},
-        #],
+        "response": 0x00412800,
+        "first": 0x00412800,
+        "last": 0x004128FF,
+        "registers": [
+            {
+                "name": "GeneralOperatingStatus", "format": "list", "offset": 62,
+                "sensor":  Sensor(
+                    "GeneralOperatingStatus", Identifier.operating_status_genereal, factor=1, unit=None, mapper = SMATagList
+                )},
+        ],
     },
     "WaitingTimeUntilFeedIn": {
         "command": 0x51000200,
@@ -447,8 +441,8 @@ commands = {
         "last": 0x002148FF,
         "registers": [
             {   
-                # TODO Schleife
                 "name": "inverter_status",
+                "format": "list",
                 "offset": 62,
                 "invalid": 0x80000000,
                 "sensor": Sensor(
@@ -618,7 +612,7 @@ commands = {
                 "offset": 78,
                 "invalid": 0x8000000000000000,
                 "sensor": Sensor(
-                    "today", Identifier.daily_yield, factor=1000, unit="kWh"
+                    "today", Identifier.daily_yield, unit="Wh"
                 ),
             },
         ],

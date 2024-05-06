@@ -853,11 +853,6 @@ commands = {
         "first": 0x00254F00,
         "last": 0x00254FFF,
     },
-    "Insulation_3": {
-        "command": 0x51020200,
-        "first": 0x40254E00,  # TODO
-        "last": 0x40254FFF,  # TODO
-    },
     "Firmware": {
         "command": 0x58000200,
         "first": 0x00823400,

@@ -1,5 +1,12 @@
-# some parts are based on https://github.com/Wired-Square/sma-query/blob/main/src/sma_query_sw/protocol.py
-# big parts rewritten
+"""
+Implementation for SMA Speedwire
+
+Originally based on https://github.com/Wired-Square/sma-query/blob/main/src/sma_query_sw/commands.py
+Improved with Information from https://github.com/mhop/fhem-mirror/blob/master/fhem/FHEM/76_SMAInverter.pm
+Receiver classes completely reimplemented by little.yoda
+
+"""
+
 import logging
 import time
 import ctypes
@@ -7,17 +14,17 @@ import binascii
 import copy
 import collections
 import struct
-
-from typing import Any, Dict, Optional, List
+import asyncio
+from typing import Any, Dict, Optional, List, Annotated
 from ctypes import LittleEndianStructure
 from asyncio import DatagramProtocol
-from typing import Annotated
 import dataclasses_struct as dcs
 
 from .helpers import version_int_to_string
 from .definitions_speedwire import commands, responseDef
 
-from .sensor import Sensor
+from .sensor import Sensors, Sensor
+from .device import Device
 from .const import SMATagList
 
 from .exceptions import (
@@ -25,9 +32,6 @@ from .exceptions import (
     SmaReadException,
     SmaAuthenticationException,
 )
-from .sensor import Sensors
-from .device import Device
-import asyncio
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -38,12 +42,9 @@ ANY_SUSYID = 0xFFFF
 # Login Timeout in seconds
 LOGIN_TIMEOUT = 900
 
-# Create a reverse index based command lookup
-# ril_index = {f"ril-{value['first']:X}": value for (key, value) in commands.items() if "first" in value}
-
 
 def get_encoded_pw(password, installer=False):
-    # user=0x88, installer=0xBB
+    """Encodes the password"""
     byte_password = bytearray(password.encode("ascii"))
 
     if installer:
@@ -63,6 +64,8 @@ def get_encoded_pw(password, installer=False):
 
 
 class SpeedwireFrame:
+    """Class for the send speedwire messages"""
+
     _frame_sequence = 1
     _id = (ctypes.c_ubyte * 4).from_buffer(bytearray(b"SMA\x00"))
     _tag0 = (ctypes.c_ubyte * 4).from_buffer(bytearray(b"\x00\x04\x02\xA0"))
@@ -76,6 +79,8 @@ class SpeedwireFrame:
     _ctrl = 0  # Placeholder value
 
     class FrameHeader(LittleEndianStructure):
+        """Frame Header"""
+
         _pack_ = 1
         _fields_ = [
             ("id", ctypes.c_ubyte * 4),
@@ -88,6 +93,8 @@ class SpeedwireFrame:
         ]
 
     class DataHeader(LittleEndianStructure):
+        # pylint: disable=too-few-public-methods
+        """Data header"""
         _pack_ = 1
         _fields_ = [
             ("dst_sysyid", ctypes.c_uint16),
@@ -101,6 +108,8 @@ class SpeedwireFrame:
         ]
 
     class LogoutFrame(LittleEndianStructure):
+        # pylint: disable=too-few-public-methods
+        """Logout"""
         _pack_ = 1
         _fields_ = [
             ("command", ctypes.c_uint32),
@@ -109,6 +118,8 @@ class SpeedwireFrame:
         ]
 
     class LoginFrame(LittleEndianStructure):
+        # pylint: disable=too-few-public-methods
+        """Login"""
         _pack_ = 1
         _fields_ = [
             ("command", ctypes.c_uint32),
@@ -121,6 +132,9 @@ class SpeedwireFrame:
         ]
 
     class QueryFrame(LittleEndianStructure):
+        # pylint: disable=too-few-public-methods
+        """Query Frame"""
+
         _pack_ = 1
         _fields_ = [
             ("command", ctypes.c_uint32),
@@ -152,6 +166,8 @@ class SpeedwireFrame:
     #     return bytes(frame_header) + bytes(frame_data_header) + bytes(frame_data)
 
     def getLoginFrame(self, password, serial: int, installer: bool):
+        # pylint: disable=too-few-public-methods
+        """Returns a Login Frame"""
         frame_header = self.getFrameHeader()
         frame_data_header = self.getDataHeader(password, serial)
         frame_data = self.LoginFrame()
@@ -186,6 +202,7 @@ class SpeedwireFrame:
         return bytes(frame_header) + bytes(frame_data_header) + bytes(frame_data)
 
     def getQueryFrame(self, password, serial: int, command_name: str):
+        """Return Query Frame"""
         frame_header = self.getFrameHeader()
         frame_data_header = self.getDataHeader(password, serial)
         frame_data = self.QueryFrame()
@@ -217,6 +234,7 @@ class SpeedwireFrame:
         return bytes(frame_header) + bytes(frame_data_header) + bytes(frame_data)
 
     def getFrameHeader(self):
+        """Return Frame Header"""
         newFrameHeader = self.FrameHeader()
         newFrameHeader.id = self._id
         newFrameHeader.tag0 = self._tag0
@@ -229,6 +247,7 @@ class SpeedwireFrame:
         return newFrameHeader
 
     def getDataHeader(self, password, serial):
+        """Return Data Header"""
         newDataHeader = self.DataHeader()
 
         newDataHeader.dst_susyid = ANY_SUSYID
@@ -247,6 +266,8 @@ class SpeedwireFrame:
 
 @dcs.dataclass(dcs.BIG_ENDIAN)
 class speedwireHeader:
+    """Speedwire header"""
+
     sma: Annotated[bytes, 4]
     tag42_length: dcs.U16
     tag42_tag0x02A0: dcs.U16
@@ -269,6 +290,8 @@ class speedwireHeader:
 # https://github.com/RalfOGit/libspeedwire
 @dcs.dataclass(dcs.LITTLE_ENDIAN)
 class speedwireHeader6065:
+    """Speedwire Header2 for 6065 Messages"""
+
     # dest_susyid: dcs.U16 #2
     # dest_serial: dcs.U32 # 2+ 4 = 6
     # dest_control: dcs.U16 # 2 4 + 2 = 8
@@ -294,8 +317,9 @@ class speedwireHeader6065:
 
 
 class SMAClientProtocol(DatagramProtocol):
+    """Basic Class for communication"""
 
-    debug = {
+    debug: Dict[str, Any] = {
         "msg": collections.deque(maxlen=len(commands) * 3),
         "data": {},
         "unfinished": set(),
@@ -310,7 +334,7 @@ class SMAClientProtocol(DatagramProtocol):
         self.cmds = []
         self.cmdidx = 0
         self.future = None
-        self.dataValues = {}
+        self.data_values = {}
         self.sensors = {}
 
         self.allCmds = []
@@ -325,7 +349,7 @@ class SMAClientProtocol(DatagramProtocol):
         self.cmds = cmds
         self.future = future
         self.cmdidx = 0
-        self.dataValues = {}
+        self.data_values = {}
         self.sensors = {}
         _LOGGER.debug("Sending login")
         self.debug["msg"].append(["SEND", "login"])
@@ -337,17 +361,19 @@ class SMAClientProtocol(DatagramProtocol):
         self.on_connection_lost.set_result(True)
 
     def _send_command(self, cmd):
+        """Send the Command"""
         _LOGGER.debug(
             f"Sending command [{len(cmd)}] -- {binascii.hexlify(cmd).upper()}"
         )
         self.transport.sendto(cmd)
 
     def _send_next_command(self):
+        """Send the next command in the list"""
         if not self.future:
             return
         if self.cmdidx >= len(self.cmds):
             # All commands send. Clean up.
-            self.debug["data"] = self.dataValues
+            self.debug["data"] = self.data_values
             self.future.set_result(True)
             self.cmds = []
             self.cmdidx = 0
@@ -362,6 +388,7 @@ class SMAClientProtocol(DatagramProtocol):
             self.cmdidx += 1
 
     def _getFormat(self, handler):
+        """Return the necessary information for extracting the information"""
         converter = None
         format = handler.get("format", "")
         if format == "int":
@@ -377,9 +404,10 @@ class SMAClientProtocol(DatagramProtocol):
         return (format, size, converter)
 
     def handle_login(self, msg):
+        """Is called if a login repsonse is received"""
         _LOGGER.debug("Login repsonse received!")
         self.sensors = {}
-        self.dataValues = {"error": msg.error}
+        self.data_values = {"error": msg.error}
         if msg.error == 256:
             _LOGGER.error("Login failed!")
             self.future.set_exception(
@@ -389,6 +417,7 @@ class SMAClientProtocol(DatagramProtocol):
             )
 
     def handle_newvalue(self, sensor: Sensor, value: Any):
+        """Set the new value to the sensor"""
         if value is None:
             return
         sen = copy.copy(sensor)
@@ -402,7 +431,7 @@ class SMAClientProtocol(DatagramProtocol):
                     f"Overwriting sensors {sen.key} {sen.name} {oldValue} with new values {sen.value}"
                 )
         self.sensors[sen.key] = sen
-        self.dataValues[sen.key] = value
+        self.data_values[sen.key] = value
 
     def extractvalues(self, handler: Dict, subdata):
         (formatdef, size, converter) = self._getFormat(handler)
@@ -420,6 +449,7 @@ class SMAClientProtocol(DatagramProtocol):
         return values
 
     def handle_register(self, subdata):
+        """Handle the payload with all the registers"""
         code = int.from_bytes(subdata[0:4], "little")
         # c = f"{(code & 0xFFFFFFFF):08X}"
         c = f"{code:08X}"
@@ -455,13 +485,15 @@ class SMAClientProtocol(DatagramProtocol):
     # Unfortunately, there is no known method of determining the size of the registers
     # from the message. Therefore, the register size is determined from the number of
     # registers and the size of the payload.
-    def calcRegister(self, data, msg: speedwireHeader6065):
-        cntRegisters = msg.lastRegister - msg.firstRegister + 1
-        sizDataPayload = len(data) - 54 - 4
-        sizeRegisters = (
-            sizDataPayload // cntRegisters if sizDataPayload % cntRegisters == 0 else -1
+    def calc_register(self, data, msg: speedwireHeader6065):
+        cnt_registers = msg.lastRegister - msg.firstRegister + 1
+        size_datapayload = len(data) - 54 - 4
+        size_registers = (
+            size_datapayload // cnt_registers
+            if size_datapayload % cnt_registers == 0
+            else -1
         )
-        return (cntRegisters, sizeRegisters)
+        return (cnt_registers, size_registers)
 
     # Main routine for processing received messages.
     def datagram_received(self, data, addr):
@@ -490,30 +522,31 @@ class SMAClientProtocol(DatagramProtocol):
             return
 
         # Filter out non matching responses
-        (cntRegisters, sizeRegisters) = self.calcRegister(data, msg6065)
+        (cnt_registers, size_registers) = self.calc_register(data, msg6065)
         code = int.from_bytes(data[54:58], "little")
         codem = code & 0x00FFFF00
-        if sizeRegisters <= 0 or sizeRegisters not in [16, 28, 40]:
+        if size_registers <= 0 or size_registers not in [16, 28, 40]:
             _LOGGER.warning(
-                f"Skipping message. --- Len {data} Ril {codem} {cntRegisters} x {sizeRegisters} bytes"
+                f"Skipping message. --- Len {data} Ril {codem} {cnt_registers} x {size_registers} bytes"
             )
             self._send_next_command()
             return
 
         # Extract the values for each register
-        for idx in range(0, cntRegisters):
-            start = idx * sizeRegisters + 54
-            self.handle_register(data[start : start + sizeRegisters])
+        for idx in range(0, cnt_registers):
+            start = idx * size_registers + 54
+            self.handle_register(data[start : start + size_registers])
 
         # Send new command
         self._send_next_command()
 
 
 class SMAspeedwireINV(Device):
+    """Adapter between Device-Class and SMAClientProtocol"""
 
     _transport = None
     _protocol = None
-    _deviceinfo = {}
+    _deviceinfo: Dict[str, Any] = {}
 
     def __init__(self, host: str, group: str, password: Optional[str]):
         self._host = host
@@ -577,13 +610,14 @@ class SMAspeedwireINV(Device):
         except TimeoutError:
             _LOGGER.warning("Timeout in device_info")
             if (
-                "error" in self._protocol.dataValues
-                and self._protocol.dataValues["error"] == 0
+                "error" in self._protocol.data_values
+                and self._protocol.data_values["error"] == 0
             ):
-                raise SmaReadException("Reply for request not received")
-            else:
-                raise SmaConnectionException("No connection to device")
-        data = self._protocol.dataValues
+                raise SmaReadException(
+                    "Reply for request not received"
+                )  # Recheck Logic
+            raise SmaConnectionException("No connection to device")
+        data = self._protocol.data_values
 
         invcnr = data.get("inverter_class", 0)
         invc = SMATagList.get(invcnr, "Unknown device")
@@ -614,9 +648,11 @@ class SMAspeedwireINV(Device):
         c = self._protocol.allCmds
         self._protocol.start_query(c, fut, self._group)
         await asyncio.wait_for(fut, timeout=5)
-        self._updateSensors(sensors, self._protocol.sensors)
+        self._update_sensors(sensors, self._protocol.sensors)
+        return True
 
-    def _updateSensors(self, sensors, sensorReadings):
+    def _update_sensors(self, sensors, sensorReadings):
+        """Update a sensor with the sensor reading"""
         for sen in sensors:
             if sen.enabled and sen.key in sensorReadings:
                 value = sensorReadings[sen.key].value
@@ -650,12 +686,13 @@ class SMAspeedwireINV(Device):
             except TimeoutError:
                 _LOGGER.warning("Timeout in detect")
             if (
-                "error" in self._protocol.dataValues
+                "error" in self._protocol.data_values
                 and self._protocol.dataValuess["error"] == 0
             ):
-                raise SmaReadException("Reply for request not received")
-            else:
-                raise SmaConnectionException("No connection to device")
+                raise SmaReadException(
+                    "Reply for request not received"
+                )  ## TODO recheck logic
+            raise SmaConnectionException("No connection to device")
         except SmaAuthenticationException as e:
             ret[0]["status"] = "maybe"
             ret[0]["exception"] = e

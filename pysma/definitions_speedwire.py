@@ -1,6 +1,11 @@
-# based on https://github.com/Wired-Square/sma-query/blob/main/src/sma_query_sw/commands.py
-# improved with https://github.com/mhop/fhem-mirror/blob/master/fhem/FHEM/76_SMAInverter.pm
-# more or less  complete rewritten
+"""
+Implementation for SMA Speedwire
+
+Originally based on https://github.com/Wired-Square/sma-query/blob/main/src/sma_query_sw/commands.py
+Improved with Information from https://github.com/mhop/fhem-mirror/blob/master/fhem/FHEM/76_SMAInverter.pm
+Receiver classes completely reimplemented by little.yoda
+
+"""
 
 from .const import Identifier
 from .sensor import Sensor
@@ -840,8 +845,8 @@ commands = {
     },
     "Insulation_1": {
         "command": 0x51020200,
-        "first": 0x00254E00,  # TODO 0x40254E00
-        "last": 0x00254FFF,  # TODO 0x40254FFF
+        "first": 0x00254E00,
+        "last": 0x00254FFF,
     },
     "Insulation_2": {
         "command": 0x51020200,

@@ -18,8 +18,9 @@ from .device import Device
 _LOGGER = logging.getLogger(__name__)
 
 
-# Backward compatibility
 def SMA(session, url, password, group):
+    """Backward compatibility"""
+    # pylint: disable=invalid-name
     return SMAwebconnect(session, url, password=password, group=group)
 
 
@@ -29,23 +30,28 @@ def getDevice(
     password: Optional[str] = None,
     groupuser: str = "user",
     accessmethod: str = "webconnect",
-) -> Device:
+) -> Device | None:
+    # pylint: disable=invalid-name
+    """Returns a Device object for accessing the device"""
     _LOGGER.debug(
-        f"Device Called! Url: {url} User/Group: {groupuser} Accessmethod: {accessmethod}"
+        "Device Called! Url: %s User/Group: %s Accessmethod: %s",
+        url,
+        groupuser,
+        accessmethod,
     )
     if accessmethod == "webconnect":
         return SMAwebconnect(session, url, password=password, group=groupuser)
-    elif accessmethod == "ennexos":
+    if accessmethod == "ennexos":
         return SMAennexos(session, url, password=password, group=groupuser)
-    elif (accessmethod == "speedwire") or (accessmethod == "speedwireem"):
+    if accessmethod in ["speedwire", "speedwireem"]:
         return SMAspeedwireEM()
-    elif accessmethod == "speedwireinv":
+    if accessmethod == "speedwireinv":
         return SMAspeedwireINV(host=url, password=password, group=groupuser)
-    else:
-        return None
+    return None
 
 
-async def _runDetect(accessmethod: str, session: ClientSession, ip):
+async def _run_detect(accessmethod: str, session: ClientSession, ip):
+    """Start Autodetection"""
     sma = None
     if accessmethod == "webconnect":
         sma = SMAwebconnect(session, ip, password="", group="user")
@@ -58,16 +64,18 @@ async def _runDetect(accessmethod: str, session: ClientSession, ip):
         i["access"] = accessmethod
     try:
         await sma.close_session()
-    except Exception:
+    except Exception:  # pylint: disable=broad-exception-caught
         pass
     return ret
 
 
 async def autoDetect(session: ClientSession, ip: str):
+    # pylint: disable=invalid-name
+    """Runs a autodetection of all supported devices (no energy meters) on the ip-address"""
     ret = await asyncio.gather(
-        _runDetect("ennexos", session, ip),
-        _runDetect("speedwireinv", session, ip),
-        _runDetect("webconnect", session, ip),
+        _run_detect("ennexos", session, ip),
+        _run_detect("speedwireinv", session, ip),
+        _run_detect("webconnect", session, ip),
     )
     results = []
     for r in ret:

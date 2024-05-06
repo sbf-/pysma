@@ -1,3 +1,10 @@
+"""Interface for SMA Energy Meters and Sunny Home Manager 2 (SHM2)
+
+see https://www.unifox.at/software/sma-em-daemon/
+see https://cdn.sma.de/fileadmin/content/www.developer.sma.de/docs/EMETER-Protokoll-TI-en-10.pdf?v=1699276024
+
+"""
+
 import base64
 import socket
 import struct
@@ -5,9 +12,6 @@ import copy
 import logging
 from typing import Any, Dict
 import datetime
-
-# https://www.unifox.at/software/sma-em-daemon/
-# https://cdn.sma.de/fileadmin/content/www.developer.sma.de/docs/EMETER-Protokoll-TI-en-10.pdf?v=1699276024
 
 
 from .sensor import Sensor
@@ -119,7 +123,6 @@ class SMAspeedwireEM(Device):
             group (str, optional): Username to use during login.
 
         """
-        pass
 
     async def new_session(self) -> bool:
         """Establish a new session.
@@ -127,19 +130,19 @@ class SMAspeedwireEM(Device):
         Returns:
             bool: authentication successful
         """
-        MCAST_GRP = "239.12.255.254"
-        MCAST_PORT = 9522
-        IPBIND = "0.0.0.0"
+        mcast_grp = "239.12.255.254"
+        mcast_port = 9522
+        ipbind = "0.0.0.0"
 
         self._sock = socket.socket(
             socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP
         )
         self._sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self._sock.settimeout(5)
-        self._sock.bind(("", MCAST_PORT))
+        self._sock.bind(("", mcast_port))
         try:
             mreq = struct.pack(
-                "4s4s", socket.inet_aton(MCAST_GRP), socket.inet_aton(IPBIND)
+                "4s4s", socket.inet_aton(mcast_grp), socket.inet_aton(ipbind)
             )
             self._sock.setsockopt(socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, mreq)
         except BaseException as exc:
@@ -168,7 +171,7 @@ class SMAspeedwireEM(Device):
     def _recv(self):
         return self._sock.recv(608)
 
-    def _getData(self):
+    def _get_data(self):
         """
 
         Hack:
@@ -209,7 +212,7 @@ class SMAspeedwireEM(Device):
             bool: reading was successful
         """
         notfound = []
-        data = self._getData()
+        data = self._get_data()
 
         for sensor in sensors:
             if sensor.key in data:
@@ -234,7 +237,7 @@ class SMAspeedwireEM(Device):
         Returns:
             dict: dict containing serial, name, type, manufacturer and sw_version
         """
-        data = self._getData()
+        data = self._get_data()
 
         device_info = {
             "serial": data["serial"],
@@ -256,14 +259,14 @@ class SMAspeedwireEM(Device):
         """
         if p[0:4] != b"SMA\0":
             return None
-        protocolID = int.from_bytes(p[16:18], byteorder="big")
+        protocol_id = int.from_bytes(p[16:18], byteorder="big")
 
-        if protocolID not in [0x6069, 0x6081]:
-            _LOGGER.debug("Unknown protocoll " + str(protocolID))
+        if protocol_id not in [0x6069, 0x6081]:
+            _LOGGER.debug("Unknown protocoll %d", protocol_id)
             return None
 
         data = {}
-        data["protocolID"] = protocolID
+        data["protocolID"] = protocol_id
         data["susyid"] = int.from_bytes(p[18:20], byteorder="big")
         data["device"] = self._susyid.get(data["susyid"], "unknown")
         data["serial"] = int.from_bytes(p[20:24], byteorder="big")

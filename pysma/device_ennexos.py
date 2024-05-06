@@ -1,3 +1,9 @@
+"""
+
+Interface for SMA ennoxOS based devices. (e.g. Tripower X and maybe EV Charger)
+
+"""
+
 import asyncio
 import copy
 import json
@@ -31,7 +37,7 @@ class SMAennexos(Device):
     _new_session_data: Optional[dict]
     _url: str
     _token: str
-    _authorization_header: str
+    _authorization_header: dict[str, str]
     _last_parameters: Any
     _last_measurements: Any
     _last_device: Any
@@ -168,7 +174,6 @@ class SMAennexos(Device):
                     }
             else:
                 # Value current not available // night?
-                # TODO
                 pass
         return data
 
@@ -208,7 +213,6 @@ class SMAennexos(Device):
                     }
             else:
                 # Value current not available // night?
-                # TODO
                 pass
         return data
 
@@ -228,9 +232,9 @@ class SMAennexos(Device):
         sensors = []
 
         # Search for matiching profile
-        for devname in ennexosSensorProfiles.keys():
-            if self._device_info["name"].startswith(devname):
-                sensors = ennexosSensorProfiles[devname]
+        for dev in ennexosSensorProfiles.items():
+            if self._device_info["name"].startswith(dev[0]):
+                sensors = dev[1]
         if len(sensors) == 0:
             _LOGGER.warning(
                 f'Unknown Device: {self._device_info["name"]} {self._device_info["type"]}'
@@ -356,9 +360,8 @@ class SMAennexos(Device):
                     )
                     ret["status"] = "found"
                     break
-                else:
-                    ret["status"] = "failed"
-                    ret["exception"] = dev
+                ret["status"] = "failed"
+                ret["exception"] = dev
             except Exception as e:
                 ret["status"] = "failed"
                 ret["exception"] = e

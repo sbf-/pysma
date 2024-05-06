@@ -1,3 +1,7 @@
+"""
+Definition for all enneoxOS senosrs 
+"""
+
 from .sensor import Sensor
 from .const import Identifier
 from .const import SMATagList
@@ -11,9 +15,7 @@ ennexosSensorProfiles = {
         Sensor("DcMs.Amp.1", Identifier.pv_current_a, factor=1, unit="A"),
         Sensor("DcMs.Amp.2", Identifier.pv_current_b, factor=1, unit="A"),
         Sensor("DcMs.Amp.3", Identifier.pv_current_c, factor=1, unit="A"),
-        Sensor(
-            "DcMs.TotDcEnCntWh.1", None, factor=1, unit=None
-        ),  # Energy released by string [A]
+        Sensor("DcMs.TotDcEnCntWh.1", None),  # Energy released by string [A]
         Sensor("DcMs.TotDcEnCntWh.2", None, factor=1, unit=None),
         Sensor("DcMs.TotDcEnCntWh.3", None, factor=1, unit=None),
         Sensor("DcMs.Vol.1", Identifier.pv_voltage_a, factor=1, unit="V"),
@@ -86,8 +88,8 @@ ennexosSensorProfiles = {
         Sensor(
             "Isolation.LeakRis", None, factor=1, unit="kOhm"
         ),  # TODO "pv_isolation_resistance"
-        Sensor("Metering.TotFeedTms", None, factor=1, unit=None),
-        Sensor("Metering.TotOpTms", None, factor=1, unit=None),
+        Sensor("Metering.TotFeedTms", None),
+        Sensor("Metering.TotOpTms", None),
         Sensor("Metering.TotWhOut", Identifier.total_yield, factor=1000, unit="kWh"),
         Sensor(
             "Metering.TotWhOut.Pv", Identifier.pv_gen_meter, factor=1000, unit="kWh"

@@ -499,7 +499,7 @@ class SMAwebconnect(Device):
                 else:
                     ret[0]["status"] = "failed"
                     ret[0]["exception"] = e
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught
                 ret[0]["status"] = "failed"
                 ret[0]["exception"] = e
             results.extend(ret)

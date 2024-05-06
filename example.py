@@ -43,7 +43,7 @@ async def identify(url: str, savedebug: bool):
             f.write(json.dumps(ret ,default=lambda o: str(o), indent=4))
 
 
-async def main_loop(user: str, password, url: str, accessmethod: str, delay: float, cnt: int, savedebug: bool):
+async def main_loop(user: str, password, url: str, accessmethod: str, delay: float, cnt: int, savedebug: bool, isVerbose: bool):
     """Run main loop."""
     async with aiohttp.ClientSession(
         connector=aiohttp.TCPConnector(ssl=False)
@@ -64,7 +64,6 @@ async def main_loop(user: str, password, url: str, accessmethod: str, delay: flo
             VAR["running"] = True
             device_info = await VAR["sma"].device_info()
             sensors = await VAR["sma"].get_sensors()
-
             for name, value in device_info.items():
                print("{:>15}{:>25}".format(name, value))
             print("=====================================================================================")
@@ -83,9 +82,13 @@ async def main_loop(user: str, password, url: str, accessmethod: str, delay: flo
                 print("=====================================================================================")
         finally:
             _LOGGER.info("Closing Session...")
+            dump = json.dumps(await VAR["sma"].get_debug(), indent=4)
+            if isVerbose:
+                
+                print(dump)
             if savedebug:
                 f = open("example.log", "w")
-                f.write(json.dumps(await VAR["sma"].get_debug(), indent=4))
+                f.write(dump)
             await VAR["sma"].close_session()
 
 
@@ -146,7 +149,7 @@ async def main():
             VAR["running"] = False
         signal.signal(signal.SIGINT, _shutdown)
         await main_loop(user=args.user, password=args.password, url=args.url, accessmethod=args.accessmethod,
-                        delay=args.delay, cnt=args.count, savedebug = args.save)
+                        delay=args.delay, cnt=args.count, savedebug = args.save, isVerbose = args.verbose)
 
 
 if __name__ == "__main__":

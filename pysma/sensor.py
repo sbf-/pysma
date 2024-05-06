@@ -1,4 +1,5 @@
 """Sensor classes for SMA WebConnect library for Python."""
+
 import copy
 import logging
 from typing import Any, Iterator, List, Optional, Union
@@ -197,7 +198,7 @@ class Sensors:
         if isinstance(sensor, Sensor):
             sensor = copy.copy(sensor)
         else:
-            raise TypeError("pysma.Sensor expected")
+            raise TypeError(f"pysma.Sensor expected {type(sensor)} {sensor}")
 
         if sensor.name in self:
             old = self[sensor.name]

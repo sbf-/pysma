@@ -20,6 +20,7 @@ dependencies = [
     "aiohttp>3.3,<4",
     "attrs>18",
     "jmespath<2",
+    "dataclasses-struct>0.8"
 ]
 requires-python = ">=3.9"
 

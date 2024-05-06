@@ -4,11 +4,12 @@ See: http://www.sma.de/en/products/monitoring-control/webconnect.html
 
 Source: http://www.github.com/kellerza/pysma
 """
+
 import asyncio
 import copy
 import json
 import logging
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, List
 
 import jmespath  # type: ignore
 from aiohttp import ClientSession, ClientTimeout, client_exceptions, hdrs
@@ -39,6 +40,7 @@ from .exceptions import (
 from .helpers import version_int_to_string
 from .sensor import Sensors
 from .device import Device
+
 _LOGGER = logging.getLogger(__name__)
 
 
@@ -96,7 +98,9 @@ class SMAwebconnect(Device):
         self._lang = lang
         self._l10n = None
         self._devclass = None
-        self._device_info_sensors = Sensors(definitions_webconnect.sensor_map[DEVICE_INFO])
+        self._device_info_sensors = Sensors(
+            definitions_webconnect.sensor_map[DEVICE_INFO]
+        )
 
     async def _request_json(
         self, method: str, url: str, **kwargs: Dict[str, Any]
@@ -446,7 +450,9 @@ class SMAwebconnect(Device):
             device_sensors.add(
                 [
                     sensor
-                    for sensor in definitions_webconnect.sensor_map[ENERGY_METER_VIA_INVERTER]
+                    for sensor in definitions_webconnect.sensor_map[
+                        ENERGY_METER_VIA_INVERTER
+                    ]
                     if sensor not in device_sensors
                 ]
             )
@@ -477,8 +483,7 @@ class SMAwebconnect(Device):
     async def get_debug(self) -> Dict:
         return {}
 
-
-    async def detect(self, ip) -> bool:
+    async def detect(self, ip) -> List:
         results = []
         for urls in ["https://" + ip, "http://" + ip]:
             self._url = urls

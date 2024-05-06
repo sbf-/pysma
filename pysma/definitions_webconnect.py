@@ -1,4 +1,5 @@
 """Sensor definitions for SMA WebConnect library for Python."""
+
 from .const_webconnect import (
     DEVICE_INFO,
     ENERGY_METER_VIA_INVERTER,
@@ -11,7 +12,9 @@ from .const import Identifier
 
 # Status - Operation
 #: Status of the device
-status = Sensor("6180_08214800", Identifier.status, path=JMESPATHS_TAG, l10n_translate=True)
+status = Sensor(
+    "6180_08214800", Identifier.status, path=JMESPATHS_TAG, l10n_translate=True
+)
 #: General operating status
 operating_status_general = Sensor(
     "6180_08412800",
@@ -112,7 +115,9 @@ pv_power = Sensor("6100_0046C200", Identifier.pv_power, unit="W", enabled=False)
 #: Power supplied to the grid. grid_power = power_l1 + power_l2 + power_l3
 grid_power = Sensor("6100_40263F00", Identifier.grid_power, unit="W")
 #: Grid frequency
-frequency = Sensor("6100_00465700", Identifier.frequency, unit="Hz", factor=100, enabled=False)
+frequency = Sensor(
+    "6100_00465700", Identifier.frequency, unit="Hz", factor=100, enabled=False
+)
 
 # AC Side - Grid measurements - Active power
 #: Power for phase 1
@@ -175,21 +180,33 @@ grid_power_factor_excitation = Sensor(
 
 # AC Side - Grid measurements - Phase Current
 #: Current for phase 1
-current_l1 = Sensor("6100_40465300", Identifier.current_l1, unit="A", factor=1000, enabled=False)
+current_l1 = Sensor(
+    "6100_40465300", Identifier.current_l1, unit="A", factor=1000, enabled=False
+)
 #: Current for phase 2
-current_l2 = Sensor("6100_40465400", Identifier.current_l2, unit="A", factor=1000, enabled=False)
+current_l2 = Sensor(
+    "6100_40465400", Identifier.current_l2, unit="A", factor=1000, enabled=False
+)
 #: Current for phase 3
-current_l3 = Sensor("6100_40465500", Identifier.current_l3, unit="A", factor=1000, enabled=False)
+current_l3 = Sensor(
+    "6100_40465500", Identifier.current_l3, unit="A", factor=1000, enabled=False
+)
 #: Total Current
 current_total = Sensor("6100_00664F00", Identifier.current_total, unit="A", factor=1000)
 
 # AC Side - Grid measurements - Phase voltage
 #: Voltage for phase 1
-voltage_l1 = Sensor("6100_00464800", Identifier.voltage_l1, unit="V", factor=100, enabled=False)
+voltage_l1 = Sensor(
+    "6100_00464800", Identifier.voltage_l1, unit="V", factor=100, enabled=False
+)
 #: Voltage for phase 2
-voltage_l2 = Sensor("6100_00464900", Identifier.voltage_l2, unit="V", factor=100, enabled=False)
+voltage_l2 = Sensor(
+    "6100_00464900", Identifier.voltage_l2, unit="V", factor=100, enabled=False
+)
 #: Voltage for phase 3
-voltage_l3 = Sensor("6100_00464A00", Identifier.voltage_l3, unit="V", factor=100, enabled=False)
+voltage_l3 = Sensor(
+    "6100_00464A00", Identifier.voltage_l3, unit="V", factor=100, enabled=False
+)
 
 # AC Side - Measured values - energy
 #: Total power yield from a solar installation
@@ -199,9 +216,13 @@ daily_yield = Sensor("6400_00262200", Identifier.daily_yield, unit="Wh")
 
 # AC Side - Measured values - Grid measurements
 #: Power supplied to grid measured by energy meter
-metering_power_supplied = Sensor("6100_40463600", Identifier.metering_power_supplied, unit="W")
+metering_power_supplied = Sensor(
+    "6100_40463600", Identifier.metering_power_supplied, unit="W"
+)
 #: Power absorbed fromgrid measured by energy meter
-metering_power_absorbed = Sensor("6100_40463700", Identifier.metering_power_absorbed, unit="W")
+metering_power_absorbed = Sensor(
+    "6100_40463700", Identifier.metering_power_absorbed, unit="W"
+)
 #: Grid frequency measured by energy meter
 metering_frequency = Sensor(
     "6100_00468100", Identifier.metering_frequency, unit="Hz", factor=100
@@ -322,11 +343,17 @@ optimizer_temp = Sensor(
 #: Total battery state of charge
 battery_soc_total = Sensor("6100_00295A00", Identifier.battery_soc_total, unit="%")
 #: State of charge battery A
-battery_soc_a = Sensor("6100_00498F00_0", Identifier.battery_soc_a, unit="%", enabled=False)
+battery_soc_a = Sensor(
+    "6100_00498F00_0", Identifier.battery_soc_a, unit="%", enabled=False
+)
 #: State of charge battery B
-battery_soc_b = Sensor("6100_00498F00_1", Identifier.battery_soc_b, unit="%", enabled=False)
+battery_soc_b = Sensor(
+    "6100_00498F00_1", Identifier.battery_soc_b, unit="%", enabled=False
+)
 #: State of charge battery C
-battery_soc_c = Sensor("6100_00498F00_2", Identifier.battery_soc_c, unit="%", enabled=False)
+battery_soc_c = Sensor(
+    "6100_00498F00_2", Identifier.battery_soc_c, unit="%", enabled=False
+)
 #: Voltage battery A
 battery_voltage_a = Sensor(
     "6100_00495C00_0", Identifier.battery_voltage_a, unit="V", factor=100, enabled=False
@@ -352,11 +379,17 @@ battery_current_c = Sensor(
     "6100_40495D00_2", Identifier.battery_current_c, unit="A", factor=1000
 )
 #: Temperature battery A
-battery_temp_a = Sensor("6100_40495B00_0", Identifier.battery_temp_a, unit="°C", factor=10)
+battery_temp_a = Sensor(
+    "6100_40495B00_0", Identifier.battery_temp_a, unit="°C", factor=10
+)
 #: Temperature battery B
-battery_temp_b = Sensor("6100_40495B00_1", Identifier.battery_temp_b, unit="°C", factor=10)
+battery_temp_b = Sensor(
+    "6100_40495B00_1", Identifier.battery_temp_b, unit="°C", factor=10
+)
 #: Temperature battery C
-battery_temp_c = Sensor("6100_40495B00_2", Identifier.battery_temp_c, unit="°C", factor=10)
+battery_temp_c = Sensor(
+    "6100_40495B00_2", Identifier.battery_temp_c, unit="°C", factor=10
+)
 #: Battery status operating mode
 battery_status_operating_mode = Sensor(
     "6180_08495E00",
@@ -367,7 +400,9 @@ battery_status_operating_mode = Sensor(
 
 # Battery (inverter) - Diagnosis
 #: Total battery capacity
-battery_capacity_total = Sensor("6100_00696E00", Identifier.battery_capacity_total, unit="%")
+battery_capacity_total = Sensor(
+    "6100_00696E00", Identifier.battery_capacity_total, unit="%"
+)
 #: Capacity battery A
 battery_capacity_a = Sensor(
     "6100_00499100_0", Identifier.battery_capacity_a, unit="%", enabled=False
@@ -384,15 +419,27 @@ battery_capacity_c = Sensor(
 # Battery (inverter) - Charge (voltage)
 #: Charging voltage battery A
 battery_charging_voltage_a = Sensor(
-    "6102_00493500_0", Identifier.battery_charging_voltage_a, unit="V", factor=100, enabled=False
+    "6102_00493500_0",
+    Identifier.battery_charging_voltage_a,
+    unit="V",
+    factor=100,
+    enabled=False,
 )
 #: Charging voltage battery B
 battery_charging_voltage_b = Sensor(
-    "6102_00493500_1", Identifier.battery_charging_voltage_b, unit="V", factor=100, enabled=False
+    "6102_00493500_1",
+    Identifier.battery_charging_voltage_b,
+    unit="V",
+    factor=100,
+    enabled=False,
 )
 #: Charging voltage battery C
 battery_charging_voltage_c = Sensor(
-    "6102_00493500_2", Identifier.battery_charging_voltage_c, unit="V", factor=100, enabled=False
+    "6102_00493500_2",
+    Identifier.battery_charging_voltage_c,
+    unit="V",
+    factor=100,
+    enabled=False,
 )
 
 # Battery (inverter) - Battery charge (power & energy)
@@ -418,15 +465,27 @@ battery_charge_total = Sensor(
 )
 #: Charge battery A
 battery_charge_a = Sensor(
-    "6400_00499500_0", Identifier.battery_charge_a, unit="kWh", factor=1000, enabled=False
+    "6400_00499500_0",
+    Identifier.battery_charge_a,
+    unit="kWh",
+    factor=1000,
+    enabled=False,
 )
 #: Charge battery B
 battery_charge_b = Sensor(
-    "6400_00499500_1", Identifier.battery_charge_b, unit="kWh", factor=1000, enabled=False
+    "6400_00499500_1",
+    Identifier.battery_charge_b,
+    unit="kWh",
+    factor=1000,
+    enabled=False,
 )
 #: Charge battery C
 battery_charge_c = Sensor(
-    "6400_00499500_2", Identifier.battery_charge_c, unit="kWh", factor=1000, enabled=False
+    "6400_00499500_2",
+    Identifier.battery_charge_c,
+    unit="kWh",
+    factor=1000,
+    enabled=False,
 )
 
 # Battery (inverter) - Battery discharge (power & energy)
@@ -452,15 +511,27 @@ battery_discharge_total = Sensor(
 )
 #: Discharge battery A
 battery_discharge_a = Sensor(
-    "6400_00499600_0", Identifier.battery_discharge_a, unit="kWh", factor=1000, enabled=False
+    "6400_00499600_0",
+    Identifier.battery_discharge_a,
+    unit="kWh",
+    factor=1000,
+    enabled=False,
 )
 #: Discharge battery B
 battery_discharge_b = Sensor(
-    "6400_00499600_1", Identifier.battery_discharge_b, unit="kWh", factor=1000, enabled=False
+    "6400_00499600_1",
+    Identifier.battery_discharge_b,
+    unit="kWh",
+    factor=1000,
+    enabled=False,
 )
 #: Discharge battery C
 battery_discharge_c = Sensor(
-    "6400_00499600_2", Identifier.battery_discharge_c, unit="kWh", factor=1000, enabled=False
+    "6400_00499600_2",
+    Identifier.battery_discharge_c,
+    unit="kWh",
+    factor=1000,
+    enabled=False,
 )
 
 # Device Parameters
@@ -475,14 +546,19 @@ device_type = Sensor(
 )
 #: Device manufactorer
 device_manufacturer = Sensor(
-    "6800_08822B00", Identifier.device_manufacturer, path=JMESPATHS_TAG, l10n_translate=True
+    "6800_08822B00",
+    Identifier.device_manufacturer,
+    path=JMESPATHS_TAG,
+    l10n_translate=True,
 )
 #: Device software version
 device_sw_version = Sensor("6800_00823400", Identifier.device_sw_version)
 
 # Device - Inverter
 #: Power limit of the Inverter
-inverter_power_limit = Sensor("6800_00832A00", Identifier.inverter_power_limit, unit="W")
+inverter_power_limit = Sensor(
+    "6800_00832A00", Identifier.inverter_power_limit, unit="W"
+)
 
 # System communication - Meter on Speedwire
 #: Serial number of energy meter

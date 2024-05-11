@@ -355,10 +355,11 @@ class SMAClientProtocol(DatagramProtocol):
             self.cmdidx += 1
             self._resendcounter = 0
         except TimeoutError:
-            _LOGGER.warning(f"Timeout in command. Resendcounter: {self._resendcounter}")
+            _LOGGER.debug(f"Timeout in command. Resendcounter: {self._resendcounter}")
             self._resendcounter += 1
             if (self._resendcounter > 2):
                 # Giving up. Next Command
+                _LOGGER.debug(f"Timeout in command")
                 self.cmdidx += 1
                 self._resendcounter = 0
         await self._send_next_command()
@@ -525,7 +526,7 @@ class SMAClientProtocol(DatagramProtocol):
                         f"No Handler for {c} at register idx {register_idx}: {values}"
                     )
                     continue
-                _LOGGER.warning(
+                _LOGGER.debug(
                     f"Special Handler for {c} at register idx {register_idx}: {values}"
                 )
                 sensor = sensor[register_idx]

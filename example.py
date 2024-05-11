@@ -91,14 +91,24 @@ async def main_loop(user: str, password, url: str, accessmethod: str, delay: flo
                 f.write(dump)
             await VAR["sma"].close_session()
 
+def getVersion():
+    versionstring = "unknown"
+    from importlib.metadata import version, PackageNotFoundError
+    try:
+        versionstring = version('pysma-plus')
+    except PackageNotFoundError:
+        pass
+    return versionstring
+
 
 async def main():
+    print("Library version: " + getVersion())
     parser = argparse.ArgumentParser(prog='python example.py',
                                      description="Test the pysma library.",
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('-v', '--verbose', action='store_true', help = "Enable debug output") 
     parser.add_argument('-d', '--delay', type=float, default=2, help = "Delay between two requests [seconds]")
-    parser.add_argument('-c', '--count', type=int, default=1, help = "Number of requests [seconds]")
+    parser.add_argument('-c', '--count', type=int, default=1, help = "Number of requests (0=unlimited)")
     parser.add_argument('-s', '--save', action='store_true', help = "Save debug information to example.log")
 
     subparsers = parser.add_subparsers(help='Supported devices', required=True)

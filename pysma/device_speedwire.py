@@ -555,7 +555,7 @@ class SMAClientProtocol(DatagramProtocol):
         # Check if message is a 6065 protocol
         msg = speedwireHeader.from_packed(data[0:18])
         if not msg.check6065():
-            _LOGGER.debug("Ignoring non 6065 Response.")
+            _LOGGER.debug("Ignoring non 6065 Response. %d", msg.protokoll)
             return
 
         # If the requested information is not available, send the next command,
@@ -571,10 +571,15 @@ class SMAClientProtocol(DatagramProtocol):
             self._confirm_repsonse()
             return
 
+
         # Filter out non matching responses
         (cnt_registers, size_registers) = self.calc_register(data, msg6065)
         code = int.from_bytes(data[54:58], "little")
         codem = code & 0x00FFFF00
+        if len(data) == 58 and codem == 0:
+            _LOGGER.debug(f"NACK [{len(data)}] -- {data}")
+            self._confirm_repsonse()
+            return
         if size_registers <= 0 or size_registers not in [16, 28, 40]:
             _LOGGER.warning(
                 f"Skipping message. --- Len {data} Ril {codem} {cnt_registers} x {size_registers} bytes"

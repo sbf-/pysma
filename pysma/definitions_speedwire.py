@@ -95,12 +95,20 @@ responseDef = {
         {
             "cmd": "OperatingStatus",
             "format": "uint",
-            "sensor": Sensor(
-                "GeneralOperatingStatus",
-                Identifier.operating_status_genereal,
-                factor=1,
-                mapper=SMATagList,
-            ),
+            "sensor": [
+                Sensor(
+                    "GeneralOperatingStatus",
+                    Identifier.operating_status_genereal,
+                    factor=1,
+                    mapper=SMATagList,
+                ),
+                Sensor(
+                    "GeneralOperatingStatus2",
+                    "Temp GeneralOperatingStatus2",
+                    factor=1,
+                    mapper=SMATagList,
+                ),
+            ],
             "mask": 0x00FFFFFF,
             "idx": 0,
         }

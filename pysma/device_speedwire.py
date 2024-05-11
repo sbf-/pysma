@@ -17,7 +17,7 @@ import struct
 import asyncio
 from typing import Any, Dict, Optional, List, Annotated
 from ctypes import LittleEndianStructure
-from asyncio import DatagramProtocol
+from asyncio import DatagramProtocol, Future
 import dataclasses_struct as dcs
 
 from .helpers import version_int_to_string
@@ -319,6 +319,8 @@ class speedwireHeader6065:
 class SMAClientProtocol(DatagramProtocol):
     """Basic Class for communication"""
 
+    _commandFuture: Future[Any] = None
+
     debug: Dict[str, Any] = {
         "msg": collections.deque(maxlen=len(commands) * 3),
         "data": {},
@@ -336,6 +338,8 @@ class SMAClientProtocol(DatagramProtocol):
         self.future = None
         self.data_values = {}
         self.sensors = {}
+        self._group = None
+        self._resendcounter = 0
 
         self.allCmds = []
         self.allCmds.extend(commands.keys())
@@ -345,16 +349,38 @@ class SMAClientProtocol(DatagramProtocol):
     def connection_made(self, transport):
         self.transport = transport
 
-    def start_query(self, cmds: List, future, group: str):
-        self.cmds = cmds
+    async def controller(self):
+        try:
+            await asyncio.wait_for(self._commandFuture, timeout=0.5)
+            self.cmdidx += 1
+            self._resendcounter = 0
+        except TimeoutError:
+            _LOGGER.warning(f"Timeout in command. Resendcounter: {self._resendcounter}")
+            self._resendcounter += 1
+            if (self._resendcounter > 2):
+                # Giving up. Next Command
+                self.cmdidx += 1
+                self._resendcounter = 0
+        await self._send_next_command()
+
+
+    def _confirm_repsonse(self, code=-1):
+        if self._commandFuture.done():
+            _LOGGER.debug(f"unexpected message {code:08X}")
+            return
+        self._commandFuture.set_result(True)
+
+    async def start_query(self, cmds: List, future, group: str):
+        self.cmds = ["login"]
+        self.cmds.extend(cmds)
         self.future = future
         self.cmdidx = 0
+        self._group = group
         self.data_values = {}
         self.sensors = {}
         _LOGGER.debug("Sending login")
         self.debug["msg"].append(["SEND", "login"])
-        groupidx = ["user", "installer"].index(group)
-        self._send_command(self.speedwire.getLoginFrame(self.password, 0, groupidx))
+        await self._send_next_command()
 
     def connection_lost(self, exc):
         _LOGGER.debug(f"Connection lost: {exc}")
@@ -365,27 +391,38 @@ class SMAClientProtocol(DatagramProtocol):
         _LOGGER.debug(
             f"Sending command [{len(cmd)}] -- {binascii.hexlify(cmd).upper()}"
         )
+        self._commandFuture = asyncio.get_running_loop().create_future()
+        asyncio.get_running_loop().create_task(self.controller())
         self.transport.sendto(cmd)
 
-    def _send_next_command(self):
+    async def _send_next_command(self):
         """Send the next command in the list"""
         if not self.future:
             return
         if self.cmdidx >= len(self.cmds):
             # All commands send. Clean up.
+            f = self.future
+            self.future = None
+            await asyncio.sleep(0.1)  # Wait for delayed respones
             self.debug["data"] = self.data_values
-            self.future.set_result(True)
             self.cmds = []
             self.cmdidx = 0
-            self.future = None
+            f.set_result(True)
         else:
             # Send the next command
             self.debug["msg"].append(["SEND", self.cmds[self.cmdidx]])
             _LOGGER.debug("Sending " + self.cmds[self.cmdidx])
-            self._send_command(
-                self.speedwire.getQueryFrame(self.password, 0, self.cmds[self.cmdidx])
-            )
-            self.cmdidx += 1
+            if (self.cmds[self.cmdidx]) == "login":
+                groupidx = ["user", "installer"].index(self._group)
+                self._send_command(
+                    self.speedwire.getLoginFrame(self.password, 0, groupidx)
+                )
+            else:
+                self._send_command(
+                    self.speedwire.getQueryFrame(
+                        self.password, 0, self.cmds[self.cmdidx]
+                    )
+                )
 
     def _getFormat(self, handler):
         """Return the necessary information for extracting the information"""
@@ -448,14 +485,14 @@ class SMAClientProtocol(DatagramProtocol):
             values.append(v)
         return values
 
-    def handle_register(self, subdata):
+    def handle_register(self, subdata, register_idx: int):
         """Handle the payload with all the registers"""
         code = int.from_bytes(subdata[0:4], "little")
         # c = f"{(code & 0xFFFFFFFF):08X}"
         c = f"{code:08X}"
         msec = int.from_bytes(subdata[4:8], "little")  # noqa: F841
 
-        # Fix for strange Codes
+        # Fix for strange response codes
         self.debug["ids"].add(c[6:])
         if c.endswith("07"):
             c = c[:7] + "1"
@@ -474,13 +511,25 @@ class SMAClientProtocol(DatagramProtocol):
 
         # Handle known repsones
         for handler in responseDef[c]:
-
             values = self.extractvalues(handler, subdata)
             if "sensor" not in handler:
                 continue
             v = values[handler["idx"]]
 
-            self.handle_newvalue(handler["sensor"], v)
+            sensor = handler["sensor"]
+
+            # Special handling for a response that returns two values under the same code
+            if isinstance(sensor, List):
+                if register_idx >= len(sensor):
+                    _LOGGER.warning(
+                        f"No Handler for {c} at register idx {register_idx}: {values}"
+                    )
+                    continue
+                _LOGGER.warning(
+                    f"Special Handler for {c} at register idx {register_idx}: {values}"
+                )
+                sensor = sensor[register_idx]
+            self.handle_newvalue(sensor, v)
 
     # Unfortunately, there is no known method of determining the size of the registers
     # from the message. Therefore, the register size is determined from the number of
@@ -511,14 +560,14 @@ class SMAClientProtocol(DatagramProtocol):
         # If the requested information is not available, send the next command,
         if len(data) < 58:
             _LOGGER.debug(f"NACK [{len(data)}] -- {data}")
-            self._send_next_command()
+            self._confirm_repsonse()
             return
 
         # Handle Login Responses
         msg6065 = speedwireHeader6065.from_packed(data[18 : 18 + 36])
         if msg6065.isLoginResponse():
             self.handle_login(msg6065)
-            self._send_next_command()
+            self._confirm_repsonse()
             return
 
         # Filter out non matching responses
@@ -529,16 +578,15 @@ class SMAClientProtocol(DatagramProtocol):
             _LOGGER.warning(
                 f"Skipping message. --- Len {data} Ril {codem} {cnt_registers} x {size_registers} bytes"
             )
-            self._send_next_command()
+            self._confirm_repsonse(code)
             return
 
         # Extract the values for each register
         for idx in range(0, cnt_registers):
             start = idx * size_registers + 54
-            self.handle_register(data[start : start + size_registers])
+            self.handle_register(data[start : start + size_registers], idx)
 
-        # Send new command
-        self._send_next_command()
+        self._confirm_repsonse(code)
 
 
 class SMAspeedwireINV(Device):
@@ -562,7 +610,9 @@ class SMAspeedwireINV(Device):
         sensorname = {}
         for responses in responseDef.values():
             for response in responses:
-                if "sensor" not in response:
+                if "sensor" not in response or not isinstance(
+                    response["sensor"], Sensor
+                ):
                     continue
                 sensor = response["sensor"]
                 if sensor.key in keysname:
@@ -588,7 +638,7 @@ class SMAspeedwireINV(Device):
                     keysname[name] = 1
                 if "sensor" in r:
                     sensor = r["sensor"]
-                    if sensor.key in sensorname:
+                    if isinstance(sensor, Sensor) and sensor.key in sensorname:
                         print("Doppelter Sensorname " + sensor.key)
                         raise RuntimeError("Doppelter Sensorname " + sensor.key)
                     sensorname[name] = 1
@@ -604,7 +654,7 @@ class SMAspeedwireINV(Device):
 
     async def device_info(self) -> dict:
         fut = asyncio.get_running_loop().create_future()
-        self._protocol.start_query(["TypeLabel", "Firmware"], fut, self._group)
+        await self._protocol.start_query(["TypeLabel", "Firmware"], fut, self._group)
         try:
             await asyncio.wait_for(fut, timeout=5)
         except TimeoutError:
@@ -636,7 +686,7 @@ class SMAspeedwireINV(Device):
     async def get_sensors(self) -> Sensors:
         fut = asyncio.get_running_loop().create_future()
         c = self._protocol.allCmds
-        self._protocol.start_query(c, fut, self._group)
+        await self._protocol.start_query(c, fut, self._group)
         await asyncio.wait_for(fut, timeout=5)
         device_sensors = Sensors()
         for s in self._protocol.sensors.values():
@@ -646,13 +696,14 @@ class SMAspeedwireINV(Device):
     async def read(self, sensors: Sensors) -> bool:
         fut = asyncio.get_running_loop().create_future()
         c = self._protocol.allCmds
-        self._protocol.start_query(c, fut, self._group)
+        await self._protocol.start_query(c, fut, self._group)
         await asyncio.wait_for(fut, timeout=5)
         self._update_sensors(sensors, self._protocol.sensors)
         return True
 
     def _update_sensors(self, sensors, sensorReadings):
         """Update a sensor with the sensor reading"""
+        _LOGGER.debug("Received %d sensor readings", len(sensorReadings))
         for sen in sensors:
             if sen.enabled and sen.key in sensorReadings:
                 value = sensorReadings[sen.key].value
@@ -680,7 +731,7 @@ class SMAspeedwireINV(Device):
             ret[0]["testedEndpoints"] = str(ip) + ":9522"
             await self.new_session()
             fut = asyncio.get_running_loop().create_future()
-            self._protocol.start_query(["TypeLabel"], fut, self._group)
+            await self._protocol.start_query(["TypeLabel"], fut, self._group)
             try:
                 await asyncio.wait_for(fut, timeout=5)
             except TimeoutError:

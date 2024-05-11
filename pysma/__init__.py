@@ -52,13 +52,15 @@ def getDevice(
 
 async def _run_detect(accessmethod: str, session: ClientSession, ip):
     """Start Autodetection"""
-    sma = None
+    sma: Device
     if accessmethod == "webconnect":
         sma = SMAwebconnect(session, ip, password="", group="user")
     elif accessmethod == "ennexos":
         sma = SMAennexos(session, ip, password=None, group=None)
     elif accessmethod == "speedwireinv":
         sma = SMAspeedwireINV(host=ip, password="", group="user")
+    else:
+        return None
     ret = await sma.detect(ip)
     for i in ret:
         i["access"] = accessmethod

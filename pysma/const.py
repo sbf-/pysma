@@ -180,7 +180,7 @@ SMATagList: Dict[int, str] = {
     1130: "No",
     1264: "Full dynamic grid support",
     1265: "Limited dynamic grid support",
-    #    1295:
+    1295: "Standby",
     1387: "Reactive power Q, setpoint via analog input",
     1388: "cos φ, setpoint via analog input",
     1389: "Reactive power / voltage characteristic curve Q(U) with hysteresis and deadband",

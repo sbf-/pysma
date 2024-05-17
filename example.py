@@ -16,7 +16,6 @@ _LOGGER = logging.getLogger(__name__)
 
 VAR = {}
 
-
 def print_table(sensors):
     """Print sensors formatted as table."""
     if (len(sensors) == 0):
@@ -28,6 +27,19 @@ def print_table(sensors):
             print("{:>25}{:>15} {} {}".format(sen.key, str(sen.value), sen.unit if sen.unit else "", sen.mapped_value if sen.mapped_value else "" ))
         else:
             print("{:>25}{:>15} {} {}".format(sen.name, str(sen.value), sen.unit if sen.unit else "", sen.mapped_value if sen.mapped_value else "" ))
+
+
+async def discovery(savedebug: bool):
+    ret = await pysma.discovery()
+    if len(ret) == 0:
+            print("Found no SMA devices via speedwire discovery request!")
+    for r in ret:
+             print(f"{r[0]}:{r[1]}")
+
+    if savedebug:
+         ret = { "discovered": ret }
+         f = open("example.log", "w")
+         f.write(json.dumps(ret ,default=lambda o: str(o), indent=4))
 
 
 async def identify(url: str, savedebug: bool):
@@ -138,11 +150,11 @@ async def main():
     parser_d.set_defaults(accessmethod="speedwireem")
 
     parser_e = subparsers.add_parser('identify', help='Tries to identify the available interfaces')
-    parser_e.set_defaults(user="")
-    parser_e.set_defaults(password="")
     parser_e.add_argument('url', type=str, help='Hostname or IP-Address')
     parser_e.set_defaults(accessmethod="identify")
 
+    parser_f = subparsers.add_parser('discovery', help='Tries to discovery SMA Devices')
+    parser_f.set_defaults(accessmethod="discovery")
 
     args = parser.parse_args(args=None if sys.argv[1:] else ['--help'])
     if args.verbose:
@@ -150,10 +162,18 @@ async def main():
 
 
     if args.accessmethod == "identify":
+        print("Engery Meters are not identified using this method.\n")
         print("Identification can take up to 30 seconds...\n")
         if not args.verbose:
             logging.basicConfig(stream=sys.stdout, level=logging.FATAL)
         await identify(args.url, args.save)
+
+    elif args.accessmethod == "discovery":
+        print("Discovery...\n")
+        if not args.verbose:
+            logging.basicConfig(stream=sys.stdout, level=logging.FATAL)
+        await discovery(args.save)
+
     else:
         def _shutdown(*_):
             VAR["running"] = False

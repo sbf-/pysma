@@ -14,6 +14,7 @@ from .device_ennexos import SMAennexos
 from .device_speedwire import SMAspeedwireINV
 from .device_em import SMAspeedwireEM
 from .device import Device
+from .discovery import Discovery
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -83,3 +84,8 @@ async def autoDetect(session: ClientSession, ip: str):
     for r in ret:
         results.extend(r)
     return results
+
+
+async def discovery():
+    discover = Discovery(asyncio.get_event_loop())
+    return await discover.run()

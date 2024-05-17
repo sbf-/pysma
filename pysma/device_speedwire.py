@@ -6,7 +6,6 @@ Improved with Information from https://github.com/mhop/fhem-mirror/blob/master/f
 Receiver classes completely reimplemented by little.yoda
 
 """
-
 import logging
 import time
 import ctypes
@@ -18,10 +17,9 @@ import asyncio
 from typing import Any, Dict, Optional, List, Annotated
 from ctypes import LittleEndianStructure
 from asyncio import DatagramProtocol, Future
-import dataclasses_struct as dcs
 
 from .helpers import version_int_to_string
-from .definitions_speedwire import commands, responseDef
+from .definitions_speedwire import commands, responseDef, speedwireHeader, speedwireHeader6065
 
 from .sensor import Sensors, Sensor
 from .device import Device
@@ -32,6 +30,7 @@ from .exceptions import (
     SmaReadException,
     SmaAuthenticationException,
 )
+
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -264,58 +263,6 @@ class SpeedwireFrame:
         return newDataHeader
 
 
-@dcs.dataclass(dcs.BIG_ENDIAN)
-class speedwireHeader:
-    """Speedwire header"""
-
-    sma: Annotated[bytes, 4]
-    tag42_length: dcs.U16
-    tag42_tag0x02A0: dcs.U16
-    group1: dcs.U32
-    smanet2_length: dcs.U16
-    smanet2_tag0x10: dcs.U16
-    protokoll: dcs.U16
-
-    def check6065(self):
-        return (
-            self.sma == b"SMA\x00"
-            and self.tag42_length == 4
-            and self.tag42_tag0x02A0 == 0x02A0
-            and self.group1 == 1
-            and self.smanet2_tag0x10 == 0x10
-            and self.protokoll == 0x6065
-        )
-
-
-# https://github.com/RalfOGit/libspeedwire
-@dcs.dataclass(dcs.LITTLE_ENDIAN)
-class speedwireHeader6065:
-    """Speedwire Header2 for 6065 Messages"""
-
-    # dest_susyid: dcs.U16 #2
-    # dest_serial: dcs.U32 # 2+ 4 = 6
-    # dest_control: dcs.U16 # 2 4 + 2 = 8
-    # src_susyid: dcs.U16 # 2 4 2 2 = 10
-    # src_serial: dcs.U32 # 2 4 2 2 4 = 14
-    # src_control: dcs.U16 # 2 4 2 2 4 2 = 16
-
-    # unknown1: dcs.U16 # 2
-    # susyid: dcs.U16  # 2 +2 = 4
-    # serial: dcs.U32  # 2 + 2 + 4 = 8
-    # unknown2: Annotated[bytes, 10] # 18
-
-    unknown2: Annotated[bytes, 18]  # 18
-    error: dcs.U16
-    fragment: dcs.U16
-    pktId: dcs.U16
-    cmdid: dcs.U32
-    firstRegister: dcs.U32
-    lastRegister: dcs.U32
-
-    def isLoginResponse(self):
-        return self.cmdid == 0xFFFD040D
-
-
 class SMAClientProtocol(DatagramProtocol):
     """Basic Class for communication"""
 
@@ -340,6 +287,8 @@ class SMAClientProtocol(DatagramProtocol):
         self.sensors = {}
         self._group = None
         self._resendcounter = 0
+        self._failedCounter = 0
+        self._sendCounter = 0
 
         self.allCmds = []
         self.allCmds.extend(commands.keys())
@@ -351,10 +300,13 @@ class SMAClientProtocol(DatagramProtocol):
 
     async def controller(self):
         try:
+            if self._resendcounter == 0:
+                self._sendCounter += 1
+
             await asyncio.wait_for(self._commandFuture, timeout=0.5)
             self.cmdidx += 1
             self._resendcounter = 0
-        except TimeoutError:
+        except asyncio.TimeoutError:
             _LOGGER.debug(f"Timeout in command. Resendcounter: {self._resendcounter}")
             self._resendcounter += 1
             if (self._resendcounter > 2):
@@ -362,6 +314,7 @@ class SMAClientProtocol(DatagramProtocol):
                 _LOGGER.debug(f"Timeout in command")
                 self.cmdidx += 1
                 self._resendcounter = 0
+                self._failedCounter += 1
         await self._send_next_command()
 
 
@@ -376,6 +329,8 @@ class SMAClientProtocol(DatagramProtocol):
         self.cmds.extend(cmds)
         self.future = future
         self.cmdidx = 0
+        self._failedCounter = 0
+        self._sendCounter = 0
         self._group = group
         self.data_values = {}
         self.sensors = {}
@@ -657,6 +612,11 @@ class SMAspeedwireINV(Device):
             lambda: SMAClientProtocol(self._password, on_connection_lost),
             remote_addr=(self._host, 9522),
         )
+        # Test with device_info if the ip and user/pwd are correct
+        await self.device_info()
+        if (self._protocol._failedCounter >= self._protocol._sendCounter):
+            raise SmaConnectionException("No connection to device: %s:9522",self._host)
+        print(self._protocol._failedCounter, self._protocol._sendCounter)
 
     async def device_info(self) -> dict:
         fut = asyncio.get_running_loop().create_future()

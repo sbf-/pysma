@@ -10,6 +10,8 @@ Receiver classes completely reimplemented by little.yoda
 from .const import Identifier
 from .sensor import Sensor
 from .const import SMATagList
+from typing import Any, Dict, Optional, List, Annotated
+import dataclasses_struct as dcs
 
 responseDef = {
     "00464B01": [],  # Netzspannung Phase L1 gegen L2
@@ -882,3 +884,75 @@ commands = {
         "last": 0x004655FF,
     },
 }
+
+
+@dcs.dataclass(dcs.BIG_ENDIAN)
+class speedwireHeader:
+    """Speedwire header"""
+
+    sma: Annotated[bytes, 4]
+    tag42_length: dcs.U16
+    tag42_tag0x02A0: dcs.U16
+    group1: dcs.U32
+    smanet2_length: dcs.U16
+    smanet2_tag0x10: dcs.U16 # renamte to id
+    protokoll: dcs.U16
+
+    def check6065(self):
+        """ Check for 6065 Type.  Size is not checked at this stage """
+        return (
+            self.sma == b"SMA\x00"
+            and self.tag42_length == 4
+            and self.tag42_tag0x02A0 == 0x02A0
+            and self.group1 == 1
+            and self.smanet2_tag0x10 == 0x10
+            and self.protokoll == 0x6065
+        )
+
+    def isDiscoveryResponse(self):
+        """  """
+        return (
+            self.sma == b"SMA\x00"
+            and self.tag42_length == 4
+            and self.tag42_tag0x02A0 == 0x02A0
+            and self.group1 == 1
+            and self.smanet2_length == 2
+            and self.smanet2_tag0x10 == 0
+            and self.protokoll == 1
+        )
+
+@dcs.dataclass(dcs.BIG_ENDIAN)
+class speedwireData2Tag:
+    smanet2_lengthPayload: dcs.U16
+    smanet2_id: dcs.U16
+    protokoll: dcs.U16
+
+
+@dcs.dataclass(dcs.LITTLE_ENDIAN)
+class speedwireHeader6065:
+    """Speedwire Header2 for 6065 Messages"""
+
+    # https://github.com/RalfOGit/libspeedwire
+
+    # dest_susyid: dcs.U16 #2
+    # dest_serial: dcs.U32 # 2+ 4 = 6
+    # dest_control: dcs.U16 # 2 4 + 2 = 8
+    # src_susyid: dcs.U16 # 2 4 2 2 = 10
+    # src_serial: dcs.U32 # 2 4 2 2 4 = 14
+    # src_control: dcs.U16 # 2 4 2 2 4 2 = 16
+
+    # unknown1: dcs.U16 # 2
+    # susyid: dcs.U16  # 2 +2 = 4
+    # serial: dcs.U32  # 2 + 2 + 4 = 8
+    # unknown2: Annotated[bytes, 10] # 18
+
+    unknown2: Annotated[bytes, 18]  # 18
+    error: dcs.U16
+    fragment: dcs.U16
+    pktId: dcs.U16
+    cmdid: dcs.U32
+    firstRegister: dcs.U32
+    lastRegister: dcs.U32
+
+    def isLoginResponse(self):
+        return self.cmdid == 0xFFFD040D

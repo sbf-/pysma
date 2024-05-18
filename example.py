@@ -55,7 +55,7 @@ async def identify(url: str, savedebug: bool):
             f.write(json.dumps(ret ,default=lambda o: str(o), indent=4))
 
 
-async def main_loop(user: str, password, url: str, accessmethod: str, delay: float, cnt: int, savedebug: bool, isVerbose: bool, options: dict):
+async def main_loop(user: str, password, url: str, accessmethod: str, delay: float, cnt: int, savedebug: bool, isVerbose: bool, ignoretimeouts: bool, options: dict):
     """Run main loop."""
     async with aiohttp.ClientSession(
         connector=aiohttp.TCPConnector(ssl=False)
@@ -86,8 +86,13 @@ async def main_loop(user: str, password, url: str, accessmethod: str, delay: flo
                 sensor.enabled = True
 
             while VAR.get("running"):
-                await VAR["sma"].read(sensors)
-                print_table(sensors)
+                try:
+                    await VAR["sma"].read(sensors)
+                    print_table(sensors)
+                except TimeoutError as e:
+                    if not ignoretimeouts:
+                        raise e
+                    print("Timeout")
                 cnt -= 1
                 if cnt == 0:
                     break
@@ -123,6 +128,7 @@ async def main():
     parser.add_argument('-d', '--delay', type=float, default=2, help = "Delay between two requests [seconds]")
     parser.add_argument('-c', '--count', type=int, default=1, help = "Number of requests (0=unlimited)")
     parser.add_argument('-s', '--save', action='store_true', help = "Save debug information to example.log")
+    parser.add_argument('--ignoretimeouts', action='store_true', help = "Continue in case of timeouts")
     parser.add_argument('-o', "--options",
                         metavar="KEY=VALUE",
                         nargs='+',
@@ -186,7 +192,7 @@ async def main():
             VAR["running"] = False
         signal.signal(signal.SIGINT, _shutdown)
         await main_loop(user=args.user, password=args.password, url=args.url, accessmethod=args.accessmethod,
-                        delay=args.delay, cnt=args.count, savedebug = args.save, isVerbose = args.verbose, options = options)
+                        delay=args.delay, cnt=args.count, savedebug = args.save, isVerbose = args.verbose, ignoretimeouts = args.ignoretimeouts, options = options)
 
 
 if __name__ == "__main__":

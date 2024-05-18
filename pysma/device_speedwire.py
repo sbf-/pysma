@@ -52,6 +52,8 @@ class SMAClientProtocol(DatagramProtocol):
     }
 
     def __init__(self, password, on_connection_lost, options: Dict[str, any]):
+        self._lastSend = None
+        self._firstSend = None
         self.speedwire = SpeedwireFrame()
         self.transport = None
         self.password = password
@@ -68,7 +70,7 @@ class SMAClientProtocol(DatagramProtocol):
         self._commandTimeout = float(options.get("commandTimeout", 0.5))
         self._commandDelay = float(options.get("commandDelay", 0.0))
         self._overallTimeout = float(options.get("overallTimeout", 5 + len(commands) * (self._commandDelay)))
-        print("Timeouts", len(commands), self._commandTimeout, self._commandDelay, self._overallTimeout)
+#        print("Timeouts", len(commands), self._commandTimeout, self._commandDelay, self._overallTimeout)
         self.allCmds = []
         self.allCmds.extend(commands.keys())
         self.allCmds.remove("login")
@@ -96,7 +98,7 @@ class SMAClientProtocol(DatagramProtocol):
                 self.cmdidx += 1
                 self._resendcounter = 0
                 self._failedCounter += 1
-                self.debug["failedcounter"] += 1
+                self.debug["failedCounter"] += 1
         await self._send_next_command()
 
 
@@ -118,6 +120,7 @@ class SMAClientProtocol(DatagramProtocol):
         self.sensors = {}
         _LOGGER.debug("Sending login")
         self.debug["msg"].append(["SEND", "login"])
+        self._firstSend = time.time()
         await self._send_next_command()
 
     def connection_lost(self, exc):
@@ -146,12 +149,19 @@ class SMAClientProtocol(DatagramProtocol):
             self.cmds = []
             self.cmdidx = 0
             f.set_result(True)
+            if self._firstSend:
+                self.debug["msg"].append(
+                    ["TOTAL", 0, "", round(time.time() - self._firstSend, 2)]
+                )
+                self._firstSend = None
+
         else:
             if self._resendcounter == 0:
                 await asyncio.sleep(self._commandDelay)
             # Send the next command
             self.debug["msg"].append(["SEND", self.cmds[self.cmdidx]])
             _LOGGER.debug("Sending " + self.cmds[self.cmdidx])
+            self._lastSend = time.time()
             if (self.cmds[self.cmdidx]) == "login":
                 groupidx = ["user", "installer"].index(self._group)
                 self._send_command(
@@ -287,8 +297,12 @@ class SMAClientProtocol(DatagramProtocol):
     # Main routine for processing received messages.
     def datagram_received(self, data, addr):
         _LOGGER.debug(f"RECV: {addr} Len:{len(data)} {binascii.hexlify(data).upper()}")
+        delta = 0
+        if self._lastSend:
+            delta = time.time() - self._lastSend
+            self._lastSend = None
         self.debug["msg"].append(
-            ["RECV", len(data), binascii.hexlify(data).upper().decode("utf-8")]
+            ["RECV", len(data), binascii.hexlify(data).upper().decode("utf-8"), round(delta, 2)]
         )
 
         # Check if message is a 6065 protocol
@@ -483,7 +497,7 @@ class SMAspeedwireINV(Device):
         ret["msg"] = list(ret["msg"])
         ret["ids"] = list(ret["ids"])
         ret["device_info"] = self._deviceinfo
-        ret["overalltimeout"] = self._debug["overalltimeout"]
+        ret["timeouts"] = self._debug["overalltimeout"]
         return ret
 
     # wait for a response or a timeout

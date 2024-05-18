@@ -7,7 +7,7 @@ import signal
 import sys
 import json
 import aiohttp
-
+import time
 import pysmaplus as pysma
 
 # This example will work with Python 3.9+
@@ -55,13 +55,14 @@ async def identify(url: str, savedebug: bool):
             f.write(json.dumps(ret ,default=lambda o: str(o), indent=4))
 
 
-async def main_loop(user: str, password, url: str, accessmethod: str, delay: float, cnt: int, savedebug: bool, isVerbose: bool):
+async def main_loop(user: str, password, url: str, accessmethod: str, delay: float, cnt: int, savedebug: bool, isVerbose: bool, options: dict):
     """Run main loop."""
     async with aiohttp.ClientSession(
         connector=aiohttp.TCPConnector(ssl=False)
     ) as session:
         _LOGGER.debug(f"MainLoop called! Url: {url} User/Group: {user} Accessmethod: {accessmethod}")
         VAR["sma"] = pysma.getDevice(session, url, password, user, accessmethod)
+        VAR["sma"].set_options(options)
         try:
             await VAR["sma"].new_session()
         except pysma.exceptions.SmaAuthenticationException:
@@ -122,6 +123,10 @@ async def main():
     parser.add_argument('-d', '--delay', type=float, default=2, help = "Delay between two requests [seconds]")
     parser.add_argument('-c', '--count', type=int, default=1, help = "Number of requests (0=unlimited)")
     parser.add_argument('-s', '--save', action='store_true', help = "Save debug information to example.log")
+    parser.add_argument('-o', "--options",
+                        metavar="KEY=VALUE",
+                        nargs='+',
+                        help="Set modul specific options")
 
     subparsers = parser.add_subparsers(help='Supported devices', required=True)
 
@@ -157,6 +162,8 @@ async def main():
     parser_f.set_defaults(accessmethod="discovery")
 
     args = parser.parse_args(args=None if sys.argv[1:] else ['--help'])
+    options = dict(map(lambda s: s.split('='), args.options)) if args.options else {}
+
     if args.verbose:
         logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
@@ -179,7 +186,7 @@ async def main():
             VAR["running"] = False
         signal.signal(signal.SIGINT, _shutdown)
         await main_loop(user=args.user, password=args.password, url=args.url, accessmethod=args.accessmethod,
-                        delay=args.delay, cnt=args.count, savedebug = args.save, isVerbose = args.verbose)
+                        delay=args.delay, cnt=args.count, savedebug = args.save, isVerbose = args.verbose, options = options)
 
 
 if __name__ == "__main__":

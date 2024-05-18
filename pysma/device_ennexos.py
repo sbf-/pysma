@@ -366,3 +366,4 @@ class SMAennexos(Device):
                 ret["status"] = "failed"
                 ret["exception"] = e
         return rets
+

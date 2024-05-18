@@ -47,3 +47,7 @@ class Device(ABC):
     @abstractmethod
     async def get_debug(self) -> Dict[str, Any]:
         """Return a dict with all debug information."""
+
+    def set_options(self, options: Dict[str, Any]):
+        """Set options"""
+        pass

@@ -269,10 +269,13 @@ class SMAClientProtocol(DatagramProtocol):
     _commandFuture: Future[Any] = None
 
     debug: Dict[str, Any] = {
-        "msg": collections.deque(maxlen=len(commands) * 3),
+        "msg": collections.deque(maxlen=len(commands) * 10),
         "data": {},
         "unfinished": set(),
         "ids": set(),
+        "sendcounter": 0,
+        "resondcounter": 0,
+        "failedCounter": 0
     }
 
     def __init__(self, password, on_connection_lost):
@@ -301,6 +304,7 @@ class SMAClientProtocol(DatagramProtocol):
     async def controller(self):
         try:
             if self._resendcounter == 0:
+                self.debug["sendcounter"] += 1
                 self._sendCounter += 1
 
             await asyncio.wait_for(self._commandFuture, timeout=0.5)
@@ -309,12 +313,15 @@ class SMAClientProtocol(DatagramProtocol):
         except asyncio.TimeoutError:
             _LOGGER.debug(f"Timeout in command. Resendcounter: {self._resendcounter}")
             self._resendcounter += 1
+            self.debug["resendcounter"] += 1
             if (self._resendcounter > 2):
                 # Giving up. Next Command
                 _LOGGER.debug(f"Timeout in command")
                 self.cmdidx += 1
                 self._resendcounter = 0
                 self._failedCounter += 1
+                self.debug["failedcounter"] += 1
+
         await self._send_next_command()
 
 
@@ -556,6 +563,9 @@ class SMAspeedwireINV(Device):
     _transport = None
     _protocol = None
     _deviceinfo: Dict[str, Any] = {}
+    _debug: Dict[str, Any] = {
+        "overalltimeout": 0
+    }
 
     def __init__(self, host: str, group: str, password: Optional[str]):
         self._host = host
@@ -616,7 +626,6 @@ class SMAspeedwireINV(Device):
         await self.device_info()
         if (self._protocol._failedCounter >= self._protocol._sendCounter):
             raise SmaConnectionException("No connection to device: %s:9522",self._host)
-        print(self._protocol._failedCounter, self._protocol._sendCounter)
 
     async def device_info(self) -> dict:
         fut = asyncio.get_running_loop().create_future()
@@ -624,6 +633,7 @@ class SMAspeedwireINV(Device):
         try:
             await asyncio.wait_for(fut, timeout=5)
         except TimeoutError:
+            self._debug["overalltimeout"] += 1
             _LOGGER.warning("Timeout in device_info")
             if (
                 "error" in self._protocol.data_values
@@ -652,20 +662,29 @@ class SMAspeedwireINV(Device):
     async def get_sensors(self) -> Sensors:
         fut = asyncio.get_running_loop().create_future()
         c = self._protocol.allCmds
-        await self._protocol.start_query(c, fut, self._group)
-        await asyncio.wait_for(fut, timeout=5)
         device_sensors = Sensors()
-        for s in self._protocol.sensors.values():
-            device_sensors.add(s)
+        try:
+            await self._protocol.start_query(c, fut, self._group)
+            await asyncio.wait_for(fut, timeout=5)
+            for s in self._protocol.sensors.values():
+                device_sensors.add(s)
+        except asyncio.TimeoutError as e:
+            self._debug["overalltimeout"] += 1
+            raise e
         return device_sensors
+
 
     async def read(self, sensors: Sensors) -> bool:
         fut = asyncio.get_running_loop().create_future()
         c = self._protocol.allCmds
         await self._protocol.start_query(c, fut, self._group)
-        await asyncio.wait_for(fut, timeout=5)
-        self._update_sensors(sensors, self._protocol.sensors)
-        return True
+        try:
+            await asyncio.wait_for(fut, timeout=5)
+            self._update_sensors(sensors, self._protocol.sensors)
+            return True
+        except asyncio.TimeoutError as e:
+            self._debug["overalltimeout"] += 1
+            raise e
 
     def _update_sensors(self, sensors, sensorReadings):
         """Update a sensor with the sensor reading"""
@@ -681,15 +700,14 @@ class SMAspeedwireINV(Device):
         self._transport.close()
 
     async def get_debug(self) -> Dict:
-        return {
-            "msg": list(self._protocol.debug["msg"]),
-            "data": self._protocol.debug["data"],
-            "device_info": self._deviceinfo,
-            "unfinished": list(self._protocol.debug["unfinished"]),
-            "ids": list(self._protocol.debug["ids"]),
-        }
+        ret = self._protocol.debug.copy()
+        ret["unfinished"] = list(ret["unfinished"])
+        ret["msg"] = list(ret["msg"])
+        ret["ids"] = list(ret["ids"])
+        ret["device_info"] = self._deviceinfo
+        ret["overalltimeout"] = self._debug["overalltimeout"]
+        return ret
 
-    # Send a typelabel Command to the Ip-Address and
     # wait for a response or a timeout
     async def detect(self, ip) -> bool:
         ret = await super().detect(ip)

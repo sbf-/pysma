@@ -75,7 +75,7 @@ responseDef = {
     "40464001": [
         {
             "cmd": "spot_ac_power",
-            "format": "uint",
+            "format": "int",
             "sensor": Sensor("spot_ac_power1", Identifier.power_l1, factor=1, unit="W"),
             "idx": 0,
         }
@@ -83,7 +83,7 @@ responseDef = {
     "40464101": [
         {
             "cmd": "spot_ac_power",
-            "format": "uint",
+            "format": "int",
             "sensor": Sensor("spot_ac_power2", Identifier.power_l2, factor=1, unit="W"),
             "idx": 0,
         }
@@ -91,7 +91,7 @@ responseDef = {
     "40464201": [
         {
             "cmd": "spot_ac_power",
-            "format": "uint",
+            "format": "int",
             "sensor": Sensor("spot_ac_power3", Identifier.power_l3, factor=1, unit="W"),
             "idx": 0,
         }
@@ -129,7 +129,7 @@ responseDef = {
     "40263F01": [
         {
             "cmd": "SpotACTotalPower",
-            "format": "uint",
+            "format": "int",
             "sensor": Sensor("grid_power", Identifier.grid_power, unit="W"),
             "idx": 0,
         }
@@ -474,7 +474,7 @@ responseDef = {
     "40495D01": [
         {
             "cmd": "battery_current_a",
-            "format": "uint",
+            "format": "int",
             "sensor": Sensor(
                 "battery_current_a",
                 Identifier.battery_current_a,

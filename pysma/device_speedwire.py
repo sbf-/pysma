@@ -225,7 +225,7 @@ class SMAClientProtocol(DatagramProtocol):
         values = []
         for idx in range(8, len(subdata), size):
             v = struct.unpack(formatdef, subdata[idx : idx + size])[0]
-            if v in [0xFFFFFFFF, 0x80000000, 0xFFFFFFEC]:
+            if v in [0xFFFFFFFF, 0x80000000, 0xFFFFFFEC, -0x80000000]:
                 v = None
             else:
                 if converter:
@@ -279,6 +279,7 @@ class SMAClientProtocol(DatagramProtocol):
                     f"Special Handler for {c} at register idx {register_idx}: {values}"
                 )
                 sensor = sensor[register_idx]
+            _LOGGER.debug(f"Values {sensor.name}/{sensor.key}: {values[handler['idx']]} {values}")
             self.handle_newvalue(sensor, v)
 
     # Unfortunately, there is no known method of determining the size of the registers
@@ -406,14 +407,18 @@ class SMAspeedwireINV(Device):
                         raise RuntimeError("Doppelter Sensorname " + sensor.key)
                     sensorname[name] = 1
 
-    async def new_session(self) -> bool:
+    async def _createEndpoint(self):
         loop = asyncio.get_running_loop()
         on_connection_lost = loop.create_future()
-
         self._transport, self._protocol = await loop.create_datagram_endpoint(
             lambda: SMAClientProtocol(self._password, on_connection_lost, self._options),
             remote_addr=(self._host, 9522),
         )
+
+    async def new_session(self) -> bool:
+        # Create Endpoint
+        await self._createEndpoint()
+
         # Test with device_info if the ip and user/pwd are correct
         await self.device_info()
         if (self._protocol._failedCounter >= self._protocol._sendCounter):

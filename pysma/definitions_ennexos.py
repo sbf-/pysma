@@ -6,7 +6,6 @@ from .sensor import Sensor
 from .const import Identifier
 from .const import SMATagList
 
-
 ennexosSensorProfiles = {
     "Sunny Tripower X ": [
         Sensor("Coolsys.Inverter.TmpVal.1", Identifier.temp_a, factor=1, unit="°C"),
@@ -157,7 +156,7 @@ ennexosSensorProfiles = {
         ),  # Soft Access Point status
         Sensor("Setpoint.PlantControl.InOut.GO1", None, factor=1, unit=None),
     ],
-    "SMA EV Charger ": [
+    "^(SMA EV Charger |EVC22-3AC-10)": [
         Sensor("ChaSess.WhIn", None, factor=1, unit=None),  # charging_session_energy
         Sensor(
             "Chrg.ModSw", None, factor=1, unit=None, mapper=SMATagList
@@ -166,7 +165,7 @@ ennexosSensorProfiles = {
             "GridMs.A.phsA", Identifier.current_l1, factor=1, unit="A"
         ),  # Netzstrom Phase L1
         Sensor("GridMs.A.phsB", Identifier.current_l2, factor=1, unit="A"),
-        Sensor("GridMs.A.phsC", Identifier.current_l3, factor=1, unit="A"),
+  #      Sensor("GridMs.A.phsC", Identifier.current_l3, factor=1, unit="A"),
         Sensor("GridMs.Hz", Identifier.frequency, factor=1, unit="Hz"),
         Sensor(
             "GridMs.PhV.phsA", Identifier.voltage_l1, factor=1, unit="V"

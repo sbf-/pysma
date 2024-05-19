@@ -9,7 +9,7 @@ import copy
 import json
 import logging
 from typing import Any, Dict, Optional
-
+import re
 
 from aiohttp import ClientSession, ClientTimeout, client_exceptions, hdrs
 from .const_webconnect import (
@@ -38,9 +38,10 @@ class SMAennexos(Device):
     _url: str
     _token: str
     _authorization_header: dict[str, str]
-    _last_parameters: Any
-    _last_measurements: Any
-    _last_device: Any
+    _last_parameters: Any = {}
+    _last_measurements: Any = {}
+    _last_device: Any = {}
+    _last_notfound: list = []
     _device_info: Dict = None
     _jsessionid: str = None
 
@@ -190,6 +191,9 @@ class SMAennexos(Device):
             "headers": self._authorization_header,
         }
         ret = await self._jsonrequest(liveurl, postdata)
+        return await self._prepare_livedata(ret)
+
+    async def _prepare_livedata(self, ret):
         self._last_measurements = ret
         data = {}
         for d in ret:
@@ -225,23 +229,28 @@ class SMAennexos(Device):
         if not self._device_info:
             raise SmaReadException("device_info() not called!")
 
+        
         ret = await self._get_livedata()
         _LOGGER.debug("Found Sensors: %s", ret)
+        profile = await self._get_sensor_profile()
+        return profile
 
+    async def _get_sensor_profile(self):
         device_sensors = Sensors()
-        sensors = []
+        expectedSensors = []
 
         # Search for matiching profile
-        for dev in ennexosSensorProfiles.items():
-            if self._device_info["name"].startswith(dev[0]):
-                sensors = dev[1]
-        if len(sensors) == 0:
+        for profil in ennexosSensorProfiles.items():
+            if re.search(profil[0], self._device_info["name"]):
+            #self._device_info["name"].startswith(dev[0]):
+                expectedSensors = profil[1]
+        if len(expectedSensors) == 0:
             _LOGGER.warning(
                 f'Unknown Device: {self._device_info["name"]} {self._device_info["type"]}'
             )
 
         # Add Sensors from profile
-        for s in sensors:
+        for s in expectedSensors:
             if s.name:
                 device_sensors.add(copy.copy(s))
         return device_sensors
@@ -305,6 +314,7 @@ class SMAennexos(Device):
                     continue
                 notfound.append(f"{sen.name} [{sen.key}]")
 
+        self._last_notfound = notfound
         if notfound:
             _LOGGER.info(
                 "No values for sensors: %s",
@@ -341,6 +351,7 @@ class SMAennexos(Device):
             "measurements": self._last_measurements,
             "parameters": self._last_parameters,
             "device_info": self._device_info,
+            "notfound": self._last_notfound
         }
 
     async def detect(self, ip):

@@ -563,72 +563,78 @@ responseDef = {
             "idx": 4,
         }
     ],
-    # "": [{
-    #             "cmd": "",
+    "08412509": [{
+                "cmd": "BackupRelayStatus",
+                "format": "uint",
+                "sensor": Sensor("BackupRelayStatus", "TEMP_BackupRelayStatus", mapper=SMATagList),
+                "idx": 0
+    }],
+    # "00469109": [{ # Meter_Grid_FeedIn
+    #             "cmd": "EM_2",
     #             "format": "uint",
-    #             "sensor": ,
+    #             "sensor": Sensor("EM_2", Identifier., unit="kWh", factor=1000),
     #             "idx": 0
     # }],
-    # "": [{
-    #             "cmd": "",
+    # "00469209": [{ # Meter_Grid_FeedIn
+    #             "cmd": "EM_2",
     #             "format": "uint",
-    #             "sensor": ,
+    #             "sensor": Sensor("EM_2", Identifier.battery_discharge_total, unit="kWh", factor=1000),
     #             "idx": 0
     # }],
-    # "": [{
-    #             "cmd": "",
-    #             "format": "uint",
-    #             "sensor": ,
-    #             "idx": 0
-    # }],
-    # "": [{
-    #             "cmd": "",
-    #             "format": "uint",
-    #             "sensor": ,
-    #             "idx": 0
-    # }],
-    # "": [{
-    #             "cmd": "",
-    #             "format": "uint",
-    #             "sensor": ,
-    #             "idx": 0
-    # }],
-    # "": [{
-    #             "cmd": "",
-    #             "format": "uint",
-    #             "sensor": ,
-    #             "idx": 0
-    # }],
-    # "": [{
-    #             "cmd": "",
-    #             "format": "uint",
-    #             "sensor": ,
-    #             "idx": 0
-    # }],
-    # "": [{
-    #             "cmd": "",
-    #             "format": "uint",
-    #             "sensor": ,
-    #             "idx": 0
-    # }],
-    # "": [{
-    #             "cmd": "",
-    #             "format": "uint",
-    #             "sensor": ,
-    #             "idx": 0
-    # }],
-    # "": [{
-    #             "cmd": "",
-    #             "format": "uint",
-    #             "sensor": ,
-    #             "idx": 0
-    # }],
-    # "": [{
-    #             "cmd": "",
-    #             "format": "uint",
-    #             "sensor": ,
-    #             "idx": 0
-    # }],
+    "0046E809": [{
+                "cmd": "EM_4",
+                "format": "uint",
+                "sensor": Sensor("active_power_feed_l1", Identifier.metering_active_power_feed_l1, unit="W"),
+                "idx": 0
+    }],
+    "0046E909": [{
+                "cmd": "EM_4",
+                "format": "uint",
+                "sensor": Sensor(    "active_power_feed_l2", Identifier.metering_active_power_feed_l2, unit="W") ,
+                "idx": 0
+    }],
+    "0046EA09": [{
+                "cmd": "EM_4",
+                "format": "uint",
+                "sensor": Sensor( "active_power_feed_l3", Identifier.metering_active_power_feed_l3, unit="W") ,
+                "idx": 0
+    }],
+    "0046EB09": [{
+                "cmd": "EM_4",
+                "format": "uint",
+                "sensor": Sensor(    "active_power_draw_l1", Identifier.metering_active_power_draw_l1, unit="W"),
+                "idx": 0
+    }],
+    "0046EC09": [{
+                "cmd": "EM_4",
+                "format": "uint",
+                "sensor":  Sensor(  "active_power_draw_l2", Identifier.metering_active_power_draw_l2, unit="W"),
+                "idx": 0
+    }],
+    "0046ED09": [{
+                "cmd": "EM_4",
+                "format": "uint",
+                "sensor":  Sensor(    "active_power_draw_l3", Identifier.metering_active_power_draw_l3, unit="W"),
+                "idx": 0
+    }],
+    "40574609": [{
+                "cmd": "SpotACCurrentBackup",
+                "format": "uint",
+                #"sensor": ,
+                "idx": 0
+    }],
+    "40574709": [{
+                "cmd": "SpotACCurrentBackup",
+                "format": "uint",
+                #"sensor": ,
+                "idx": 0
+    }],
+    "40574809": [{
+                "cmd": "SpotACCurrentBackup",
+                "format": "uint",
+                #"sensor": ,
+                "idx": 0
+    }],
     # "": [{
     #             "cmd": "",
     #             "format": "uint",

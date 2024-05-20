@@ -235,6 +235,14 @@ class SMAClientProtocol(DatagramProtocol):
             values.append(v)
         return values
 
+    def fixID(self, orig):
+        if orig in responseDef:
+            return orig
+        for code in responseDef.keys():
+            if code[0:7] == orig[:7]:
+                return code
+        return orig
+
     def handle_register(self, subdata, register_idx: int):
         """Handle the payload with all the registers"""
         code = int.from_bytes(subdata[0:4], "little")
@@ -244,8 +252,7 @@ class SMAClientProtocol(DatagramProtocol):
 
         # Fix for strange response codes
         self.debug["ids"].add(c[6:])
-        if c.endswith("07"):
-            c = c[:7] + "1"
+        c = self.fixID(c)
 
         # Handle unknown Responses
         if c not in responseDef:

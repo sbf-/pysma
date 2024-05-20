@@ -165,7 +165,7 @@ ennexosSensorProfiles = {
             "GridMs.A.phsA", Identifier.current_l1, factor=1, unit="A"
         ),  # Netzstrom Phase L1
         Sensor("GridMs.A.phsB", Identifier.current_l2, factor=1, unit="A"),
-  #      Sensor("GridMs.A.phsC", Identifier.current_l3, factor=1, unit="A"),
+        Sensor("GridMs.A.phsC", Identifier.current_l3, factor=1, unit="A"),
         Sensor("GridMs.Hz", Identifier.frequency, factor=1, unit="Hz"),
         Sensor(
             "GridMs.PhV.phsA", Identifier.voltage_l1, factor=1, unit="V"

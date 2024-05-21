@@ -32,6 +32,7 @@ responseDef = {
             "format": "version",
             "sensor": Sensor("Firmware", Identifier.device_sw_version),
             "idx": 4,
+            "overwrite": False            
         }
     ],
     "00260101": [
@@ -326,22 +327,23 @@ responseDef = {
         {
             "cmd": "TypeLabel",
             "format": "uint",
-            "mask": 0x00FFFFFF,
             "sensor": Sensor(
                 "inverter_class", Identifier.device_class, mapper=SMATagList
             ),
-            "idx": 0,
+            "idx": 0xFF,
+            "overwrite": False
         }
     ],
     "08822001": [
         {
             "cmd": "TypeLabel",
             "format": "uint",
-            "mask": 0x00FFFFFF,
+            #"mask": 0x00FFFFFF,
             "sensor": Sensor(
                 "inverter_type", Identifier.device_type, mapper=SMATagList
             ),
-            "idx": 0,
+            "idx": 0xFF,
+            "overwrite": False
         }
     ],
     "00262201": [

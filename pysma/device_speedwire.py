@@ -203,7 +203,7 @@ class SMAClientProtocol(DatagramProtocol):
                 )
             )
 
-    def handle_newvalue(self, sensor: Sensor, value: Any):
+    def handle_newvalue(self, sensor: Sensor, value: Any, overwrite: bool):
         """Set the new value to the sensor"""
         if value is None:
             return
@@ -215,8 +215,10 @@ class SMAClientProtocol(DatagramProtocol):
             oldValue = self.sensors[sen.key].value
             if oldValue != value:
                 _LOGGER.warning(
-                    f"Overwriting sensors {sen.key} {sen.name} {oldValue} with new values {sen.value}"
+                    f"Sensors {sen.key} {sen.name} Old Value: {oldValue} New values: {sen.value} Overwrite: {overwrite}"
                 )
+                if not overwrite:
+                    value = oldValue
         self.sensors[sen.key] = sen
         self.data_values[sen.key] = value
 
@@ -225,7 +227,7 @@ class SMAClientProtocol(DatagramProtocol):
         values = []
         for idx in range(8, len(subdata), size):
             v = struct.unpack(formatdef, subdata[idx : idx + size])[0]
-            if v in [0xFFFFFFFF, 0x80000000, 0xFFFFFFEC, -0x80000000]:
+            if v in [0xFFFFFFFF, 0x80000000, 0xFFFFFFEC, -0x80000000, 0xFFFFFE]:
                 v = None
             else:
                 if converter:
@@ -234,6 +236,7 @@ class SMAClientProtocol(DatagramProtocol):
                     v = v & handler["mask"]
             values.append(v)
         return values
+   
 
     def fixID(self, orig):
         if orig in responseDef:
@@ -252,6 +255,7 @@ class SMAClientProtocol(DatagramProtocol):
 
         # Fix for strange response codes
         self.debug["ids"].add(c[6:])
+        self._id = c[6:]
         c = self.fixID(c)
 
         # Handle unknown Responses
@@ -271,7 +275,16 @@ class SMAClientProtocol(DatagramProtocol):
             values = self.extractvalues(handler, subdata)
             if "sensor" not in handler:
                 continue
-            v = values[handler["idx"]]
+            v = None
+            if handler["idx"] == 0xFF:
+                """ For some responses, a list is returned and the correct value 
+                    wihtin this list is marked by the top 8 bits.  """
+                for origValue in values:
+                    if origValue is not None and (origValue & 0xFF000000) > 0:
+                        v = origValue & 0x00FFFFFF
+                        break
+            else:
+                v = values[handler["idx"]]
 
             sensor = handler["sensor"]
 
@@ -286,8 +299,8 @@ class SMAClientProtocol(DatagramProtocol):
                     f"Special Handler for {c} at register idx {register_idx}: {values}"
                 )
                 sensor = sensor[register_idx]
-            _LOGGER.debug(f"Values {sensor.name}/{sensor.key}: {values[handler['idx']]} {values}")
-            self.handle_newvalue(sensor, v)
+            _LOGGER.debug(f"ID: {self._id} Values {sensor.name}/{sensor.key}: {v} {values}")
+            self.handle_newvalue(sensor, v, handler.get("overwrite", True))
 
     # Unfortunately, there is no known method of determining the size of the registers
     # from the message. Therefore, the register size is determined from the number of

@@ -10,6 +10,7 @@ import json
 import logging
 from typing import Any, Dict, Optional
 import re
+from datetime import datetime, UTC
 
 from aiohttp import ClientSession, ClientTimeout, client_exceptions, hdrs
 from .const_webconnect import (
@@ -20,7 +21,7 @@ from .exceptions import (
     SmaConnectionException,
     SmaReadException,
 )
-from .sensor import Sensors
+from .sensor import Sensors, Sensor_Range
 from .device import Device
 from .definitions_ennexos import ennexosSensorProfiles
 from .const import SMATagList
@@ -44,6 +45,7 @@ class SMAennexos(Device):
     _last_notfound: list = []
     _device_info: Dict = None
     _jsessionid: str = None
+    _options: Dict[str, Any] = {}
 
     def __init__(
         self,
@@ -162,7 +164,18 @@ class SMAennexos(Device):
             dname = d["channelId"].replace("Parameter.", "").replace("[]", "")
             if "value" in d:
                 v = d["value"]
-                data[dname] = {"name": dname, "value": v, "origname": d["channelId"]}
+                sensorRange = None
+                if "min" in d and "max" in d:
+                    sensorRange = Sensor_Range("min/max", [d["min"], d["max"]], d["editable"])
+                if "possibleValues" in d:
+                    sensorRange = Sensor_Range("selection", d["possibleValues"], d["editable"])
+
+                data[dname] = {"name": dname,
+                               "value": v,
+                               "origname": d["channelId"],
+                               "range": sensorRange
+                               }
+
             elif "values" in d:
                 # Split Value-Arrays
                 for idx in range(0, len(d["values"])):
@@ -230,7 +243,7 @@ class SMAennexos(Device):
             raise SmaReadException("device_info() not called!")
 
         
-        ret = await self._get_livedata()
+        ret = await self._get_livedata() | await self._get_parameter()
         _LOGGER.debug("Found Sensors: %s", ret)
         profile = await self._get_sensor_profile()
         return profile
@@ -242,7 +255,6 @@ class SMAennexos(Device):
         # Search for matiching profile
         for profil in ennexosSensorProfiles.items():
             if re.search(profil[0], self._device_info["name"]):
-            #self._device_info["name"].startswith(dev[0]):
                 expectedSensors = profil[1]
         if len(expectedSensors) == 0:
             _LOGGER.warning(
@@ -295,13 +307,12 @@ class SMAennexos(Device):
         notfound = []
         data = None
         try:
-            data = await self._get_livedata()
+            data = await self._get_livedata()  | await self._get_parameter()
         except SmaAuthenticationException:
             # Relogin
             _LOGGER.debug("Re-login .. Starting new Session")
             await self.new_session()
-            data = await self._get_livedata()
-
+            data = await self._get_livedata() | await self._get_parameter()
         for sen in sensors:
             if sen.enabled:
                 if sen.key in data:
@@ -311,6 +322,8 @@ class SMAennexos(Device):
                     if sen.factor and sen.factor != 1:
                         value = round(value / sen.factor, 4)
                     sen.value = value
+                    if "range" in data[sen.key]:
+                       sen.range  = data[sen.key]["range"]
                     continue
                 notfound.append(f"{sen.name} [{sen.key}]")
 
@@ -378,3 +391,41 @@ class SMAennexos(Device):
                 ret["exception"] = e
         return rets
 
+
+    def set_options(self, options: Dict[str, Any]):
+        self._options = options
+
+
+    async def getTimestamp(self):
+        return f"{datetime.now(tz=UTC).isoformat(timespec='milliseconds').split('+')[0]}Z"
+
+
+    # async def handleModulActions(self):
+    #     if self._options.get("CMD", "") != "SET":
+    #         return
+    #     channelName = self._options.get("NAME", "")
+    #     sensors = await self.get_sensors()
+    #     for sensor in sensors:
+    #         sensor.enabled = True
+    #     await self.read(sensors)
+    #     for sensor in sensors:
+    #         if (sensor.name == channelName):
+    #             found = sensor
+    #     if not found:
+    #         _LOGGER.error("Sensor {} not found!".format(channelName))
+    #         return
+
+    #     sensorData = await self._get_parameter()
+    #     sensorData = sensorData[found.key]
+    #     timestamp = await self.getTimestamp()
+    #     value = self._options.get("VALUE","")
+    #     channelName = sensorData["origname"]
+    #     url = self._url + "/api/v1/parameters/IGULD:SELF"
+    #     requestData = f'{{"values":[{{"channelId":"{channelName}","timestamp":"{timestamp}","value":"{value}"}}]}}'
+    #     putdata = {
+    #         "data": requestData,
+    #         "headers": self._authorization_header,
+    #     }
+    #     print(putdata)
+    #     dev = await self._jsonrequest(url, putdata, hdrs.METH_PUT)
+    #     print(dev)

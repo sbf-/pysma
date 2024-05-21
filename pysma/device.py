@@ -51,3 +51,6 @@ class Device(ABC):
     def set_options(self, options: Dict[str, Any]):
         """Set options"""
         pass
+
+    async def handleModulActions(self):
+        pass

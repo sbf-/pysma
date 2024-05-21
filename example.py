@@ -7,8 +7,8 @@ import signal
 import sys
 import json
 import aiohttp
-import time
 import pysmaplus as pysma
+from pysmaplus.helpers import BetterJSONEncoder
 
 # This example will work with Python 3.9+
 
@@ -23,10 +23,14 @@ def print_table(sensors):
     for sen in sensors:
         if sen.value is None:
             print("{:>25}".format(sen.name))
-        elif sen.name is None:
-            print("{:>25}{:>15} {} {}".format(sen.key, str(sen.value), sen.unit if sen.unit else "", sen.mapped_value if sen.mapped_value else "" ))
         else:
-            print("{:>25}{:>15} {} {}".format(sen.name, str(sen.value), sen.unit if sen.unit else "", sen.mapped_value if sen.mapped_value else "" ))
+            name = sen.name
+            if sen.key:
+                name = sen.key
+            print("{:>25}{:>15} {} {} {}".format(name, str(sen.value),
+                                                 sen.unit if sen.unit else "",
+                                                 sen.mapped_value if sen.mapped_value else "" ,
+                                                 sen.range if sen.range else ""))
 
 
 async def discovery(savedebug: bool, id: bool):
@@ -90,6 +94,7 @@ async def main_loop(user: str, password, url: str, accessmethod: str, delay: flo
             VAR["running"] = True
             device_info = await VAR["sma"].device_info()
             sensors = await VAR["sma"].get_sensors()
+            await VAR["sma"].handleModulActions()
             for name, value in device_info.items():
                print("{:>15}{:>25}".format(name, value))
             print("=====================================================================================")
@@ -113,7 +118,7 @@ async def main_loop(user: str, password, url: str, accessmethod: str, delay: flo
                 print("=====================================================================================")
         finally:
             _LOGGER.info("Closing Session...")
-            dump = json.dumps(await VAR["sma"].get_debug(), indent=4)
+            dump = json.dumps(await VAR["sma"].get_debug(), indent=4, cls=BetterJSONEncoder)
             if isVerbose:
                 
                 print(dump)

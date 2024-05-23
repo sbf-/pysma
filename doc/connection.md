@@ -2,7 +2,8 @@ If there are initial connection problems, the following steps can be carried out
 
 If a Python environment is available, the library can be downloaded and the network can be searched for SMA devices.
 
-```git clone -b tripowerX https://github.com/littleyoda/pysma/
+```
+git clone -b tripowerX https://github.com/littleyoda/pysma/
 cd pysma
 ln -s pysma/ pysmaplus
 python -m venv venv

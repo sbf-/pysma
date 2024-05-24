@@ -21,7 +21,7 @@ from .discovery import Discovery
 _LOGGER = logging.getLogger(__name__)
 
 
-def SMA(session, url, password, group):
+def SMA(session, url, password, group) -> SMAwebconnect:
     """Backward compatibility"""
     # pylint: disable=invalid-name
     return SMAwebconnect(session, url, password=password, group=group)
@@ -53,7 +53,7 @@ def getDevice(
     return None
 
 
-async def _run_detect(accessmethod: str, session: ClientSession, ip):
+async def _run_detect(accessmethod: str, session: ClientSession, ip) -> Device:
     """Start Autodetection"""
     sma: Device
     if accessmethod == "webconnect":
@@ -74,7 +74,7 @@ async def _run_detect(accessmethod: str, session: ClientSession, ip):
     return ret
 
 
-async def autoDetect(session: ClientSession, ip: str):
+async def autoDetect(session: ClientSession, ip: str) -> list:
     # pylint: disable=invalid-name
     """Runs a autodetection of all supported devices (no energy meters) on the ip-address"""
     ret = await asyncio.gather(
@@ -88,6 +88,6 @@ async def autoDetect(session: ClientSession, ip: str):
     return results
 
 
-async def discovery():
+async def discovery() -> list:
     discover = Discovery(asyncio.get_event_loop())
     return await discover.run()

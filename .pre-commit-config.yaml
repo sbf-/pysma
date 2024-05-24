@@ -22,7 +22,7 @@ repos:
     hooks:
       - id: mypy
         files: "pysma/.*.py"
-        additional_dependencies: [types-attrs]
+        additional_dependencies: [types-attrs,dataclasses_struct]
   - repo: https://github.com/pycqa/pydocstyle
     rev: 6.1.1
     hooks:

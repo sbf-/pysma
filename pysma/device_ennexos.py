@@ -1,7 +1,6 @@
-"""
+"""Interface for SMA ennoxOS based devices.
 
-Interface for SMA ennoxOS based devices. (e.g. Tripower X and maybe EV Charger)
-
+e.g. Tripower X and maybe EV Charger.
 """
 
 import asyncio
@@ -29,7 +28,7 @@ _LOGGER = logging.getLogger(__name__)
 
 
 class SMAennexos(Device):
-    """Class to connect to the ennexos based SMA inverters. (e.g. Tripower X Devices)"""
+    """Class to connect to the ennexos based SMA inverters."""
 
     # pylint: disable=too-many-instance-attributes
     _aio_session: ClientSession
@@ -38,7 +37,9 @@ class SMAennexos(Device):
     _token: str
     _authorization_header: dict[str, str]
     _last_parameters: Any = {}
+    _last_parameters_raw: Any = {}
     _last_measurements: Any = {}
+    _last_measurements_raw: Any = {}
     _last_device: Any = {}
     _last_notfound: list = []
     _device_info: Dict = None
@@ -84,9 +85,6 @@ class SMAennexos(Device):
         Returns:
             dict: json returned by device
         """
-
-        # _LOGGER.debug("Sending Request to %s: %s", url, parameters)
-
         try:
             async with self._aio_session.request(
                 method, url, timeout=ClientTimeout(total=DEFAULT_TIMEOUT), **parameters
@@ -136,11 +134,11 @@ class SMAennexos(Device):
             "Authorization": "Bearer " + self._token,
             "Content-Type": "application/json",
         }
-        _LOGGER.debug("Login successfull")
+        _LOGGER.debug("Login successful")
         return True
 
     async def _get_parameter(self) -> Dict:
-        """Get all parameters from the device
+        """Get all parameters from the device.
 
         Returns:
             Dict: Return a dict with all parameters
@@ -152,6 +150,7 @@ class SMAennexos(Device):
             "headers": self._authorization_header,
         }
         ret = await self._jsonrequest(url, postdata)
+        self._last_parameters_raw = ret
         data = {}
         if len(ret) != 1:
             _LOGGER.warning(
@@ -195,7 +194,7 @@ class SMAennexos(Device):
         return data
 
     async def _get_livedata(self) -> Dict:
-        """Get the sensors reading from the device
+        """Get the sensors reading from the device.
 
         Returns:
             Dict: Return a dict with all measurements
@@ -207,9 +206,10 @@ class SMAennexos(Device):
             "headers": self._authorization_header,
         }
         ret = await self._jsonrequest(liveurl, postdata)
+        self._last_measurements_raw = ret
         return await self._prepare_livedata(ret)
 
-    async def _prepare_livedata(self, ret):
+    async def _prepare_livedata(self, ret) -> Dict[str, Any]:
         self._last_measurements = ret
         data = {}
         for d in ret:
@@ -250,7 +250,7 @@ class SMAennexos(Device):
         profile = await self._get_sensor_profile()
         return profile
 
-    async def _get_sensor_profile(self):
+    async def _get_sensor_profile(self) -> Sensors:
         device_sensors = Sensors()
         expectedSensors = []
 
@@ -270,10 +270,11 @@ class SMAennexos(Device):
         return device_sensors
 
     async def close_session(self) -> None:
+        """Closes the session."""
         pass
 
-    def _isfloat(self, num: Any):
-        """Test if num is a float
+    def _isfloat(self, num: Any) -> bool:
+        """Test if num is a float.
 
             Tests for type float or a string with a dot is is float
 
@@ -360,16 +361,19 @@ class SMAennexos(Device):
         return self._device_info
 
     async def get_debug(self) -> Dict:
-        """Collect all Debug Information"""
+        """Returns all Debug Information."""
         return {
             "device": self._last_device,
             "measurements": self._last_measurements,
             "parameters": self._last_parameters,
+            "measurements_raw": self._last_measurements_raw,
+            "parameters_raw": self._last_parameters_raw,
             "device_info": self._device_info,
             "notfound": self._last_notfound,
         }
 
-    async def detect(self, ip):
+    async def detect(self, ip) -> list:
+        """Tries to detect a ennexos-based Device on this ip-address."""
         rets = []
         for prefix in ["https", "http"]:
             url = f"{prefix}://{ip}/api/v1/system/info"
@@ -380,7 +384,7 @@ class SMAennexos(Device):
             try:
                 dev = await self._jsonrequest(url, {}, hdrs.METH_GET)
                 if "productFriendlyNameTagId" in dev:
-                    fallback = "Unkown: " + str(dev["productFriendlyNameTagId"])
+                    fallback = "Unknown: " + str(dev["productFriendlyNameTagId"])
                     ret["device"] = SMATagList.get(
                         dev["productFriendlyNameTagId"], fallback
                     )
@@ -393,10 +397,12 @@ class SMAennexos(Device):
                 ret["exception"] = e
         return rets
 
-    def set_options(self, options: Dict[str, Any]):
+    def set_options(self, options: Dict[str, Any]) -> None:
+        """Set low-level options."""
         self._options = options
 
-    async def getTimestamp(self):
+    async def _getTimestamp(self) -> str:
+        """Returns the time in a format as required by the put instruction."""
         return (
             f"{datetime.now(tz=UTC).isoformat(timespec='milliseconds').split('+')[0]}Z"
         )

@@ -3,7 +3,7 @@
 import copy
 import logging
 from dataclasses import dataclass
-from typing import Any, Iterator, List, Optional, Union
+from typing import Any, Iterator, List, Optional, Union, cast
 
 import attr
 import jmespath  # type: ignore
@@ -146,7 +146,7 @@ class Sensors:
         """
         return len(self.__s)
 
-    def __contains__(self, key: Union[str, Sensor] | str) -> bool:
+    def __contains__(self, key: Sensor | str) -> bool:
         """Check if a sensor is defined.
 
         Args:
@@ -156,7 +156,10 @@ class Sensors:
             bool: [description]
         """
         if isinstance(key, Sensor):
-            key = key.name
+            sen = cast(Sensor, key)
+            if not sen.name:
+                return False
+            key = sen.name
 
         try:
             if self[key]:
@@ -213,7 +216,7 @@ class Sensors:
         else:
             raise TypeError(f"pysma.Sensor expected {type(sensor)} {sensor}")
 
-        if sensor.name in self:
+        if sensor.name and sensor.name in self:
             old = self[sensor.name]
             self.__s.remove(old)
             _LOGGER.warning("Replacing sensor %s with %s", old, sensor)

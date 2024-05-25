@@ -21,7 +21,7 @@ from .discovery import Discovery
 _LOGGER = logging.getLogger(__name__)
 
 
-def SMA(session, url, password, group) -> SMAwebconnect:
+def SMA(session: ClientSession, url: str, password: str, group: str) -> SMAwebconnect:
     """Backward compatibility"""
     # pylint: disable=invalid-name
     return SMAwebconnect(session, url, password=password, group=group)
@@ -53,8 +53,10 @@ def getDevice(
     return None
 
 
-async def _run_detect(accessmethod: str, session: ClientSession, ip) -> list[DiscoveryInformation]:
-    """Start Autodetection"""
+async def _run_detect(
+    accessmethod: str, session: ClientSession, ip: str
+) -> list[DiscoveryInformation]:
+    """Start Autodetection for one ip and for one accessmethod"""
     sma: Device
     if accessmethod == "webconnect":
         sma = SMAwebconnect(session, ip, password="", group="user")
@@ -62,14 +64,16 @@ async def _run_detect(accessmethod: str, session: ClientSession, ip) -> list[Dis
         sma = SMAennexos(session, ip, password=None, group=None)
     elif accessmethod == "speedwireinv":
         sma = SMAspeedwireINV(host=ip, password="", group="user")
+    elif accessmethod == "speedwireem":
+        sma = SMAspeedwireEM()
     else:
-        return None
+        return []
     ret = await sma.detect(ip)
     for i in ret:
         i.access = accessmethod
     try:
         await sma.close_session()
-    except Exception as e:  # pylint: disable=broad-exception-caught
+    except Exception:  # pylint: disable=broad-exception-caught
         pass
     return ret
 
@@ -81,6 +85,7 @@ async def autoDetect(session: ClientSession, ip: str) -> list[DiscoveryInformati
         _run_detect("ennexos", session, ip),
         _run_detect("speedwireinv", session, ip),
         _run_detect("webconnect", session, ip),
+        _run_detect("speedwireem", session, ip),
     )
     results: list[DiscoveryInformation] = []
     for r in ret:
@@ -89,5 +94,6 @@ async def autoDetect(session: ClientSession, ip: str) -> list[DiscoveryInformati
 
 
 async def discovery() -> list:
+    """Perform a scan of the local network"""
     discover = Discovery(asyncio.get_event_loop())
     return await discover.run()

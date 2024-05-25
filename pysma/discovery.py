@@ -16,10 +16,10 @@ class Discovery:
     def __init__(self, loop: asyncio.AbstractEventLoop) -> None:
         """ init """
         self.loop = loop
-        self.transport = None
+        self.transport: asyncio.BaseTransport
         self.addr = "239.12.255.254"
         self.port = 9522
-        self.discovered = []
+        self.discovered: list[tuple[str, int]] = []
 
     def getDiscoverySocket(self) -> socket.socket:
         addrinfo = socket.getaddrinfo(self.addr, None)[0]
@@ -34,7 +34,7 @@ class Discovery:
         sock = self.getDiscoverySocket()
         on_connection_lost = self.loop.create_future()
         connect = await self.loop.create_datagram_endpoint(
-            lambda: self,
+            lambda: self, # type: ignore[type-var]
             sock=sock,
         )
         for i in range(0, 3):
@@ -50,12 +50,12 @@ class Discovery:
     def sendDiscoveryRequest(self) -> None:
         """Send a discovery Request"""
         _LOGGER.warn("Sending Discovery Request")
-        self.transport.sendto(
+        self.transport.sendto( # type: ignore[attr-defined]
             bytes.fromhex("534d4100000402a0ffffffff0000002000000000"),
             (self.addr, self.port),
         )
 
-    def datagram_received(self, data: bytes, addr:tuple[str, int]) -> None:
+    def datagram_received(self, data: bytes, addr: tuple[str, int]) -> None:
         """Datagram received"""
         msg = speedwireHeader.from_packed(data[0:18])
         if not msg.isDiscoveryResponse():

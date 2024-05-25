@@ -4,18 +4,19 @@ Originally based on https://github.com/Wired-Square/sma-query/blob/main/src/sma_
 Improved with Information from https://github.com/mhop/fhem-mirror/blob/master/fhem/FHEM/76_SMAInverter.pm
 Receiver classes completely reimplemented by little.yoda
 """
+# pylint: disable=too-many-lines
 
 import ctypes
 import time
 from ctypes import LittleEndianStructure
-from typing import Annotated, Any, Dict, List, Optional
+from typing import Annotated, Any, Dict
 
 import dataclasses_struct as dcs
 
 from .const import Identifier, SMATagList
 from .sensor import Sensor
 
-responseDef = {
+responseDef: dict[str, list[dict[str, Any]]] = {
     "00464B01": [],  # Netzspannung Phase L1 gegen L2
     "00464C01": [],  # Netzspannung Phase L2 gegen L3
     "00464D01": [],  # Netzspannung Phase L3 gegen L1
@@ -714,7 +715,7 @@ responseDef = {
     # }],
 }
 
-commands: Dict[str, Dict[str, any]] = {
+commands: Dict[str, Dict[str, Any]] = {
     "login": {
         "command": 0xFFFD040C,
         "response": 0xFFFD040D,
@@ -959,9 +960,20 @@ class speedwireHeader:
             and self.protokoll == 0x6065
         )
 
+    def check6069(self) -> bool:
+        """Check for 6069 Type.  Size is not checked at this stage."""
+        return (
+            self.sma == b"SMA\x00"
+            and self.tag42_length == 4
+            and self.tag42_tag0x02A0 == 0x02A0
+            and self.group1 == 1
+            and self.smanet2_tagID == 0x10
+            and self.protokoll == 0x6069
+        )
+
     def __str__(self) -> str:
         """customized output. Use hex-format for important values."""
-        return f"speedwireHeader(sma:{self.sma} tag42_length:{self.tag42_length} tag42_tag0x02A0:{self.tag42_tag0x02A0:#04x} group1:{self.group1} smanet2_length:{self.smanet2_length} smanet2_tagID:{self.smanet2_tagID:#02x} protokoll:{self.protokoll:#04x})"
+        return f"speedwireHeader(sma:{self.sma!r} tag42_length:{self.tag42_length} tag42_tag0x02A0:{self.tag42_tag0x02A0:#04x} group1:{self.group1} smanet2_length:{self.smanet2_length} smanet2_tagID:{self.smanet2_tagID:#02x} protokoll:{self.protokoll:#04x})"
 
     def isDiscoveryResponse(self) -> bool:
         """Check if this message is a response to a discovery request."""
@@ -1014,6 +1026,16 @@ class speedwireHeader6065:
     def __str__(self) -> str:
         """customized output. Use hex-format for important values."""
         return f"speedwireHeader6065(?:{self.unknown09A0E0.hex()} Src (ID,SNR,CNT): {self.src_susyid} {self.src_serial} {self.src_control} Dest (ID,SNR,CNT): {self.dest_susyid} {self.dest_serial} {self.dest_control}   error:{self.error} fragment:{self.fragment} pktId:{self.pktId} cmdid:{self.cmdid:#010x} firstRegister:{self.firstRegister:#010x} lastRegister:{self.lastRegister:#010x})"
+
+
+@dcs.dataclass(dcs.BIG_ENDIAN)
+class speedwireHeader6069:
+    """Speedwire Header2 for 6069 Messages. 10 Bytes"""
+
+    src_susyid: dcs.U16
+    src_serial: dcs.U32
+
+    timestamp: dcs.U32
 
 
 @dcs.dataclass(dcs.LITTLE_ENDIAN)
@@ -1150,7 +1172,7 @@ class SpeedwireFrame:
 
     #     return bytes(frame_header) + bytes(frame_data_header) + bytes(frame_data)
 
-    def getLoginFrame(self, password: str, serial: int, installer: bool) -> bytes:
+    def getLoginFrame(self, password: str, serial: str, installer: bool) -> bytes:
         # pylint: disable=too-few-public-methods
         """Returns a Login Frame"""
         frame_header = self.getFrameHeader()
@@ -1186,7 +1208,7 @@ class SpeedwireFrame:
 
         return bytes(frame_header) + bytes(frame_data_header) + bytes(frame_data)
 
-    def getQueryFrame(self, password: str, serial: int, command_name: str) -> bytes:
+    def getQueryFrame(self, password: str, serial: str, command_name: str) -> bytes:
         """Return Query Frame"""
         frame_header = self.getFrameHeader()
         frame_data_header = self.getDataHeader(password, serial)

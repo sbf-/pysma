@@ -9,7 +9,8 @@ from typing import Dict
 class Identifier:
     # pylint: disable=too-few-public-methods
     """All Sensor names
-    This list is considered part of the pysam interface and changes to names are considered a breaking change
+    This list is considered part of the pysam interface and
+    changes to names are considered a breaking change
     """
     pv_power_a: str = "pv_power_a"
     pv_power_b: str = "pv_power_b"
@@ -134,11 +135,14 @@ class Identifier:
 
 # Data-Source:
 # https://www.sma.de/produkte/solar-wechselrichter/sunny-tripower-x
-# Technical Information - Parameters and Measured Values STP 12-50 / STP 15-50 / STP 20-50 / STP 25-50 (Sunny Tripower X) with firmware package 03.02.07.R
+# Technical Information - Parameters and Measured Values
+# STP 12-50 / STP 15-50 / STP 20-50 / STP 25-50 (Sunny Tripower X)
+# with firmware package 03.02.07.R
 # https://github.com/sma-bluetooth/sma-bluetooth/blob/master/smatool.xml
 SMATagList: Dict[int, str] = {
     35: "Error",
     51: "Closed",
+    270: "Energy Meter",
     276: "Instantaneous value",
     295: "MPP",
     303: "Off",
@@ -153,11 +157,12 @@ SMATagList: Dict[int, str] = {
     336: "Contact the manufacturer",
     337: "Contact the installer",
     338: "Invalid",
+    349: "Energy Meter 2",
+    372: "Sunny Home Manager 2",
     381: "Stop",
     402: "Phases L1 and L2 (phsAB)",
     403: "Phases L1 and L3 (phsAC)",
     404: "Phases L2 and L3 (phsBC)",
-    # 433: "Contant voltage",
     443: "Constant voltage",
     455: "Warning",
     461: "SMA",

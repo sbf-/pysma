@@ -50,8 +50,8 @@ class SMAennexos(Device):
         self,
         session: ClientSession,
         url: str,
-        password: Optional[str],
-        group: str,
+        password: str | None,
+        group: str | None,
     ):
         """Init SMA connection.
 
@@ -117,6 +117,9 @@ class SMAennexos(Device):
         Returns:
             bool: authentication successful
         """
+        if self._new_session_data is None:
+            _LOGGER.error("User & Pwd not set!")
+            return False
         loginurl = self._url + "/api/v1/token"
         postdata = {
             "data": {
@@ -161,13 +164,13 @@ class SMAennexos(Device):
             dname = d["channelId"].replace("Parameter.", "").replace("[]", "")
             if "value" in d:
                 v = d["value"]
-                sensorRange = None
+                sensor_range = None
                 if "min" in d and "max" in d:
-                    sensorRange = Sensor_Range(
+                    sensor_range = Sensor_Range(
                         "min/max", [d["min"], d["max"]], d["editable"]
                     )
                 if "possibleValues" in d:
-                    sensorRange = Sensor_Range(
+                    sensor_range = Sensor_Range(
                         "selection", d["possibleValues"], d["editable"]
                     )
 
@@ -175,7 +178,7 @@ class SMAennexos(Device):
                     "name": dname,
                     "value": v,
                     "origname": d["channelId"],
-                    "range": sensorRange,
+                    "range": sensor_range,
                 }
 
             elif "values" in d:
@@ -253,27 +256,27 @@ class SMAennexos(Device):
 
     async def _get_sensor_profile(self) -> Sensors:
         device_sensors = Sensors()
-        expectedSensors = []
+        expected_sensors = []
 
         # Search for matiching profile
-        if self._device_info and "name" in self._device_info:
-            for profil in ennexosSensorProfiles.items():
-                if re.search(profil[0], self._device_info["name"]):
-                    expectedSensors = profil[1]
-        if len(expectedSensors) == 0:
-            _LOGGER.warning(
-                f'Unknown Device: {self._device_info["name"]} {self._device_info["type"]}'
-            )
+        if self._device_info:
+            if "name" in self._device_info:
+                for profil in ennexosSensorProfiles.items():
+                    if re.search(profil[0], self._device_info["name"]):
+                        expected_sensors = profil[1]
+            if len(expected_sensors) == 0:
+                _LOGGER.warning(
+                    f'Unknown Device: {self._device_info["name"]} {self._device_info["type"]}'
+                )
 
         # Add Sensors from profile
-        for s in expectedSensors:
+        for s in expected_sensors:
             if s.name:
                 device_sensors.add(copy.copy(s))
         return device_sensors
 
     async def close_session(self) -> None:
         """Closes the session."""
-        pass
 
     def _isfloat(self, num: Any) -> bool:
         """Test if num is a float.
@@ -394,8 +397,8 @@ class SMAennexos(Device):
                     break
                 di.status = "failed"
                 di.exception = None
-            except Exception as e:
-                di.status  = "failed"
+            except Exception as e:  # pylint: disable=broad-exception-caught
+                di.status = "failed"
                 di.exception = e
         return rets
 
@@ -403,7 +406,7 @@ class SMAennexos(Device):
         """Set low-level options."""
         self._options = options
 
-    async def _getTimestamp(self) -> str:
+    async def _get_timestamp(self) -> str:
         """Returns the time in a format as required by the put instruction."""
         return (
             f"{datetime.now(tz=UTC).isoformat(timespec='milliseconds').split('+')[0]}Z"

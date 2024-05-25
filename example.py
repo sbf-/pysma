@@ -8,7 +8,6 @@ import signal
 import sys
 
 import aiohttp
-
 import pysmaplus as pysma
 from pysmaplus.helpers import BetterJSONEncoder
 from pysmaplus.sensor import Sensors
@@ -42,7 +41,7 @@ def print_table(sensors: Sensors) -> None:
             )
 
 
-async def discovery(savedebug: bool, id: bool) -> None:
+async def discovery(savedebug: bool, doIdentification: bool) -> None:
     debug = {"cmd": "discovery", "addr": [], "id": {}}
     ret = await pysma.discovery()
     if len(ret) == 0:
@@ -50,7 +49,7 @@ async def discovery(savedebug: bool, id: bool) -> None:
     for r in ret:
         print(f"{r[0]}:{r[1]}")
     debug["addr"] = ret
-    if id and len(r) > 0:
+    if doIdentification and len(r) > 0:
         print("\nTrying to identify... (can take up to 30 seconds pre device)\n")
         for r in ret:
             print(r[0])
@@ -60,24 +59,26 @@ async def discovery(savedebug: bool, id: bool) -> None:
 
     if savedebug:
         f = open("example.log", "w")
-        f.write(json.dumps(debug, default=lambda o: str(o), indent=4))
+        f.write(json.dumps(debug, cls=BetterJSONEncoder, indent=4))
 
 
 async def identify(url: str, savedebug: bool) -> list:
+    order_list = ["found", "maybe", "failed"]
     async with aiohttp.ClientSession(
         connector=aiohttp.TCPConnector(ssl=False)
     ) as session:
         ret = await pysma.autoDetect(session, url)
+        ret_sorted = sorted(ret, key=lambda x: order_list.index(x.status))
         print("{:>15}{:>10}    {}".format("Access", "", "Remarks"))
-        for r in ret:
+        for r in ret_sorted:
             print(
                 "{:>15}{:>10}    {}".format(
-                    r["access"], r["status"], (r["remark"] + " " + r["device"]).strip()
+                    r.access, r.status, (r.remark + " " + r.device).strip()
                 )
             )
         if savedebug:
             f = open("example.log", "w")
-            f.write(json.dumps(ret, default=lambda o: str(o), indent=4))
+            f.write(json.dumps(ret, cls=BetterJSONEncoder, indent=4))
         return ret
 
 
@@ -116,7 +117,6 @@ async def main_loop(
             VAR["running"] = True
             device_info = await VAR["sma"].device_info()
             sensors = await VAR["sma"].get_sensors()
-            await VAR["sma"].handleModulActions()
             for name, value in device_info.items():
                 print("{:>15}{:>25}".format(name, value))
             print(

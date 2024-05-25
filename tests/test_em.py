@@ -14,7 +14,7 @@ from pysma.exceptions import (
     SmaConnectionException,
     SmaReadException,
 )
-
+from aioresponses import aioresponses
 from . import MOCK_DEVICE, MOCK_L10N, mock_aioresponse
 
 _LOGGER = logging.getLogger(__name__)
@@ -22,15 +22,20 @@ _LOGGER = logging.getLogger(__name__)
 class Test_SMAEM_class:
     """Test the SMA class."""
 
-    def fake_recv(self):
-        time.sleep(0.6)
+    async def looper(self, sma: SMAspeedwireEM) -> None:
+        """ Send fake packets from SunnyHomeManager2 """
         with open("tests/testdata/SunnyHomeManager2.json", "r") as file:
             data = json.load(file)
-            return base64.b64decode(data["packet"])
+            data = base64.b64decode(data["packet"])
+        for _ in range(1_000_000_000):
+            await asyncio.sleep(0.6)
+            sma.datagram_received(data, ("192.0.2.1", 4711))
 
-    @patch.object(SMAspeedwireEM, '_recv', fake_recv)
-    async def test_json_timeout_error(self, mock_aioresponse):
+    async def test_json_timeout_error(self, mock_aioresponse: aioresponses) -> None:
+         """ Basic Tests """
          sma = SMAspeedwireEM()
+         task = asyncio.create_task(self.looper(sma))
+         await sma.new_session()
          device_info = await sma.device_info()
          print(device_info)
          for key in ["manufacturer", "name", "serial", "sw_version", "type" ]:
@@ -40,13 +45,17 @@ class Test_SMAEM_class:
          sensors = await sma.get_sensors()
          assert len(sensors) >= 17
          await sma.read(sensors)
+         task.cancel()
 
-    async def test_debug(self):
+    async def test_debug(self) -> None:
+         """ Checks the encoding for the debug-information. """
          sma = SMAspeedwireEM()
          with open("tests/testdata/SunnyHomeManager2.json", "r") as file:
             data = json.load(file)
             packet = base64.b64decode(data["packet"])
-            sma._last_packet = packet
+            sma.di.last_packet = packet
+            sma.di.last_valid_packet = packet
             debug = await sma.get_debug()
-            assert debug["packet"] == data["packet"]  
+            print(debug)
+            assert debug["last_packet"] == debug["last_valid_packet"] == data["packet"]  
 

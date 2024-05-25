@@ -100,20 +100,22 @@ class Test_SMA_class:
 
 
     async def test_known_device(self, mock_aioresponse):
+        """ The the Case if it is a known"""
         mock_aioresponse.post(
-            f"https://localhost/api/v1/token",
+            "https://localhost/api/v1/token",
             payload={ "access_token": "sample"}
         )
         mock_aioresponse.get(
-            f"https://localhost/api/v1/plants/Plant:1/devices/IGULD:SELF",
+            "https://localhost/api/v1/plants/Plant:1/devices/IGULD:SELF",
             payload= self.loadJson("TripowerX15-deviceinfo.json")
         )
         mock_aioresponse.post(
-            f"https://localhost/api/v1/parameters/search",
-            payload= self.loadJson("TripowerX15-parameters.json")
+            "https://localhost/api/v1/parameters/search",
+            payload= self.loadJson("TripowerX15-parameters.json"),
+            repeat=True
         )
         mock_aioresponse.post(
-            f"https://localhost/api/v1/measurements/live",
+            "https://localhost/api/v1/measurements/live",
             payload= self.loadJson("TripowerX15-measurements.json"),
             repeat = True
         )
@@ -137,20 +139,22 @@ class Test_SMA_class:
         await session.close()        
 
     async def test_unknown_device(self, mock_aioresponse):
+        """ Test the case if a unknown device is detected """
         mock_aioresponse.post(
-            f"https://localhost/api/v1/token",
+            "https://localhost/api/v1/token",
             payload={ "access_token": "sample"}
         )
         mock_aioresponse.get(
-            f"https://localhost/api/v1/plants/Plant:1/devices/IGULD:SELF",
+            "https://localhost/api/v1/plants/Plant:1/devices/IGULD:SELF",
             payload= self.changeExistingDeviceInfo("TripowerX15-deviceinfo.json", {"product": "Unknown", "vendor": "SomeoneElse" })
         )
         mock_aioresponse.post(
-            f"https://localhost/api/v1/parameters/search",
-            payload= self.loadJson("TripowerX15-parameters.json")
+            "https://localhost/api/v1/parameters/search",
+            payload= self.loadJson("TripowerX15-parameters.json"),
+            repeat = True
         )
         mock_aioresponse.post(
-            f"https://localhost/api/v1/measurements/live",
+            "https://localhost/api/v1/measurements/live",
             payload= self.loadJson("TripowerX15-measurements.json"),
             repeat = True
         )
@@ -200,11 +204,12 @@ class Test_SMA_class:
             payload= self.changeExistingDeviceInfo("TripowerX15-deviceinfo.json", {"product": "SMA EV Charger "})
         )
         mock_aioresponse.post(
-            f"https://localhost/api/v1/parameters/search",
-            payload= [ {"values" : []} ]
+            "https://localhost/api/v1/parameters/search",
+            payload= [ {"values" : []} ],
+            repeat=True
         )
         mock_aioresponse.post(
-            f"https://localhost/api/v1/measurements/live",
+            "https://localhost/api/v1/measurements/live",
             payload= self.loadJson("EVCharger-measurements.json"),
             repeat = True
         )

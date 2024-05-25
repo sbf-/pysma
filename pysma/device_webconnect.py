@@ -33,7 +33,7 @@ from .const_webconnect import (
     URL_VALUES,
     USERS,
 )
-from .device import Device
+from .device import Device, DiscoveryInformation
 from .exceptions import (
     SmaAuthenticationException,
     SmaConnectionException,
@@ -484,24 +484,24 @@ class SMAwebconnect(Device):
     async def get_debug(self) -> Dict:
         return {}
 
-    async def detect(self, ip: str) -> List:
+    async def detect(self, ip: str) -> list[DiscoveryInformation]:
         results = []
         for urls in ["https://" + ip, "http://" + ip]:
             self._url = urls
-            ret = await super().detect(ip)
-            ret[0]["remark"] = urls
+            di = DiscoveryInformation()
+            di.remark = urls
             try:
-                ret[0]["testedEndpoints"] = self._url
+                di.tested_endpoints = self._url
                 await self.new_session()
             except SmaAuthenticationException as e:
                 if self._sid:
-                    ret[0]["status"] = "found"
-                    ret[0]["exception"] = e
+                    di.status = "found"
+                    di.exception = e
                 else:
-                    ret[0]["status"] = "failed"
-                    ret[0]["exception"] = e
+                    di.status = "failed"
+                    di.exception = e
             except Exception as e:  # pylint: disable=broad-exception-caught
-                ret[0]["status"] = "failed"
-                ret[0]["exception"] = e
-            results.extend(ret)
+                di.status = "failed"
+                di.exception =  e
+            results.append(di)
         return results

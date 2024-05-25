@@ -13,14 +13,15 @@ _LOGGER = logging.getLogger(__name__)
 class Discovery:
     """Class for the detection of SMA Devices in the local network."""
 
-    def __init__(self, loop) -> None:
+    def __init__(self, loop: asyncio.AbstractEventLoop) -> None:
+        """ init """
         self.loop = loop
         self.transport = None
         self.addr = "239.12.255.254"
         self.port = 9522
         self.discovered = []
 
-    def getDiscoverySocket(self) -> socket:
+    def getDiscoverySocket(self) -> socket.socket:
         addrinfo = socket.getaddrinfo(self.addr, None)[0]
         sock = socket.socket(addrinfo[0], socket.SOCK_DGRAM)
         sock.setsockopt(
@@ -28,7 +29,7 @@ class Discovery:
         )
         return sock
 
-    async def run(self):
+    async def run(self) -> list:
         """Start the Task"""
         sock = self.getDiscoverySocket()
         on_connection_lost = self.loop.create_future()
@@ -42,7 +43,7 @@ class Discovery:
         await asyncio.sleep(0.5)
         return self.discovered
 
-    def connection_made(self, transport) -> None:
+    def connection_made(self, transport: asyncio.BaseTransport) -> None:
         self.transport = transport
         self.sendDiscoveryRequest()
 
@@ -54,19 +55,19 @@ class Discovery:
             (self.addr, self.port),
         )
 
-    def datagram_received(self, data: bytes, addr) -> None:
+    def datagram_received(self, data: bytes, addr:tuple[str, int]) -> None:
         """Datagram received"""
         msg = speedwireHeader.from_packed(data[0:18])
         if not msg.isDiscoveryResponse():
-            _LOGGER.warn("Ignoring %", msg)
+            _LOGGER.warning("Ignoring %s", msg)
             return
         if addr not in self.discovered:
             self.discovered.append(addr)
 
     def error_received(self, exc: Exception) -> None:
         """Called by error."""
-        _LOGGER.error("Error received:", exc)
+        _LOGGER.error("%s error occurred: %s", type(exc), exc)
 
     def connection_lost(self, exc: Exception) -> None:
         """Called by connection lost."""
-        print("Socket closed, stop the event loop")
+        _LOGGER.error("Socket closed, stop the event loop %s %s", type(exc), exc)

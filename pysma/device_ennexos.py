@@ -16,7 +16,7 @@ from aiohttp import ClientSession, ClientTimeout, client_exceptions, hdrs
 from .const import SMATagList
 from .const_webconnect import DEFAULT_TIMEOUT
 from .definitions_ennexos import ennexosSensorProfiles
-from .device import Device
+from .device import Device, DiscoveryInformation
 from .exceptions import (
     SmaAuthenticationException,
     SmaConnectionException,
@@ -32,7 +32,7 @@ class SMAennexos(Device):
 
     # pylint: disable=too-many-instance-attributes
     _aio_session: ClientSession
-    _new_session_data: Optional[dict]
+    _new_session_data: Optional[dict[str, Any]]
     _url: str
     _token: str
     _authorization_header: dict[str, str]
@@ -42,7 +42,7 @@ class SMAennexos(Device):
     _last_measurements_raw: Any = {}
     _last_device: Any = {}
     _last_notfound: list = []
-    _device_info: Dict | None = None
+    _device_info: Dict[str, Any] | None = None
     _jsessionid: str | None = None
     _options: Dict[str, Any] = {}
 
@@ -70,7 +70,7 @@ class SMAennexos(Device):
 
     async def _jsonrequest(
         self, url: str, parameters: Dict[str, Any], method: str = hdrs.METH_POST
-    ) -> dict:
+    ) -> Any:
         """Request json data for requests.
 
         Args:
@@ -193,7 +193,7 @@ class SMAennexos(Device):
                 pass
         return data
 
-    async def _get_livedata(self) -> Dict:
+    async def _get_livedata(self) -> Any:
         """Get the sensors reading from the device.
 
         Returns:
@@ -209,9 +209,10 @@ class SMAennexos(Device):
         self._last_measurements_raw = ret
         return await self._prepare_livedata(ret)
 
-    async def _prepare_livedata(self, ret) -> Dict[str, Any]:
+    async def _prepare_livedata(self, ret: Any) -> Dict[str, Any]:
+        """Convert the raw data from the inverter to a dict"""
         self._last_measurements = ret
-        data = {}
+        data: Dict[str, Any] = {}
         for d in ret:
             dname = d["channelId"].replace("Measurement.", "").replace("[]", "")
             if "value" in d["values"][0]:
@@ -255,9 +256,10 @@ class SMAennexos(Device):
         expectedSensors = []
 
         # Search for matiching profile
-        for profil in ennexosSensorProfiles.items():
-            if re.search(profil[0], self._device_info["name"]):
-                expectedSensors = profil[1]
+        if self._device_info and "name" in self._device_info:
+            for profil in ennexosSensorProfiles.items():
+                if re.search(profil[0], self._device_info["name"]):
+                    expectedSensors = profil[1]
         if len(expectedSensors) == 0:
             _LOGGER.warning(
                 f'Unknown Device: {self._device_info["name"]} {self._device_info["type"]}'
@@ -372,29 +374,29 @@ class SMAennexos(Device):
             "notfound": self._last_notfound,
         }
 
-    async def detect(self, ip: str) -> list[dict[str:any]]:
+    async def detect(self, ip: str) -> list[DiscoveryInformation]:
         """Tries to detect a ennexos-based Device on this ip-address."""
         rets = []
         for prefix in ["https", "http"]:
+            di = DiscoveryInformation()
+            rets.append(di)
             url = f"{prefix}://{ip}/api/v1/system/info"
-            ret = (await super().detect(ip))[0]
-            rets.append(ret)
-            ret["testedEndpoints"] = url
-            ret["remark"] = prefix
+            di.tested_endpoints = url
+            di.remark = prefix
             try:
                 dev = await self._jsonrequest(url, {}, hdrs.METH_GET)
                 if "productFriendlyNameTagId" in dev:
                     fallback = "Unknown: " + str(dev["productFriendlyNameTagId"])
-                    ret["device"] = SMATagList.get(
+                    di.device = SMATagList.get(
                         dev["productFriendlyNameTagId"], fallback
                     )
-                    ret["status"] = "found"
+                    di.status = "found"
                     break
-                ret["status"] = "failed"
-                ret["exception"] = dev
+                di.status = "failed"
+                di.exception = None
             except Exception as e:
-                ret["status"] = "failed"
-                ret["exception"] = e
+                di.status  = "failed"
+                di.exception = e
         return rets
 
     def set_options(self, options: Dict[str, Any]) -> None:

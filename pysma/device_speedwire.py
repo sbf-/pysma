@@ -25,7 +25,7 @@ from .definitions_speedwire import (
     speedwireHeader,
     speedwireHeader6065,
 )
-from .device import Device
+from .device import Device, DiscoveryInformation
 from .exceptions import (
     SmaAuthenticationException,
     SmaConnectionException,
@@ -56,14 +56,14 @@ class SMAClientProtocol(DatagramProtocol):
         self, password: str, on_connection_lost: Future, options: Dict[str, any]
     ):
         self._lastSend = None
-        self._firstSend = None
+        self._firstSend: float | None = None
         self.speedwire = SpeedwireFrame()
         self.transport = None
         self.password = password
         self.on_connection_lost = on_connection_lost
         self.cmds = []
         self.cmdidx = 0
-        self.future = None
+        self.future: Future | None = None
         self.data_values = {}
         self.sensors = {}
         self._group = None
@@ -84,7 +84,7 @@ class SMAClientProtocol(DatagramProtocol):
     def connection_made(self, transport) -> None:
         self.transport = transport
 
-    async def controller(self):
+    async def controller(self) -> None:
         try:
             if self._resendcounter == 0:
                 self.debug["sendcounter"] += 1
@@ -112,7 +112,7 @@ class SMAClientProtocol(DatagramProtocol):
             return
         self._commandFuture.set_result(True)
 
-    async def start_query(self, cmds: List, future, group: str):
+    async def start_query(self, cmds: List, future: Future, group: str) -> None:
         self.cmds = ["login"]
         self.cmds.extend(cmds)
         self.future = future
@@ -127,11 +127,12 @@ class SMAClientProtocol(DatagramProtocol):
         self._firstSend = time.time()
         await self._send_next_command()
 
-    def connection_lost(self, exc):
-        _LOGGER.debug(f"Connection lost: {exc}")
+    def connection_lost(self, exc: Exception | None) -> None:
+        """ connection lost handler """
+        _LOGGER.debug("Connection lost: %s %s", type(exc), exc)
         self.on_connection_lost.set_result(True)
 
-    def _send_command(self, cmd):
+    def _send_command(self, cmd: str) -> None:
         """Send the Command"""
         _LOGGER.debug(
             f"Sending command [{len(cmd)}] -- {binascii.hexlify(cmd).upper()}"
@@ -321,7 +322,7 @@ class SMAClientProtocol(DatagramProtocol):
         return (cnt_registers, size_registers)
 
     # Main routine for processing received messages.
-    def datagram_received(self, data: bytes, addr) -> None:
+    def datagram_received(self, data: bytes, addr: tuple[str, int]) -> None:
         _LOGGER.debug(f"RECV: {addr} Len:{len(data)} {binascii.hexlify(data).upper()}")
         delta = 0
         if self._lastSend:
@@ -511,7 +512,7 @@ class SMAspeedwireINV(Device):
             self._debug["overalltimeout"] += 1
             raise e
 
-    def _update_sensors(self, sensors, sensorReadings):
+    def _update_sensors(self, sensors: Sensors, sensorReadings: Sensors) -> None:
         """Update a sensor with the sensor reading"""
         _LOGGER.debug("Received %d sensor readings", len(sensorReadings))
         for sen in sensors:
@@ -534,10 +535,10 @@ class SMAspeedwireINV(Device):
         return ret
 
     # wait for a response or a timeout
-    async def detect(self, ip) -> bool:
-        ret = await super().detect(ip)
+    async def detect(self, ip: str) -> list[DiscoveryInformation]:
         try:
-            ret[0]["testedEndpoints"] = str(ip) + ":9522"
+            di = DiscoveryInformation()
+            di.tested_endpoints = str(ip) + ":9522"
             await self.new_session()
             fut = asyncio.get_running_loop().create_future()
             await self._protocol.start_query(["TypeLabel"], fut, self._group)
@@ -554,13 +555,13 @@ class SMAspeedwireINV(Device):
                 )  ## TODO recheck logic
             raise SmaConnectionException("No connection to device")
         except SmaAuthenticationException as e:
-            ret[0]["status"] = "maybe"
-            ret[0]["exception"] = e
-            ret[0]["remark"] = "only unencrypted Speedwire is supported"
+            di.status = "maybe"
+            di.exception = e
+            di.remark = "only unencrypted Speedwire is supported"
         except Exception as e:
-            ret[0]["status"] = "failed"
-            ret[0]["exception"] = e
-        return ret
+            di.status = "failed"
+            di.exception = e
+        return [di]
 
     def set_options(self, options: Dict[str, Any]) -> None:
         self._options = options

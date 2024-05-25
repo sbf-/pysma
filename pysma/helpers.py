@@ -2,17 +2,17 @@
 
 import dataclasses
 import json
+from typing import Any
 
 
 class BetterJSONEncoder(json.JSONEncoder):
-    """JSON Encoder that handles dataclasses."""
+    """JSON Encoder that handles dataclasses and non serialziable objects."""
 
-    def default(self, o: any) -> any:
+    def default(self, o: Any) -> Any:
         """Handler for the Encoder."""
         if dataclasses.is_dataclass(o):
             return dataclasses.asdict(o)
-        return super().default(o)
-
+        return str(o)
 
 def version_int_to_string(version_integer: int) -> str:
     """Convert a version integer to a readable string.

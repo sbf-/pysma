@@ -11,7 +11,7 @@ from typing import Optional
 
 from aiohttp import ClientSession
 
-from .device import Device
+from .device import Device, DiscoveryInformation
 from .device_em import SMAspeedwireEM
 from .device_ennexos import SMAennexos
 from .device_speedwire import SMAspeedwireINV
@@ -53,7 +53,7 @@ def getDevice(
     return None
 
 
-async def _run_detect(accessmethod: str, session: ClientSession, ip) -> Device:
+async def _run_detect(accessmethod: str, session: ClientSession, ip) -> list[DiscoveryInformation]:
     """Start Autodetection"""
     sma: Device
     if accessmethod == "webconnect":
@@ -66,15 +66,15 @@ async def _run_detect(accessmethod: str, session: ClientSession, ip) -> Device:
         return None
     ret = await sma.detect(ip)
     for i in ret:
-        i["access"] = accessmethod
+        i.access = accessmethod
     try:
         await sma.close_session()
-    except Exception:  # pylint: disable=broad-exception-caught
+    except Exception as e:  # pylint: disable=broad-exception-caught
         pass
     return ret
 
 
-async def autoDetect(session: ClientSession, ip: str) -> list:
+async def autoDetect(session: ClientSession, ip: str) -> list[DiscoveryInformation]:
     # pylint: disable=invalid-name
     """Runs a autodetection of all supported devices (no energy meters) on the ip-address"""
     ret = await asyncio.gather(
@@ -82,7 +82,7 @@ async def autoDetect(session: ClientSession, ip: str) -> list:
         _run_detect("speedwireinv", session, ip),
         _run_detect("webconnect", session, ip),
     )
-    results = []
+    results: list[DiscoveryInformation] = []
     for r in ret:
         results.extend(r)
     return results

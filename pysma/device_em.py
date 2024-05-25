@@ -99,13 +99,13 @@ _LOGGER = logging.getLogger(__name__)
 class SMAspeedwireEM(Device):
     """Class to connect to the ennexos based SMA inverters. (e.g. Tripower X Devices)"""
 
-    _sock: socket
+    _sock: socket.socket
     _susyid: Dict[int, Any] = {
         270: "Energy Meter",
         349: "Energy Meter 2",
         372: "Sunny Home Manager 2",
     }
-    _last_packet: bytes = None
+    _last_packet: bytes | None = None
 
     def __init__(self) -> None:
         """Init SMA connection.
@@ -162,10 +162,10 @@ class SMAspeedwireEM(Device):
         """Close the session login."""
         self._sock.close()
 
-    def _recv(self):
+    def _recv(self) -> bytes:
         return self._sock.recv(608)
 
-    def _get_data(self):
+    def _get_data(self) -> dict[str, Any]:
         """
 
         Hack:
@@ -242,7 +242,7 @@ class SMAspeedwireEM(Device):
         }
         return device_info
 
-    def _decode(self, p: bytes):
+    def _decode(self, p: bytes) -> dict[str, Any] | None:
         """Decode a Speedwire-Packet
 
         Args:

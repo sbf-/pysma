@@ -4,8 +4,17 @@ abstract base class on which all device implementations are based
 
 from abc import ABC, abstractmethod
 from typing import Any, Dict, List
-
+from dataclasses import dataclass
 from .sensor import Sensor, Sensors
+
+@dataclass
+class DiscoveryInformation():
+    tested_endpoints: str = ""
+    status: str = ""
+    access: str = ""
+    exception: Exception | None = None
+    remark: str = ""
+    device: str = ""
 
 
 class Device(ABC):
@@ -31,19 +40,9 @@ class Device(ABC):
     async def close_session(self) -> None:
         """Closes the session"""
 
-    async def detect(self, ip: str) -> List:
-        """Tries an automatic detection of this device and returns the results"""
-        return [
-            {
-                "testedEndpoints": "",
-                "status": "failed",
-                "access": "",
-                "device": "",
-                "exception": "",
-                "remark": "",
-                "ip": ip,
-            }
-        ]
+    @abstractmethod
+    async def detect(self, ip: str) -> List[DiscoveryInformation]:
+        """ Try to detect SMA devices """
 
     @abstractmethod
     async def get_debug(self) -> Dict[str, Any]:
@@ -51,10 +50,6 @@ class Device(ABC):
 
     def set_options(self, options: Dict[str, Any]) -> None:
         """Set options"""
-        pass
-
-    async def handleModulActions(self) -> None:
-        """Testing."""
         pass
 
     def set_parameter(self, sensor: Sensor | str, value: int) -> None:

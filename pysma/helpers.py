@@ -5,7 +5,10 @@ import json
 
 
 class BetterJSONEncoder(json.JSONEncoder):
-    def default(self, o):
+    """JSON Encoder that handles dataclasses."""
+
+    def default(self, o: any) -> any:
+        """Handler for the Encoder."""
         if dataclasses.is_dataclass(o):
             return dataclasses.asdict(o)
         return super().default(o)

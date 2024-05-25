@@ -1,10 +1,8 @@
-"""
-Implementation for SMA Speedwire
+"""Implementation for SMA Speedwire
 
 Originally based on https://github.com/Wired-Square/sma-query/blob/main/src/sma_query_sw/commands.py
 Improved with Information from https://github.com/mhop/fhem-mirror/blob/master/fhem/FHEM/76_SMAInverter.pm
 Receiver classes completely reimplemented by little.yoda
-
 """
 
 import ctypes
@@ -716,7 +714,7 @@ responseDef = {
     # }],
 }
 
-commands = {
+commands: Dict[str, Dict[str, any]] = {
     "login": {
         "command": 0xFFFD040C,
         "response": 0xFFFD040D,
@@ -950,8 +948,8 @@ class speedwireHeader:
     smanet2_tagID: dcs.U16
     protokoll: dcs.U16
 
-    def check6065(self):
-        """Check for 6065 Type.  Size is not checked at this stage"""
+    def check6065(self) -> bool:
+        """Check for 6065 Type.  Size is not checked at this stage."""
         return (
             self.sma == b"SMA\x00"
             and self.tag42_length == 4
@@ -962,10 +960,11 @@ class speedwireHeader:
         )
 
     def __str__(self) -> str:
+        """customized output. Use hex-format for important values."""
         return f"speedwireHeader(sma:{self.sma} tag42_length:{self.tag42_length} tag42_tag0x02A0:{self.tag42_tag0x02A0:#04x} group1:{self.group1} smanet2_length:{self.smanet2_length} smanet2_tagID:{self.smanet2_tagID:#02x} protokoll:{self.protokoll:#04x})"
 
-    def isDiscoveryResponse(self):
-        """ """
+    def isDiscoveryResponse(self) -> bool:
+        """Check if this message is a response to a discovery request."""
         return (
             self.sma == b"SMA\x00"
             and self.tag42_length == 4
@@ -986,7 +985,7 @@ class speedwireData2Tag:
 
 @dcs.dataclass(dcs.LITTLE_ENDIAN)
 class speedwireHeader6065:
-    """Speedwire Header2 for 6065 Messages"""
+    """Speedwire Header2 for 6065 Messages."""
 
     # https://github.com/RalfOGit/libspeedwire
 
@@ -1008,10 +1007,12 @@ class speedwireHeader6065:
     firstRegister: dcs.U32
     lastRegister: dcs.U32
 
-    def isLoginResponse(self):
+    def isLoginResponse(self) -> bool:
+        """Check if this message is a response to a login request."""
         return self.cmdid == 0xFFFD040D
 
     def __str__(self) -> str:
+        """customized output. Use hex-format for important values."""
         return f"speedwireHeader6065(?:{self.unknown09A0E0.hex()} Src (ID,SNR,CNT): {self.src_susyid} {self.src_serial} {self.src_control} Dest (ID,SNR,CNT): {self.dest_susyid} {self.dest_serial} {self.dest_control}   error:{self.error} fragment:{self.fragment} pktId:{self.pktId} cmdid:{self.cmdid:#010x} firstRegister:{self.firstRegister:#010x} lastRegister:{self.lastRegister:#010x})"
 
 
@@ -1031,7 +1032,7 @@ class SpeedwireFrame:
     # Login Timeout in seconds
     LOGIN_TIMEOUT = 900
 
-    def get_encoded_pw(self, password, installer=False):
+    def get_encoded_pw(self, password: str, installer: bool = False) -> bytearray:
         """Encodes the password"""
         byte_password = bytearray(password.encode("ascii"))
 
@@ -1149,7 +1150,7 @@ class SpeedwireFrame:
 
     #     return bytes(frame_header) + bytes(frame_data_header) + bytes(frame_data)
 
-    def getLoginFrame(self, password, serial: int, installer: bool):
+    def getLoginFrame(self, password: str, serial: int, installer: bool) -> bytes:
         # pylint: disable=too-few-public-methods
         """Returns a Login Frame"""
         frame_header = self.getFrameHeader()
@@ -1185,7 +1186,7 @@ class SpeedwireFrame:
 
         return bytes(frame_header) + bytes(frame_data_header) + bytes(frame_data)
 
-    def getQueryFrame(self, password, serial: int, command_name: str):
+    def getQueryFrame(self, password: str, serial: int, command_name: str) -> bytes:
         """Return Query Frame"""
         frame_header = self.getFrameHeader()
         frame_data_header = self.getDataHeader(password, serial)
@@ -1217,7 +1218,7 @@ class SpeedwireFrame:
 
         return bytes(frame_header) + bytes(frame_data_header) + bytes(frame_data)
 
-    def getFrameHeader(self):
+    def getFrameHeader(self) -> FrameHeader:
         """Return Frame Header"""
         newFrameHeader = self.FrameHeader()
         newFrameHeader.id = self._id
@@ -1230,7 +1231,7 @@ class SpeedwireFrame:
 
         return newFrameHeader
 
-    def getDataHeader(self, password, serial):
+    def getDataHeader(self, password: str, serial: str) -> DataHeader:
         """Return Data Header"""
         newDataHeader = self.DataHeader()
 

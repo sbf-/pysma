@@ -11,6 +11,7 @@ import aiohttp
 
 import pysmaplus as pysma
 from pysmaplus.helpers import BetterJSONEncoder
+from pysmaplus.sensor import Sensors
 
 # This example will work with Python 3.9+
 
@@ -19,7 +20,7 @@ _LOGGER = logging.getLogger(__name__)
 VAR = {}
 
 
-def print_table(sensors):
+def print_table(sensors: Sensors) -> None:
     """Print sensors formatted as table."""
     if len(sensors) == 0:
         print("No Sensors found!")
@@ -41,7 +42,7 @@ def print_table(sensors):
             )
 
 
-async def discovery(savedebug: bool, id: bool):
+async def discovery(savedebug: bool, id: bool) -> None:
     debug = {"cmd": "discovery", "addr": [], "id": {}}
     ret = await pysma.discovery()
     if len(ret) == 0:
@@ -62,12 +63,11 @@ async def discovery(savedebug: bool, id: bool):
         f.write(json.dumps(debug, default=lambda o: str(o), indent=4))
 
 
-async def identify(url: str, savedebug: bool):
+async def identify(url: str, savedebug: bool) -> list:
     async with aiohttp.ClientSession(
         connector=aiohttp.TCPConnector(ssl=False)
     ) as session:
         ret = await pysma.autoDetect(session, url)
-        ret["cmd"] = "identify"
         print("{:>15}{:>10}    {}".format("Access", "", "Remarks"))
         for r in ret:
             print(
@@ -83,7 +83,7 @@ async def identify(url: str, savedebug: bool):
 
 async def main_loop(
     user: str,
-    password,
+    password: str,
     url: str,
     accessmethod: str,
     delay: float,
@@ -92,7 +92,7 @@ async def main_loop(
     isVerbose: bool,
     ignoretimeouts: bool,
     options: dict,
-):
+) -> None:
     """Run main loop."""
     async with aiohttp.ClientSession(
         connector=aiohttp.TCPConnector(ssl=False)
@@ -155,7 +155,7 @@ async def main_loop(
             await VAR["sma"].close_session()
 
 
-def getVersion():
+def getVersion() -> str:
     versionstring = "unknown"
     from importlib.metadata import PackageNotFoundError, version
 
@@ -166,7 +166,7 @@ def getVersion():
     return versionstring
 
 
-async def main():
+async def main() -> None:
     print("Library version: " + getVersion())
     parser = argparse.ArgumentParser(
         prog="python example.py",
@@ -200,7 +200,7 @@ async def main():
         "--options",
         metavar="KEY=VALUE",
         nargs="+",
-        help="Set modul specific options",
+        help="Set module specific options",
     )
 
     subparsers = parser.add_subparsers(help="Supported devices", required=True)

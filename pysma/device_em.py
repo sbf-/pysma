@@ -107,7 +107,7 @@ class SMAspeedwireEM(Device):
     }
     _last_packet: bytes = None
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Init SMA connection.
 
         Args:
@@ -256,7 +256,7 @@ class SMAspeedwireEM(Device):
         protocol_id = int.from_bytes(p[16:18], byteorder="big")
 
         if protocol_id not in [0x6069, 0x6081]:
-            _LOGGER.debug("Unknown protocoll %d", protocol_id)
+            _LOGGER.debug("Unknown protocol %d", protocol_id)
             return None
 
         data = {}

@@ -49,12 +49,14 @@ class Device(ABC):
     async def get_debug(self) -> Dict[str, Any]:
         """Return a dict with all debug information."""
 
-    def set_options(self, options: Dict[str, Any]):
+    def set_options(self, options: Dict[str, Any]) -> None:
         """Set options"""
         pass
 
-    async def handleModulActions(self):
+    async def handleModulActions(self) -> None:
+        """Testing."""
         pass
 
-    def set_parameter(self, sensor: Sensor | str, value: int):
+    def set_parameter(self, sensor: Sensor | str, value: int) -> None:
+        """Set Parameters."""
         pass

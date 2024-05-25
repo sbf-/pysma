@@ -484,7 +484,7 @@ class SMAwebconnect(Device):
     async def get_debug(self) -> Dict:
         return {}
 
-    async def detect(self, ip) -> List:
+    async def detect(self, ip: str) -> List:
         results = []
         for urls in ["https://" + ip, "http://" + ip]:
             self._url = urls

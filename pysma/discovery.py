@@ -11,14 +11,16 @@ _LOGGER = logging.getLogger(__name__)
 
 
 class Discovery:
-    def __init__(self, loop):
+    """Class for the detection of SMA Devices in the local network."""
+
+    def __init__(self, loop) -> None:
         self.loop = loop
         self.transport = None
         self.addr = "239.12.255.254"
         self.port = 9522
         self.discovered = []
 
-    def getDiscoverySocket(self):
+    def getDiscoverySocket(self) -> socket:
         addrinfo = socket.getaddrinfo(self.addr, None)[0]
         sock = socket.socket(addrinfo[0], socket.SOCK_DGRAM)
         sock.setsockopt(
@@ -27,6 +29,7 @@ class Discovery:
         return sock
 
     async def run(self):
+        """Start the Task"""
         sock = self.getDiscoverySocket()
         on_connection_lost = self.loop.create_future()
         connect = await self.loop.create_datagram_endpoint(
@@ -39,18 +42,20 @@ class Discovery:
         await asyncio.sleep(0.5)
         return self.discovered
 
-    def connection_made(self, transport):
+    def connection_made(self, transport) -> None:
         self.transport = transport
         self.sendDiscoveryRequest()
 
-    def sendDiscoveryRequest(self):
+    def sendDiscoveryRequest(self) -> None:
+        """Send a discovery Request"""
         _LOGGER.warn("Sending Discovery Request")
         self.transport.sendto(
             bytes.fromhex("534d4100000402a0ffffffff0000002000000000"),
             (self.addr, self.port),
         )
 
-    def datagram_received(self, data, addr):
+    def datagram_received(self, data: bytes, addr) -> None:
+        """Datagram received"""
         msg = speedwireHeader.from_packed(data[0:18])
         if not msg.isDiscoveryResponse():
             _LOGGER.warn("Ignoring %", msg)
@@ -58,8 +63,10 @@ class Discovery:
         if addr not in self.discovered:
             self.discovered.append(addr)
 
-    def error_received(self, exc):
+    def error_received(self, exc: Exception) -> None:
+        """Called by error."""
         _LOGGER.error("Error received:", exc)
 
-    def connection_lost(self, exc):
+    def connection_lost(self, exc: Exception) -> None:
+        """Called by connection lost."""
         print("Socket closed, stop the event loop")

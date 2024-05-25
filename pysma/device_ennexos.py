@@ -42,8 +42,8 @@ class SMAennexos(Device):
     _last_measurements_raw: Any = {}
     _last_device: Any = {}
     _last_notfound: list = []
-    _device_info: Dict = None
-    _jsessionid: str = None
+    _device_info: Dict | None = None
+    _jsessionid: str | None = None
     _options: Dict[str, Any] = {}
 
     def __init__(
@@ -372,7 +372,7 @@ class SMAennexos(Device):
             "notfound": self._last_notfound,
         }
 
-    async def detect(self, ip) -> list:
+    async def detect(self, ip: str) -> list[dict[str:any]]:
         """Tries to detect a ennexos-based Device on this ip-address."""
         rets = []
         for prefix in ["https", "http"]:

@@ -19,7 +19,8 @@ class Sensor_Range:
     values: list[int]
     editable: bool
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """String Function."""
         return f"{self.typ} {self.values} {self.editable}"
 
 
@@ -30,8 +31,8 @@ class Sensor:
     # pylint: disable=too-many-instance-attributes
     # pylint: disable=too-few-public-methods
     key: str = attr.ib()
-    name: str = attr.ib()
-    unit: str = attr.ib(default=None)
+    name: str | None = attr.ib()
+    unit: str | None = attr.ib(default=None)
     factor: int = attr.ib(default=None)
     path: Union[list, tuple] = attr.ib(default=None)
     enabled: bool = attr.ib(default=True)
@@ -145,7 +146,7 @@ class Sensors:
         """
         return len(self.__s)
 
-    def __contains__(self, key: Union[str, Sensor]) -> bool:
+    def __contains__(self, key: Union[str, Sensor] | str) -> bool:
         """Check if a sensor is defined.
 
         Args:
@@ -224,5 +225,6 @@ class Sensors:
 
         self.__s.append(sensor)
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return the dict as string."""
         return str(self.__s)

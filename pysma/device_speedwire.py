@@ -40,7 +40,7 @@ _LOGGER = logging.getLogger(__name__)
 class SMAClientProtocol(DatagramProtocol):
     """Basic Class for communication"""
 
-    _commandFuture: Future[Any] = None
+    _commandFuture: Future[Any] | None = None
 
     debug: Dict[str, Any] = {
         "msg": collections.deque(maxlen=len(commands) * 10),
@@ -52,7 +52,9 @@ class SMAClientProtocol(DatagramProtocol):
         "failedCounter": 0,
     }
 
-    def __init__(self, password, on_connection_lost, options: Dict[str, any]):
+    def __init__(
+        self, password: str, on_connection_lost: Future, options: Dict[str, any]
+    ):
         self._lastSend = None
         self._firstSend = None
         self.speedwire = SpeedwireFrame()
@@ -79,7 +81,7 @@ class SMAClientProtocol(DatagramProtocol):
         self.allCmds.remove("login")
         self.allCmds.remove("logoff")
 
-    def connection_made(self, transport):
+    def connection_made(self, transport) -> None:
         self.transport = transport
 
     async def controller(self):
@@ -138,7 +140,7 @@ class SMAClientProtocol(DatagramProtocol):
         asyncio.get_running_loop().create_task(self.controller())
         self.transport.sendto(cmd)
 
-    async def _send_next_command(self):
+    async def _send_next_command(self) -> None:
         """Send the next command in the list"""
         if not self.future:
             return
@@ -176,7 +178,7 @@ class SMAClientProtocol(DatagramProtocol):
                     )
                 )
 
-    def _getFormat(self, handler):
+    def _getFormat(self, handler: dict) -> tuple:
         """Return the necessary information for extracting the information"""
         converter = None
         format = handler.get("format", "")
@@ -192,9 +194,9 @@ class SMAClientProtocol(DatagramProtocol):
         size = struct.calcsize(format)
         return (format, size, converter)
 
-    def handle_login(self, msg):
-        """Is called if a login repsonse is received"""
-        _LOGGER.debug("Login repsonse received!")
+    def handle_login(self, msg: speedwireHeader6065) -> None:
+        """Is called if a login response is received"""
+        _LOGGER.debug("Login rppsonse received!")
         self.sensors = {}
         self.data_values = {"error": msg.error}
         if msg.error == 256:
@@ -205,7 +207,7 @@ class SMAClientProtocol(DatagramProtocol):
                 )
             )
 
-    def handle_newvalue(self, sensor: Sensor, value: Any, overwrite: bool):
+    def handle_newvalue(self, sensor: Sensor, value: Any, overwrite: bool) -> None:
         """Set the new value to the sensor"""
         if value is None:
             return
@@ -224,7 +226,7 @@ class SMAClientProtocol(DatagramProtocol):
         self.sensors[sen.key] = sen
         self.data_values[sen.key] = value
 
-    def extractvalues(self, handler: Dict, subdata):
+    def extractvalues(self, handler: Dict, subdata: bytes) -> list[any]:
         (formatdef, size, converter) = self._getFormat(handler)
         values = []
         for idx in range(8, len(subdata), size):
@@ -239,7 +241,7 @@ class SMAClientProtocol(DatagramProtocol):
             values.append(v)
         return values
 
-    def fixID(self, orig):
+    def fixID(self, orig: str) -> str:
         if orig in responseDef:
             return orig
         for code in responseDef.keys():
@@ -247,7 +249,7 @@ class SMAClientProtocol(DatagramProtocol):
                 return code
         return orig
 
-    def handle_register(self, subdata, register_idx: int):
+    def handle_register(self, subdata: bytes, register_idx: int) -> None:
         """Handle the payload with all the registers"""
         code = int.from_bytes(subdata[0:4], "little")
         # c = f"{(code & 0xFFFFFFFF):08X}"
@@ -279,7 +281,7 @@ class SMAClientProtocol(DatagramProtocol):
             v = None
             if handler["idx"] == 0xFF:
                 """For some responses, a list is returned and the correct value
-                wihtin this list is marked by the top 8 bits."""
+                within this list is marked by the top 8 bits."""
                 for origValue in values:
                     if origValue is not None and (origValue & 0xFF000000) > 0:
                         v = origValue & 0x00FFFFFF
@@ -308,7 +310,7 @@ class SMAClientProtocol(DatagramProtocol):
     # Unfortunately, there is no known method of determining the size of the registers
     # from the message. Therefore, the register size is determined from the number of
     # registers and the size of the payload.
-    def calc_register(self, data, msg: speedwireHeader6065):
+    def calc_register(self, data:bytes , msg: speedwireHeader6065) -> tuple:
         cnt_registers = msg.lastRegister - msg.firstRegister + 1
         size_datapayload = len(data) - 54 - 4
         size_registers = (
@@ -319,7 +321,7 @@ class SMAClientProtocol(DatagramProtocol):
         return (cnt_registers, size_registers)
 
     # Main routine for processing received messages.
-    def datagram_received(self, data, addr):
+    def datagram_received(self, data: bytes, addr) -> None:
         _LOGGER.debug(f"RECV: {addr} Len:{len(data)} {binascii.hexlify(data).upper()}")
         delta = 0
         if self._lastSend:
@@ -432,7 +434,7 @@ class SMAspeedwireINV(Device):
                         raise RuntimeError("Doppelter Sensorname " + sensor.key)
                     sensorname[name] = 1
 
-    async def _createEndpoint(self):
+    async def _createEndpoint(self) -> None:
         loop = asyncio.get_running_loop()
         on_connection_lost = loop.create_future()
         self._transport, self._protocol = await loop.create_datagram_endpoint(
@@ -442,7 +444,7 @@ class SMAspeedwireINV(Device):
             remote_addr=(self._host, 9522),
         )
 
-    async def new_session(self) -> bool:
+    async def new_session(self) -> None:
         # Create Endpoint
         await self._createEndpoint()
 
@@ -560,5 +562,5 @@ class SMAspeedwireINV(Device):
             ret[0]["exception"] = e
         return ret
 
-    def set_options(self, options: Dict[str, Any]):
+    def set_options(self, options: Dict[str, Any]) -> None:
         self._options = options

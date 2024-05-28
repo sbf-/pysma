@@ -4,6 +4,7 @@ see https://www.unifox.at/software/sma-em-daemon/
 see https://cdn.sma.de/fileadmin/content/www.developer.sma.de/docs/EMETER-Protokoll-TI-en-10.pdf
 
 """
+
 import asyncio
 import base64
 import copy
@@ -41,6 +42,8 @@ class SMAspeedwireEM(Device):
     def __init__(self) -> None:
         """init"""
         self.loop = asyncio.get_event_loop()
+        self._transport: asyncio.BaseTransport | None = None
+        self._protocol: SMAspeedwireEM | None = None
         self.transport: asyncio.BaseTransport | None = None
         self._data_received: asyncio.Future | None = None
         self.di = Debug_information_em()
@@ -61,8 +64,8 @@ class SMAspeedwireEM(Device):
         """Starts a new session"""
         sock = self._getDiscoverySocket()
         on_connection_lost = self.loop.create_future()
-        connect = await self.loop.create_datagram_endpoint(
-            lambda: self, # type: ignore[type-var]
+        self._transport, self._protocol = await self.loop.create_datagram_endpoint(
+            lambda: self,  # type: ignore[type-var]
             sock=sock,
         )
         data = None
@@ -128,6 +131,8 @@ class SMAspeedwireEM(Device):
 
     async def close_session(self) -> None:
         """Closes the session"""
+        if self._transport:
+            self._transport.close()
         self._sock.close()
 
     async def detect(self, ip: str) -> List[DiscoveryInformation]:
@@ -234,7 +239,7 @@ class SMAspeedwireEM(Device):
         data: dict[str, Any] = {}
         data["protocolID"] = sw.protokoll
         data["susyid"] = sw6069.src_susyid
-        data["device"]  = SMATagList.get(data["susyid"], "unknown")
+        data["device"] = SMATagList.get(data["susyid"], "unknown")
         data["serial"] = sw6069.src_serial
         data["ip"] = addr[0] + ":" + str(addr[1])
         length = sw.smanet2_length + 16

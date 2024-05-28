@@ -14,7 +14,7 @@ class Discovery:
     """Class for the detection of SMA Devices in the local network."""
 
     def __init__(self, loop: asyncio.AbstractEventLoop) -> None:
-        """ init """
+        """init"""
         self.loop = loop
         self.transport: asyncio.BaseTransport
         self.addr = "239.12.255.254"
@@ -34,7 +34,7 @@ class Discovery:
         sock = self.getDiscoverySocket()
         on_connection_lost = self.loop.create_future()
         connect = await self.loop.create_datagram_endpoint(
-            lambda: self, # type: ignore[type-var]
+            lambda: self,  # type: ignore[type-var]
             sock=sock,
         )
         for i in range(0, 3):
@@ -50,7 +50,7 @@ class Discovery:
     def sendDiscoveryRequest(self) -> None:
         """Send a discovery Request"""
         _LOGGER.warn("Sending Discovery Request")
-        self.transport.sendto( # type: ignore[attr-defined]
+        self.transport.sendto(  # type: ignore[attr-defined]
             bytes.fromhex("534d4100000402a0ffffffff0000002000000000"),
             (self.addr, self.port),
         )

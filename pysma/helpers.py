@@ -14,6 +14,7 @@ class BetterJSONEncoder(json.JSONEncoder):
             return dataclasses.asdict(o)
         return str(o)
 
+
 def version_int_to_string(version_integer: int) -> str:
     """Convert a version integer to a readable string.
 

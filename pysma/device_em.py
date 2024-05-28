@@ -190,7 +190,7 @@ class SMAspeedwireEM(Device):
     def set_options(self, options: Dict[str, Any]) -> None:
         """Set options"""
 
-    def set_parameter(self, sensor: Sensor | str, value: int) -> None:
+    async def set_parameter(self, sensor: Sensor, value: int) -> None:
         """Set Parameters."""
 
     def _getDiscoverySocket(self) -> socket.socket:

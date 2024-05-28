@@ -3,12 +3,14 @@ abstract base class on which all device implementations are based
 """
 
 from abc import ABC, abstractmethod
-from typing import Any, Dict, List
 from dataclasses import dataclass
+from typing import Any, Dict, List
+
 from .sensor import Sensor, Sensors
 
+
 @dataclass
-class DiscoveryInformation():
+class DiscoveryInformation:
     tested_endpoints: str = ""
     status: str = ""
     access: str = ""
@@ -42,7 +44,7 @@ class Device(ABC):
 
     @abstractmethod
     async def detect(self, ip: str) -> List[DiscoveryInformation]:
-        """ Try to detect SMA devices """
+        """Try to detect SMA devices"""
 
     @abstractmethod
     async def get_debug(self) -> Dict[str, Any]:
@@ -52,6 +54,6 @@ class Device(ABC):
         """Set options"""
         pass
 
-    def set_parameter(self, sensor: Sensor | str, value: int) -> None:
+    async def set_parameter(self, sensor: Sensor, value: int) -> None:
         """Set Parameters."""
         pass

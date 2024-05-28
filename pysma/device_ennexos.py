@@ -22,7 +22,7 @@ from .exceptions import (
     SmaConnectionException,
     SmaReadException,
 )
-from .sensor import Sensor_Range, Sensors
+from .sensor import Sensor, Sensor_Range, Sensors
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -45,6 +45,7 @@ class SMAennexos(Device):
     _device_info: Dict[str, Any] | None = None
     _jsessionid: str | None = None
     _options: Dict[str, Any] = {}
+    _readings: Dict[str, Dict[str, Any]] = {}
 
     def __init__(
         self,
@@ -140,7 +141,7 @@ class SMAennexos(Device):
         _LOGGER.debug("Login successful")
         return True
 
-    async def _get_parameter(self) -> Dict:
+    async def _get_parameter(self) -> Dict[str, Dict[str, Any]]:
         """Get all parameters from the device.
 
         Returns:
@@ -164,7 +165,7 @@ class SMAennexos(Device):
             dname = d["channelId"].replace("Parameter.", "").replace("[]", "")
             if "value" in d:
                 v = d["value"]
-                sensor_range = None
+                sensor_range = Sensor_Range("", [], d["editable"])
                 if "min" in d and "max" in d:
                     sensor_range = Sensor_Range(
                         "min/max", [d["min"], d["max"]], d["editable"]
@@ -196,7 +197,12 @@ class SMAennexos(Device):
                 pass
         return data
 
-    async def _get_livedata(self) -> Any:
+    async def _get_all_readings(self) -> Dict[str, Dict[str, Any]]:
+        self._readings = await self._get_livedata()
+        self._readings.update(await self._get_parameter())
+        return self._readings
+
+    async def _get_livedata(self) -> Dict[str, Dict[str, Any]]:
         """Get the sensors reading from the device.
 
         Returns:
@@ -212,7 +218,7 @@ class SMAennexos(Device):
         self._last_measurements_raw = ret
         return await self._prepare_livedata(ret)
 
-    async def _prepare_livedata(self, ret: Any) -> Dict[str, Any]:
+    async def _prepare_livedata(self, ret: Any) -> Dict[str, Dict[str, Any]]:
         """Convert the raw data from the inverter to a dict"""
         self._last_measurements = ret
         data: Dict[str, Any] = {}
@@ -249,7 +255,7 @@ class SMAennexos(Device):
         if not self._device_info:
             raise SmaReadException("device_info() not called!")
 
-        ret = await self._get_livedata() | await self._get_parameter()
+        ret = await self._get_all_readings()
         _LOGGER.debug("Found Sensors: %s", ret)
         profile = await self._get_sensor_profile()
         return profile
@@ -315,12 +321,12 @@ class SMAennexos(Device):
         notfound = []
         data = None
         try:
-            data = await self._get_livedata() | await self._get_parameter()
+            data = await self._get_all_readings()
         except SmaAuthenticationException:
             # Relogin
             _LOGGER.debug("Re-login .. Starting new Session")
             await self.new_session()
-            data = await self._get_livedata() | await self._get_parameter()
+            data = await self._get_all_readings()
         for sen in sensors:
             if sen.enabled:
                 if sen.key in data:
@@ -412,32 +418,15 @@ class SMAennexos(Device):
             f"{datetime.now(tz=UTC).isoformat(timespec='milliseconds').split('+')[0]}Z"
         )
 
-    # async def handleModulActions(self):
-    #     if self._options.get("CMD", "") != "SET":
-    #         return
-    #     channelName = self._options.get("NAME", "")
-    #     sensors = await self.get_sensors()
-    #     for sensor in sensors:
-    #         sensor.enabled = True
-    #     await self.read(sensors)
-    #     for sensor in sensors:
-    #         if (sensor.name == channelName):
-    #             found = sensor
-    #     if not found:
-    #         _LOGGER.error("Sensor {} not found!".format(channelName))
-    #         return
-
-    #     sensorData = await self._get_parameter()
-    #     sensorData = sensorData[found.key]
-    #     timestamp = await self.getTimestamp()
-    #     value = self._options.get("VALUE","")
-    #     channelName = sensorData["origname"]
-    #     url = self._url + "/api/v1/parameters/IGULD:SELF"
-    #     requestData = f'{{"values":[{{"channelId":"{channelName}","timestamp":"{timestamp}","value":"{value}"}}]}}'
-    #     putdata = {
-    #         "data": requestData,
-    #         "headers": self._authorization_header,
-    #     }
-    #     print(putdata)
-    #     dev = await self._jsonrequest(url, putdata, hdrs.METH_PUT)
-    #     print(dev)
+    async def set_parameter(self, sensor: Sensor, value: int) -> None:
+        """SetParameters."""
+        timestamp = await self._get_timestamp()
+        channelName = self._readings[sensor.key]["origname"]
+        requestData = f'{{"values":[{{"channelId":"{channelName}","timestamp":"{timestamp}","value":"{value}"}}]}}'
+        putdata = {
+            "data": requestData,
+            "headers": self._authorization_header,
+        }
+        url = self._url + "/api/v1/parameters/IGULD:SELF"
+        dev = await self._jsonrequest(url, putdata, hdrs.METH_PUT)
+        print(dev)

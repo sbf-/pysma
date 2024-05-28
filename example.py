@@ -6,8 +6,10 @@ import json
 import logging
 import signal
 import sys
+from typing import cast
 
 import aiohttp
+
 import pysmaplus as pysma
 from pysmaplus.helpers import BetterJSONEncoder
 from pysmaplus.sensor import Sensors
@@ -42,6 +44,7 @@ def print_table(sensors: Sensors) -> None:
 
 
 async def discovery(savedebug: bool, doIdentification: bool) -> None:
+    # Run Discovery Request
     debug = {"cmd": "discovery", "addr": [], "id": {}}
     ret = await pysma.discovery()
     if len(ret) == 0:
@@ -49,6 +52,8 @@ async def discovery(savedebug: bool, doIdentification: bool) -> None:
     for r in ret:
         print(f"{r[0]}:{r[1]}")
     debug["addr"] = ret
+
+    # Check every host found
     if doIdentification and len(r) > 0:
         print("\nTrying to identify... (can take up to 30 seconds pre device)\n")
         for r in ret:
@@ -82,22 +87,25 @@ async def identify(url: str, savedebug: bool) -> list:
         return ret
 
 
-async def main_loop(
-    user: str,
-    password: str,
-    url: str,
-    accessmethod: str,
-    delay: float,
-    cnt: int,
-    savedebug: bool,
-    isVerbose: bool,
-    ignoretimeouts: bool,
-    options: dict,
-) -> None:
+async def main_loop(args: argparse.Namespace) -> None:
     """Run main loop."""
     async with aiohttp.ClientSession(
         connector=aiohttp.TCPConnector(ssl=False)
     ) as session:
+        user = args.user
+        password = args.password
+        url = args.url
+        accessmethod = args.accessmethod
+        delay = args.delay
+        cnt = args.count
+        savedebug = args.save
+        isVerbose = args.verbose
+        ignoretimeouts = (args.ignoretimeouts,)
+        options = (
+            dict(map(lambda s: s.split("="), args.options)) if args.options else {}
+        )
+        setvalue = dict(map(lambda s: s.split("="), args.set)) if args.set else {}
+
         _LOGGER.debug(
             f"MainLoop called! Url: {url} User/Group: {user} Accessmethod: {accessmethod}"
         )
@@ -122,6 +130,15 @@ async def main_loop(
             print(
                 "====================================================================================="
             )
+
+            # Set Parameters if requested
+            for pname, pvalue in setvalue.items():
+                psensor = [
+                    sen for sen in sensors if sen.name == pname or sen.key == pname
+                ]
+                if len(psensor) != 1:
+                    raise ValueError("Sensor not found %s %s", pname, psensor)
+                await VAR["sma"].set_parameter(psensor[0], int(pvalue))
 
             # enable all sensors
             for sensor in sensors:
@@ -195,13 +212,6 @@ async def main() -> None:
     parser.add_argument(
         "--ignoretimeouts", action="store_true", help="Continue in case of timeouts"
     )
-    parser.add_argument(
-        "-o",
-        "--options",
-        metavar="KEY=VALUE",
-        nargs="+",
-        help="Set module specific options",
-    )
 
     subparsers = parser.add_subparsers(help="Supported devices", required=True)
 
@@ -247,15 +257,27 @@ async def main() -> None:
         action="store_true",
         help="Run identify on found IP-addresses",
     )
-
+    for p in [parser_a, parser_b, parser_c]:
+        p.add_argument(
+            "--set",
+            metavar="KEY=VALUE",
+            nargs="+",
+            help="Set Parameters",
+        )
+        p.add_argument(
+            "-o",
+            "--options",
+            metavar="KEY=VALUE",
+            nargs="+",
+            help="Set module specific options",
+        )
     args = parser.parse_args(args=None if sys.argv[1:] else ["--help"])
-    options = dict(map(lambda s: s.split("="), args.options)) if args.options else {}
 
     if args.verbose:
         logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
     if args.accessmethod == "identify":
-        print("Engery Meters are not identified using this method.\n")
+        print("Energy Meters are not identified using this method.\n")
         print("Identification can take up to 30 seconds...\n")
         if not args.verbose:
             logging.basicConfig(stream=sys.stdout, level=logging.FATAL)
@@ -273,18 +295,7 @@ async def main() -> None:
             VAR["running"] = False
 
         signal.signal(signal.SIGINT, _shutdown)
-        await main_loop(
-            user=args.user,
-            password=args.password,
-            url=args.url,
-            accessmethod=args.accessmethod,
-            delay=args.delay,
-            cnt=args.count,
-            savedebug=args.save,
-            isVerbose=args.verbose,
-            ignoretimeouts=args.ignoretimeouts,
-            options=options,
-        )
+        await main_loop(args)
 
 
 if __name__ == "__main__":

@@ -106,7 +106,7 @@ class SMAClientProtocol(DatagramProtocol):
         await self._send_next_command()
 
     def _confirm_repsonse(self, code: int = -1):
-        """ Mark the commandFuture as done """
+        """Mark the commandFuture as done"""
         if self._commandFuture is None or self._commandFuture.done():
             _LOGGER.debug(f"unexpected message {code:08X}")
             return
@@ -135,12 +135,12 @@ class SMAClientProtocol(DatagramProtocol):
     def _send_command(self, cmd: bytes) -> None:
         """Send the Command"""
         _LOGGER.debug(
-            f"Sending command [{len(cmd)}] -- {binascii.hexlify(cmd).upper()}" # type: ignore[str-bytes-safe]
-        )  
+            f"Sending command [{len(cmd)}] -- {binascii.hexlify(cmd).upper()}"  # type: ignore[str-bytes-safe]
+        )
         self._commandFuture = asyncio.get_running_loop().create_future()
         asyncio.get_running_loop().create_task(self.controller())
         if self._transport is None:
-            raise RuntimeError("Transport is None") 
+            raise RuntimeError("Transport is None")
         self._transport.sendto(cmd)
 
     async def _send_next_command(self) -> None:
@@ -170,14 +170,14 @@ class SMAClientProtocol(DatagramProtocol):
             _LOGGER.debug("Sending " + self.cmds[self.cmdidx])
             self._lastSend = time.time()
             if (self.cmds[self.cmdidx]) == "login":
-                groupidx = ["user", "installer"].index(self._group)
+                groupidx = ["user", "installer"].index(self._group) == 1
                 self._send_command(
-                    self.speedwire.getLoginFrame(self.password, 0, groupidx)
+                    self.speedwire.getLoginFrame(self.password, "0", groupidx)
                 )
             else:
                 self._send_command(
                     self.speedwire.getQueryFrame(
-                        self.password, 0, self.cmds[self.cmdidx]
+                        self.password, "0", self.cmds[self.cmdidx]
                     )
                 )
 
@@ -326,7 +326,7 @@ class SMAClientProtocol(DatagramProtocol):
 
     # Main routine for processing received messages.
     def datagram_received(self, data: bytes, addr: tuple[str, int]) -> None:
-        _LOGGER.debug(f"RECV: {addr} Len:{len(data)} {binascii.hexlify(data).upper()}") # type: ignore[str-bytes-safe]
+        _LOGGER.debug(f"RECV: {addr} Len:{len(data)} {binascii.hexlify(data).upper()}")  # type: ignore[str-bytes-safe]
         delta = 0.0
         if self._lastSend > 0:
             delta = time.time() - self._lastSend
@@ -406,7 +406,8 @@ class SMAspeedwireINV(Device):
         self._transport, self._protocol = await loop.create_datagram_endpoint(
             lambda: SMAClientProtocol(
                 self._password,  # type: ignore[arg-type]
-                on_connection_lost, self._options
+                on_connection_lost,
+                self._options,
             ),
             remote_addr=(self._host, 9522),
         )
@@ -479,7 +480,9 @@ class SMAspeedwireINV(Device):
             self._debug["overalltimeout"] += 1
             raise e
 
-    def _update_sensors(self, sensors: Sensors, sensorReadings: dict[str, Sensor]) -> None:
+    def _update_sensors(
+        self, sensors: Sensors, sensorReadings: dict[str, Sensor]
+    ) -> None:
         """Update a sensor with the sensor reading"""
         _LOGGER.debug("Received %d sensor readings", len(sensorReadings))
         for sen in sensors:
@@ -490,7 +493,7 @@ class SMAspeedwireINV(Device):
                 sen.value = value
 
     async def close_session(self) -> None:
-        if self._transport is not None: 
+        if self._transport is not None:
             self._transport.close()
 
     async def get_debug(self) -> Dict:
@@ -518,9 +521,7 @@ class SMAspeedwireINV(Device):
                 "error" in self._protocol.data_values
                 and self._protocol.data_values["error"] == 0
             ):
-                raise SmaReadException(
-                    "Reply for request not received"
-                )
+                raise SmaReadException("Reply for request not received")
             raise SmaConnectionException("No connection to device")
         except SmaAuthenticationException as e:
             di.status = "maybe"

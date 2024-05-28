@@ -9,6 +9,7 @@ import asyncio
 import copy
 import json
 import logging
+from dataclasses import asdict, dataclass, field
 from typing import Any, Dict, List, Optional
 
 import jmespath  # type: ignore
@@ -43,6 +44,15 @@ from .helpers import version_int_to_string
 from .sensor import Sensors
 
 _LOGGER = logging.getLogger(__name__)
+
+
+@dataclass
+class Debug_information_webconnect:
+    """Struct to store debug Information"""
+
+    full_json: dict | None = None
+    last_json: dict | None = None
+    device_info: dict | None = None
 
 
 class SMAwebconnect(Device):
@@ -99,6 +109,7 @@ class SMAwebconnect(Device):
         self._lang = lang
         self._l10n = None
         self._devclass = None
+        self._debug = Debug_information_webconnect()
         self._device_info_sensors = Sensors(
             definitions_webconnect.sensor_map[DEVICE_INFO]
         )
@@ -308,12 +319,14 @@ class SMAwebconnect(Device):
         if self._new_session_data is None:
             payload: Dict[str, Any] = {"destDev": [], "keys": []}
             result_body = await self._read_body(URL_DASH_VALUES, payload)
+            self._debug.full_json = result_body
         else:
             payload = {
                 "destDev": [],
                 "keys": list({s.key for s in sensors if s.enabled}),
             }
             result_body = await self._read_body(URL_VALUES, payload)
+            self._debug.last_json = result_body
 
         notfound = []
         l10n = await self._read_l10n()
@@ -395,6 +408,7 @@ class SMAwebconnect(Device):
                 self._device_info_sensors["device_sw_version"].value
             ),
         }
+        self._debug.device_info = device_info
 
         return device_info
 
@@ -482,7 +496,10 @@ class SMAwebconnect(Device):
         return device_sensors
 
     async def get_debug(self) -> Dict:
-        return {}
+        debug = asdict(self._debug)
+        debug["device_info_sensors"] = self._device_info_sensors
+        debug["url"] = self._url
+        return debug
 
     async def detect(self, ip: str) -> list[DiscoveryInformation]:
         results = []
@@ -502,6 +519,6 @@ class SMAwebconnect(Device):
                     di.exception = e
             except Exception as e:  # pylint: disable=broad-exception-caught
                 di.status = "failed"
-                di.exception =  e
+                di.exception = e
             results.append(di)
         return results

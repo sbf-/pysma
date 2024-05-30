@@ -50,6 +50,7 @@ def getDevice(
         return SMAspeedwireEM()
     if accessmethod == "speedwireinv":
         return SMAspeedwireINV(host=url, password=password, group=groupuser)
+    _LOGGER.error("Unknown Accessmethod: %s", accessmethod)
     return None
 
 

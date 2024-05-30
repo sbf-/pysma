@@ -3,7 +3,7 @@ If there are initial connection problems, the following steps can be carried out
 If a Python environment is available, the library can be downloaded and the network can be searched for SMA devices.
 
 ```
-git clone -b tripowerX https://github.com/littleyoda/pysma/
+git clone https://github.com/littleyoda/pysma/
 cd pysma
 ln -s pysma/ pysmaplus
 python -m venv venv
@@ -44,7 +44,7 @@ The output shows that the device 192.0.2.81 can be accessed using the method enn
 The device 192.0.2.80 was not recognized. It may be an energy meter or the sunny home manager 2 (shm2).
 
 
-If the devices were not found automatically with the discovery command, individual IP addresses can be scaned with the identifiy command:
+If the devices were not found automatically with the discovery command, individual IP addresses can be scanned with the identifiy command:
 ```python3 example.py identify 192.0.2.55```
 
 Once it has been clarified which method can be used to retrieve the measured values, the following commands could be used to display the measured values.

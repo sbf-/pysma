@@ -4,6 +4,7 @@ Originally based on https://github.com/Wired-Square/sma-query/blob/main/src/sma_
 Improved with Information from https://github.com/mhop/fhem-mirror/blob/master/fhem/FHEM/76_SMAInverter.pm
 Receiver classes completely reimplemented by little.yoda
 """
+
 # pylint: disable=too-many-lines
 
 import ctypes
@@ -950,7 +951,7 @@ class speedwireHeader:
     protokoll: dcs.U16
 
     def check6065(self) -> bool:
-        """Check for 6065 Type.  Size is not checked at this stage."""
+        """Check for 6065 Type, used by inverters. Size is not checked at this stage."""
         return (
             self.sma == b"SMA\x00"
             and self.tag42_length == 4
@@ -961,7 +962,7 @@ class speedwireHeader:
         )
 
     def check6069(self) -> bool:
-        """Check for 6069 Type.  Size is not checked at this stage."""
+        """Check for 6069 Type, used by energymeters.  Size is not checked at this stage."""
         return (
             self.sma == b"SMA\x00"
             and self.tag42_length == 4
@@ -1172,7 +1173,7 @@ class SpeedwireFrame:
 
     #     return bytes(frame_header) + bytes(frame_data_header) + bytes(frame_data)
 
-    def getLoginFrame(self, password: str, serial: str, installer: bool) -> bytes:
+    def getLoginFrame(self, password: str, serial: int, installer: bool) -> bytes:
         # pylint: disable=too-few-public-methods
         """Returns a Login Frame"""
         frame_header = self.getFrameHeader()
@@ -1208,7 +1209,7 @@ class SpeedwireFrame:
 
         return bytes(frame_header) + bytes(frame_data_header) + bytes(frame_data)
 
-    def getQueryFrame(self, password: str, serial: str, command_name: str) -> bytes:
+    def getQueryFrame(self, password: str, serial: int, command_name: str) -> bytes:
         """Return Query Frame"""
         frame_header = self.getFrameHeader()
         frame_data_header = self.getDataHeader(password, serial)
@@ -1253,7 +1254,7 @@ class SpeedwireFrame:
 
         return newFrameHeader
 
-    def getDataHeader(self, password: str, serial: str) -> DataHeader:
+    def getDataHeader(self, password: str, serial: int) -> DataHeader:
         """Return Data Header"""
         newDataHeader = self.DataHeader()
 

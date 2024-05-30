@@ -1,5 +1,6 @@
 """Definition for Speedwire-Energy Meter
 """
+
 from .const import Identifier
 from .sensor import Sensor
 

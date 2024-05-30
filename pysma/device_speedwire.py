@@ -172,12 +172,12 @@ class SMAClientProtocol(DatagramProtocol):
             if (self.cmds[self.cmdidx]) == "login":
                 groupidx = ["user", "installer"].index(self._group) == 1
                 self._send_command(
-                    self.speedwire.getLoginFrame(self.password, "0", groupidx)
+                    self.speedwire.getLoginFrame(self.password, 0, groupidx)
                 )
             else:
                 self._send_command(
                     self.speedwire.getQueryFrame(
-                        self.password, "0", self.cmds[self.cmdidx]
+                        self.password, 0, self.cmds[self.cmdidx]
                     )
                 )
 

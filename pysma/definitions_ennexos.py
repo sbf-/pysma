@@ -75,7 +75,7 @@ ennexosSensorProfiles = {
         Sensor("GridMs.W.phsA", Identifier.power_l1, factor=1, unit="W"),
         Sensor("GridMs.W.phsB", Identifier.power_l2, factor=1, unit="W"),
         Sensor("GridMs.W.phsC", Identifier.power_l3, factor=1, unit="W"),
-        Sensor("InOut.GI1", None, factor=1, unit=None),  # Digital group input
+        Sensor("InOut.GI1", None, factor=1, unit=None),  # codespell:ignore
         Sensor("Inverter.VArModCfg.PFCtlVolCfg.Stt", None, factor=1, unit=None),
         Sensor(
             "Isolation.FltA",
@@ -153,7 +153,12 @@ ennexosSensorProfiles = {
         Sensor(
             "Wl.SoftAcsConnStt", None, factor=1, unit=None
         ),  # Soft Access Point status
-        Sensor("Setpoint.PlantControl.InOut.GO1", None, factor=1, unit=None),
+        Sensor(
+            "Setpoint.PlantControl.InOut.GO1",  # codespell:ignore
+            None,
+            factor=1,
+            unit=None,
+        ),
         Sensor("Inverter.WMax", Identifier.inverter_power_limit, factor=1, unit="W"),
     ],
     "^(SMA EV Charger |EVC22-3AC-10)": [
@@ -175,7 +180,7 @@ ennexosSensorProfiles = {
         Sensor("GridMs.TotPF", None, factor=1, unit=None),
         Sensor("GridMs.TotVA", Identifier.grid_apparent_power, factor=1, unit="VA"),
         Sensor("GridMs.TotVAr", Identifier.grid_reactive_power, factor=1, unit="var"),
-        Sensor("InOut.GI1", None, factor=1, unit=None),
+        Sensor("InOut.GI1", None, factor=1, unit=None),  # codespell:ignore
         Sensor(
             "Metering.GridMs.TotWIn",
             Identifier.metering_power_absorbed,
@@ -263,7 +268,7 @@ ennexosSensorProfiles = {
             "GridMs.VAr.phsA", Identifier.grid_reactive_power_l1, factor=1, unit="var"
         ),
         Sensor("GridMs.W.phsA", Identifier.power_l1, factor=1, unit="W"),
-        Sensor("InOut.GI1", None, factor=1, unit=None),
+        Sensor("InOut.GI1", None, factor=1, unit=None),  # codespell:ignore
         Sensor("Inverter.VArModCfg.PFCtlVolCfg.Stt", None, factor=1, unit=None),
         Sensor(
             "Isolation.FltA",
@@ -337,7 +342,12 @@ ennexosSensorProfiles = {
             "PvGen.PvWh", None, factor=1, unit=None
         ),  # Meter count and PV gen. meter
         Sensor("PvGen.PvW", None, factor=1, unit=None),  #  PV generation power
-        Sensor("Setpoint.PlantControl.InOut.GO1", None, factor=1, unit=None),
+        Sensor(
+            "Setpoint.PlantControl.InOut.GO1",  # codespell:ignore
+            None,
+            factor=1,
+            unit=None,
+        ),
         Sensor(
             "Spdwr.ComSocA.Stt", None, factor=1, unit=None
         ),  # Speedwire connection status of SMACOM A
@@ -377,8 +387,8 @@ ennexosSensorProfiles = {
         Sensor("GridMs.TotPFEEI", None, factor=1, unit=None),
         Sensor("GridMs.TotPFExt", None, factor=1, unit=None),
         Sensor("GridMs.TotPFPrc", None, factor=1, unit=None),
-        Sensor("InOut.GI1", None, factor=1, unit=None),
-        Sensor("InOut.GO1", None, factor=1, unit=None),
+        Sensor("InOut.GI1", None, factor=1, unit=None),  # codespell:ignore
+        Sensor("InOut.GO1", None, factor=1, unit=None),  # codespell:ignore
         Sensor("Inverter.VArModCfg.PFCtlVolCfg.Stt", None, factor=1, unit=None),
         Sensor("Isolation.LeakRis", None, factor=1, unit=None),
         Sensor("Metering.GridMs.TotWhIn.Bat", None, factor=1, unit=None),
@@ -420,5 +430,47 @@ ennexosSensorProfiles = {
         Sensor("Setpoint.PlantControl.CmpBMS.OpMod.1", None, factor=1, unit=None),
         Sensor("Metering.GridMs.TotWhIn.Bat", None, factor=1, unit=None),
         Sensor("Metering.GridMs.TotWhOut.Bat", None, factor=1, unit=None),
+    ],
+    "EDMM-10": [
+        Sensor(
+            "Operation.Health",
+            Identifier.status,
+            factor=1,
+            unit=None,
+            mapper=SMATagList,
+        ),
+        Sensor("DevUpd.IsOn", None, factor=1, unit=None),
+        Sensor("FTPPush.IsOn", None, factor=1, unit=None),
+        Sensor("FTPPush.Login", None, factor=1, unit=None),
+        Sensor("FTPPush.Port", None, factor=1, unit=None),
+        Sensor("FTPPush.Pwd", None, factor=1, unit=None),
+        Sensor("FTPPush.RemStoLcn", None, factor=1, unit=None),
+        Sensor("FTPPush.Srv", None, factor=1, unit=None),
+        Sensor("FTPPush.UpldCyc", None, factor=1, unit=None),
+        Sensor("InOut.GI1", None, factor=1, unit=None),  # codespell:ignore
+        Sensor("Nameplate.CmpMain.HwRev", None, factor=1, unit=None),
+        Sensor("Nameplate.CmpMain.Rev", None, factor=1, unit=None),
+        Sensor("Nameplate.CmpOS.SwRev", None, factor=1, unit=None),
+        Sensor("Nameplate.Location", None, factor=1, unit=None),
+        Sensor("Nameplate.MainModel", None, factor=1, unit=None),
+        Sensor("Nameplate.Model", None, factor=1, unit=None),
+        Sensor("Nameplate.ModelStr", None, factor=1, unit=None),
+        Sensor("Nameplate.PkgRev", None, factor=1, unit=None),
+        Sensor("Nameplate.SerNum", None, factor=1, unit=None),
+        Sensor("Nameplate.Vendor", None, factor=1, unit=None),
+        Sensor("Portal.EnnexOS.ConnStt", None, factor=1, unit=None),
+        Sensor("Spdwr.ActlDnsSrvIp", None, factor=1, unit=None),
+        Sensor("Spdwr.ActlGwIp", None, factor=1, unit=None),
+        Sensor("Spdwr.ActlIp", None, factor=1, unit=None),
+        Sensor("Spdwr.ActlSnetMsk", None, factor=1, unit=None),
+        Sensor("Spdwr.AutoCfgIsOn", None, factor=1, unit=None),
+        Sensor("Spdwr.IgmpQryTms", None, factor=1, unit=None),
+        Sensor("Spdwr.IgmpQryTx", None, factor=1, unit=None),
+        Sensor("SwCmp.CmpEnnexOS.Frwk.SwRev", None, factor=1, unit=None),
+        Sensor("Sys.DevRstr", None, factor=1, unit=None),
+        Sensor("Upd.AutoUpdIsOn", None, factor=1, unit=None),
+        Sensor("WebConn.IsOn", None, factor=1, unit=None),
+        Sensor("WebConn.Stt", None, factor=1, unit=None),
+        Sensor("WebConn.SwRev", None, factor=1, unit=None),
     ],
 }

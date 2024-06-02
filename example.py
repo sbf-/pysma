@@ -185,6 +185,7 @@ async def main_loop(args: argparse.Namespace) -> None:
             _LOGGER.info("Closing Session...")
             debug = await VAR["sma"].get_debug()
             debug["cmd"] = accessmethod
+            debug["version"] = getVersion()
             if isVerbose:
                 print(toJson(debug))
             if savedebug:

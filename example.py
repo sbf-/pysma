@@ -4,6 +4,7 @@ import argparse
 import asyncio
 import json
 import logging
+import queue
 import signal
 import sys
 from typing import Any
@@ -11,7 +12,7 @@ from typing import Any
 import aiohttp
 
 import pysmaplus as pysma
-from pysmaplus.helpers import BetterJSONEncoder
+from pysmaplus.helpers import toJson
 from pysmaplus.sensor import Sensors
 
 # This example will work with Python 3.9+
@@ -19,6 +20,18 @@ from pysmaplus.sensor import Sensors
 _LOGGER = logging.getLogger(__name__)
 
 VAR: dict[str, Any] = {}
+log_queue: queue.Queue = queue.Queue()
+
+
+class QueuingHandler(logging.Handler):
+    def __init__(self, *args, message_queue, **kwargs):
+        """Initialize by copying the queue and sending everything else to superclass."""
+        logging.Handler.__init__(self, *args, **kwargs)
+        self.message_queue = message_queue
+
+    def emit(self, record):
+        """Add the formatted log message (sans newlines) to the queue."""
+        self.message_queue.put(self.format(record).rstrip("\n"))
 
 
 def print_table(sensors: Sensors) -> None:
@@ -64,7 +77,7 @@ async def discovery(savedebug: bool, doIdentification: bool) -> None:
 
     if savedebug:
         f = open("example.log", "w")
-        f.write(json.dumps(debug, cls=BetterJSONEncoder, indent=4))
+        f.write(toJson(debug))
 
 
 async def identify(url: str, savedebug: bool) -> list:
@@ -83,7 +96,7 @@ async def identify(url: str, savedebug: bool) -> list:
             )
         if savedebug:
             f = open("example.log", "w")
-            f.write(json.dumps(ret, cls=BetterJSONEncoder, indent=4))
+            f.write(toJson(ret))
         return ret
 
 
@@ -115,10 +128,10 @@ async def main_loop(args: argparse.Namespace) -> None:
         try:
             await VAR["sma"].new_session()
         except pysma.exceptions.SmaAuthenticationException:
-            _LOGGER.warning("Authentication failed!")
+            _LOGGER.error("Authentication failed!")
             return
         except pysma.exceptions.SmaConnectionException as e:
-            _LOGGER.warning("Unable to connect to device at %s", url)
+            _LOGGER.error("Unable to connect to device at %s", url)
             return
         # We should not get any exceptions, but if we do we will close the session.
         try:
@@ -172,12 +185,12 @@ async def main_loop(args: argparse.Namespace) -> None:
             _LOGGER.info("Closing Session...")
             debug = await VAR["sma"].get_debug()
             debug["cmd"] = accessmethod
-            dump = json.dumps(debug, indent=4, cls=BetterJSONEncoder)
             if isVerbose:
-                print(dump)
+                print(toJson(debug))
             if savedebug:
+                debug["log"] = list(log_queue.queue)
                 f = open("example.log", "w")
-                f.write(dump)
+                f.write(toJson(debug))
             await VAR["sma"].close_session()
 
 
@@ -190,6 +203,26 @@ def getVersion() -> str:
     except PackageNotFoundError:
         pass
     return versionstring
+
+
+def setupLogging(verbose: bool):
+
+    #    LOG_FORMAT = '%(asctime)s: %(levelname)8s: %(name)20s:  %(message)s'
+    LOG_FORMAT = "%(levelname)8s: %(name)30s:  %(message)s"
+
+    logger = logging.getLogger()
+    logger.setLevel(logging.DEBUG)
+
+    handler = QueuingHandler(message_queue=log_queue, level=logging.DEBUG)
+    formatter = logging.Formatter(LOG_FORMAT)
+    formatter.default_time_format = "%H:%M:%S"
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+
+    stream_handler = logging.StreamHandler()
+    stream_handler.setLevel(logging.DEBUG if verbose else logging.ERROR)
+    stream_handler.setFormatter(formatter)
+    logger.addHandler(stream_handler)
 
 
 async def main() -> None:
@@ -282,20 +315,15 @@ async def main() -> None:
         )
     args = parser.parse_args(args=None if sys.argv[1:] else ["--help"])
 
-    if args.verbose:
-        logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
+    setupLogging(args.verbose)
 
     if args.accessmethod == "identify":
         print("Energy Meters are not identified using this method.\n")
         print("Identification can take up to 30 seconds...\n")
-        if not args.verbose:
-            logging.basicConfig(stream=sys.stdout, level=logging.FATAL)
         await identify(args.url, args.save)
 
     elif args.accessmethod == "discovery":
         print("Discovery...\n")
-        if not args.verbose:
-            logging.basicConfig(stream=sys.stdout, level=logging.FATAL)
         await discovery(args.save, args.identify)
 
     else:

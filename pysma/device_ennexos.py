@@ -8,7 +8,6 @@ import copy
 import json
 import logging
 import re
-import sys
 from dataclasses import asdict, dataclass, field
 from datetime import UTC, datetime
 from typing import Any, Dict, Optional, override
@@ -18,14 +17,13 @@ from deprecated import deprecated
 
 from .const import SMATagList
 from .const_webconnect import DEFAULT_TIMEOUT
-from .definitions_ennexos import ennexosSensorProfiles
+from .definitions_ennexos import getSensorForDevice
 from .device import Device, DeviceInformation, DiscoveryInformation
 from .exceptions import (
     SmaAuthenticationException,
     SmaConnectionException,
     SmaReadException,
 )
-from .helpers import toJson
 from .sensor import Sensor, Sensor_Range, Sensors
 
 _LOGGER = logging.getLogger(__name__)
@@ -38,6 +36,7 @@ class EnnexosDebug:
     measurements: dict[str, Any] = field(default_factory=dict)
     measurements_raw: dict[str, Any] = field(default_factory=dict)
     last_notfound: dict[str, list] = field(default_factory=dict)
+    profilemissing: dict[str, list] = field(default_factory=dict)
     plantInfo: dict[str, Any] = field(default_factory=dict)
 
 
@@ -176,13 +175,19 @@ class SMAennexos(Device):
             Dict: Return a dict with all parameters
 
         """
-        url = self._url + "/api/v1/parameters/search"
+        liveurl = self._url + "/api/v1/parameters/search"
         postdata = {
             "data": '{"queryItems":[{"componentId":"' + componentId + '"}]}',
             "headers": self._authorization_header,
         }
-        ret = await self._jsonrequest(url, postdata)
-        data = {}
+        ret = await self._jsonrequest(liveurl, postdata)
+        data = await self._prepare_parameter(ret, componentId)
+        return data
+
+    async def _prepare_parameter(
+        self, ret: Any, componentId: str
+    ) -> Dict[str, Dict[str, Any]]:
+        data: Dict[str, Dict[str, Any]] = {}
         if len(ret) != 1:
             _LOGGER.warning(
                 "Uncommon length of array in parameters request: %d", len(ret)
@@ -245,7 +250,8 @@ class SMAennexos(Device):
             "headers": self._authorization_header,
         }
         ret = await self._jsonrequest(liveurl, postdata)
-        return await self._prepare_livedata(ret, componentId)
+        out = await self._prepare_livedata(ret, componentId)
+        return out
 
     async def _prepare_livedata(
         self, ret: Any, componentId: str
@@ -291,23 +297,26 @@ class SMAennexos(Device):
 
         # Mark sure this function get called at least once
         ret = await self._get_all_readings(deviceID)
-        _LOGGER.debug("Found Sensors for %s: %s", deviceID, ret)
+        _LOGGER.debug("Found Sensors for %s: %d", deviceID, len(ret))
         profile = await self._get_sensor_profile(deviceID)
         return profile
 
     async def _get_sensor_profile(self, deviceID: str) -> Sensors:
         device_sensors = Sensors()
-        expected_sensors = []
 
         # Search for matiching profile
         dev = self._device_list[deviceID]
-        if dev:
-            for profil in ennexosSensorProfiles.items():
-                if re.search(profil[0], dev.name):
-                    expected_sensors = profil[1]
-            if len(expected_sensors) == 0:
-                _LOGGER.warning(f"Unknown Device: {dev.name} {dev.type} {deviceID}")
-
+        productTagId = int(dev.additional.get("productTagId", 0))
+        profile = getSensorForDevice(productTagId)
+        if not profile:
+            _LOGGER.warning(
+                f"Unknown Device: {productTagId} N:{dev.name} T:{dev.type} ID:{deviceID}"
+            )
+            return device_sensors
+        expected_sensors, unknown = profile
+        if len(unknown) > 0:
+            _LOGGER.debug(f"Missing Sensors in Profile {productTagId}: {unknown}")
+            self._debug.profilemissing[deviceID] = unknown
         # Add Sensors from profile
         for s in expected_sensors:
             if s.name:
@@ -414,15 +423,24 @@ class SMAennexos(Device):
             {"headers": self._authorization_header},
             hdrs.METH_GET,
         )
-        deviceID = {"IGULD:SELF", "Plant:1"}
+        deviceID = {"IGULD:SELF"}
         for d in devices:
             deviceID.add(d["deviceId"])
-            deviceID.add(d["plantId"])
         self._device_list = {}
         for d in deviceID:
             di = await self._device_info_by_componentId(d)
             if di:
                 self._device_list[di.id] = di
+
+        # TO DO move to device info by commpeontID TO DO
+        # Adding Device-Placeholder for the whole plant
+        pi = self._debug.plantInfo["Plant:1"]
+        serial = "P" + self._device_list["IGULD:SELF"].serial
+        print("Serial", serial)
+        self._device_list["Plant:1"] = DeviceInformation(
+            "Plant:1", serial, pi["name"], pi["plantId"], "SMA", ""
+        )
+        self._device_list["Plant:1"].additional["productTagId"] = -47114711
         return self._device_list
 
     async def _device_info_by_componentId(
@@ -515,7 +533,6 @@ class SMAennexos(Device):
         self, sensor: Sensor, value: int, deviceID: str | None = None
     ) -> None:
         """SetParameters."""
-        # TODO
         # deviceID = self.deviceIDFallback(deviceID)
         # timestamp = await self._get_timestamp()
         # channelName = self._readings[sensor.key]["origname"]

@@ -131,6 +131,8 @@ class Identifier:
     metering_total_consumption: str = "metering_total_consumption"
     battery_status_operating_mode: str = "battery_status_operating_mode"
     status: str = "status"
+    active_power_limitation: str = "active_power_limitation"
+    power_limit_via_io: str = "power_limit_via_io"
 
 
 # Data-Source:
@@ -598,6 +600,7 @@ SMATagList: Dict[int, str] = {
     9474: "SI 4.4M-13 (Sunny Island 4.4M)",
     9475: "SI 6.0H-13 (Sunny Island 6.0H)",
     9476: "SI 8.0H-13 (Sunny Island 8.0H)",
+    9488: "STP-25-50 (SUNNY TRIPOWER X 25)",
     9489: "STP-20-50 (SUNNY TRIPOWER X 20)",
     9491: "STP-15-50 (SUNNY TRIPOWER X 15)",
     9492: "STP-12-50 (SUNNY TRIPOWER X 12)",
@@ -606,6 +609,7 @@ SMATagList: Dict[int, str] = {
     19049: "STP6.0SE (SUNNY TRIPOWER 6.0 SE)",
     19050: "STP8.0SE (SUNNY TRIPOWER 8.0 SE)",
     19051: "STP10.0SE (SUNNY TRIPOWER 10.0 SE)",
+    19130: "Sunny Boy Smart Energy 5.0",
     200111: "Not connected",  # EV-Charger
     200112: "Sleep Mode",  # EV-Charger
     200113: "Active Mode",  # EV-Charger

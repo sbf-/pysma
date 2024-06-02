@@ -49,6 +49,8 @@ class SMAspeedwireEM(Device):
         self.transport: asyncio.BaseTransport | None = None
         self._data_received: asyncio.Future | None = None
         self.di = Debug_information_em()
+        self._device_list: Dict[str, DeviceInformation] = {}
+        self._expected_device: str | None = None
 
     @override
     async def get_sensors(self, deviceID: str | None = None) -> Sensors:
@@ -80,9 +82,12 @@ class SMAspeedwireEM(Device):
             raise SmaReadException("No usable data received!")
         return True
 
-    async def _get_next_values(self, timeout: float = 2) -> dict:
+    async def _get_next_values(
+        self, deviceID: str | None = None, timeout: float = 2
+    ) -> dict:
         """Returns the next values received from the device."""
         self._data_received = asyncio.get_running_loop().create_future()
+        self._expected_device = deviceID
         await asyncio.wait_for(self._data_received, timeout=timeout)
         data = self._data_received.result()
         self._data_received = None
@@ -96,6 +101,8 @@ class SMAspeedwireEM(Device):
         Returns:
             dict: dict containing serial, name, type, manufacturer and sw_version
         """
+        #        await asyncio.wait_for(self._data_received, timeout=timeout)
+
         di = await self.device_list()
         return list(di.values())[0].asDict()
 
@@ -106,16 +113,21 @@ class SMAspeedwireEM(Device):
         Returns:
             dict: dict containing serial, name, type, manufacturer and sw_version
         """
-        data = await self._get_next_values()
-        di = DeviceInformation(
-            str(data["serial"]),
-            str(data["serial"]),
-            data["device"],
-            data["susyid"],
-            "SMA",
-            data["sw_version"],
-        )
-        return {di.serial: di}
+        self._device_list = {}
+        start = time.time()
+        while time.time() - start < 2.1:
+            data = await self._get_next_values()
+            if data["serial"] not in self._device_list:
+                di = DeviceInformation(
+                    str(data["serial"]),
+                    str(data["serial"]),
+                    data["device"],
+                    data["susyid"],
+                    "SMA",
+                    data.get("sw_version", ""),
+                )
+                self._device_list[str(data["serial"])] = di
+        return self._device_list
 
     @override
     async def read(self, sensors: Sensors, deviceID: str | None = None) -> bool:
@@ -128,7 +140,7 @@ class SMAspeedwireEM(Device):
             bool: reading was successful
         """
         notfound = []
-        data = await self._get_next_values()
+        data = await self._get_next_values(deviceID)
         for sensor in sensors:
             if sensor.key in data:
                 value = data[sensor.key]
@@ -303,5 +315,8 @@ class SMAspeedwireEM(Device):
         self.di.last_valid_packet = p
         self.di.last_data = data
         if self._data_received is not None and not self._data_received.done():
-            self._data_received.set_result(data)
+            if self._expected_device == None or self._expected_device == str(
+                data["serial"]
+            ):
+                self._data_received.set_result(data)
         return data

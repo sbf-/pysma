@@ -29,7 +29,7 @@ class DeviceInformation:
     type: str
     manufacturer: str
     sw_version: str
-    additional: dict[str, str] = field(default_factory=dict)
+    additional: dict[str, str | int] = field(default_factory=dict)
     measurementsCount: int | None = None
     parameterCount: int | None = None
 

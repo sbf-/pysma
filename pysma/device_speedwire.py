@@ -202,6 +202,7 @@ class SMAClientProtocol(DatagramProtocol):
         _LOGGER.debug("Login rppsonse received!")
         self.sensors = {}
         self.data_values = {"error": msg.error}
+        self.data_values["serial"] = str(msg.src_serial)
         if msg.error == 256:
             _LOGGER.error("Login failed!")
             if self.future:

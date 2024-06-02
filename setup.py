@@ -19,7 +19,7 @@ setup(
     author_email="sb_pysma@bursch.com",
     license="MIT",
     packages=["pysma-plus"],
-    python_requires=">=3.12",
+    python_requires=">=3.9",
     install_requires=[
         "aiohttp>3.3,<4",
         "attrs>18",

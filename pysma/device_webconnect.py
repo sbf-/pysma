@@ -10,10 +10,11 @@ import copy
 import json
 import logging
 from dataclasses import asdict, dataclass, field
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, override
 
 import jmespath  # type: ignore
 from aiohttp import ClientSession, ClientTimeout, client_exceptions, hdrs
+from deprecated import deprecated
 
 from . import definitions_webconnect
 from .const_webconnect import (
@@ -34,7 +35,7 @@ from .const_webconnect import (
     URL_VALUES,
     USERS,
 )
-from .device import Device, DiscoveryInformation
+from .device import Device, DeviceInformation, DiscoveryInformation
 from .exceptions import (
     SmaAuthenticationException,
     SmaConnectionException,
@@ -52,7 +53,7 @@ class Debug_information_webconnect:
 
     full_json: dict | None = None
     last_json: dict | None = None
-    device_info: dict | None = None
+    device_info: DeviceInformation | None = None
 
 
 class SMAwebconnect(Device):
@@ -265,6 +266,7 @@ class SMAwebconnect(Device):
 
         return result_body
 
+    @override
     async def new_session(self) -> bool:
         """Establish a new session.
 
@@ -298,6 +300,7 @@ class SMAwebconnect(Device):
 
         raise SmaAuthenticationException()
 
+    @override
     async def close_session(self) -> None:
         """Close the session login."""
         if self._sid is None:
@@ -307,7 +310,8 @@ class SMAwebconnect(Device):
         finally:
             self._sid = None
 
-    async def read(self, sensors: Sensors) -> bool:
+    @override
+    async def read(self, sensors: Sensors, deviceID: str | None = None) -> bool:
         """Read a set of keys.
 
         Args:
@@ -387,37 +391,40 @@ class SMAwebconnect(Device):
 
         return result_body
 
+    @override
+    @deprecated
     async def device_info(self) -> dict:
         """Read device info and return the results.
 
         Returns:
             dict: dict containing serial, name, type, manufacturer and sw_version
         """
+        di = await self.device_list()
+        return list(di.values())[0].asDict()
+
+    @override
+    async def device_list(self) -> dict[str, DeviceInformation]:
         await self.read(self._device_info_sensors)
 
-        device_info = {
-            "serial": self._device_info_sensors["serial_number"].value
-            or FALLBACK_DEVICE_INFO["serial"],
-            "name": self._device_info_sensors["device_name"].value
-            or FALLBACK_DEVICE_INFO["name"],
-            "type": self._device_info_sensors["device_type"].value
-            or FALLBACK_DEVICE_INFO["type"],
-            "manufacturer": self._device_info_sensors["device_manufacturer"].value
-            or FALLBACK_DEVICE_INFO["manufacturer"],
-            "sw_version": version_int_to_string(
-                self._device_info_sensors["device_sw_version"].value
-            ),
-        }
-        self._debug.device_info = device_info
-
-        return device_info
+        sen = self._device_info_sensors
+        di = DeviceInformation(
+            sen["serial_number"].value or FALLBACK_DEVICE_INFO["serial"],
+            sen["serial_number"].value or FALLBACK_DEVICE_INFO["serial"],
+            sen["device_name"].value or FALLBACK_DEVICE_INFO["name"],
+            sen["device_type"].value or FALLBACK_DEVICE_INFO["type"],
+            sen["device_manufacturer"].value or FALLBACK_DEVICE_INFO["manufacturer"],
+            version_int_to_string(self._device_info_sensors["device_sw_version"].value),
+        )
+        self._debug.device_info = di
+        return {di.serial: di}
 
     async def _read_all_sensors(self) -> dict:
         all_values = await self._read_body(URL_ALL_VALUES, {"destDev": []})
         all_params = await self._read_body(URL_ALL_PARAMS, {"destDev": []})
         return all_values | all_params
 
-    async def get_sensors(self) -> Sensors:
+    @override
+    async def get_sensors(self, deviceID: str | None = None) -> Sensors:
         """Get the sensors that are present on the device.
 
         Returns:
@@ -495,12 +502,14 @@ class SMAwebconnect(Device):
 
         return device_sensors
 
+    @override
     async def get_debug(self) -> Dict:
         debug = asdict(self._debug)
         debug["device_info_sensors"] = self._device_info_sensors
         debug["url"] = self._url
         return debug
 
+    @override
     async def detect(self, ip: str) -> list[DiscoveryInformation]:
         results = []
         for urls in ["https://" + ip, "http://" + ip]:

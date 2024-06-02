@@ -6,7 +6,7 @@ import json
 import logging
 import signal
 import sys
-from typing import cast
+from typing import Any
 
 import aiohttp
 
@@ -18,7 +18,7 @@ from pysmaplus.sensor import Sensors
 
 _LOGGER = logging.getLogger(__name__)
 
-VAR = {}
+VAR: dict[str, Any] = {}
 
 
 def print_table(sensors: Sensors) -> None:
@@ -45,7 +45,7 @@ def print_table(sensors: Sensors) -> None:
 
 async def discovery(savedebug: bool, doIdentification: bool) -> None:
     # Run Discovery Request
-    debug = {"cmd": "discovery", "addr": [], "id": {}}
+    debug: dict[str, Any] = {"cmd": "discovery", "addr": [], "id": {}}
     ret = await pysma.discovery()
     if len(ret) == 0:
         print("Found no SMA devices via speedwire discovery request!")
@@ -54,7 +54,7 @@ async def discovery(savedebug: bool, doIdentification: bool) -> None:
     debug["addr"] = ret
 
     # Check every host found
-    if doIdentification and len(r) > 0:
+    if doIdentification and len(ret) > 0:
         print("\nTrying to identify... (can take up to 30 seconds pre device)\n")
         for r in ret:
             print(r[0])
@@ -110,48 +110,57 @@ async def main_loop(args: argparse.Namespace) -> None:
             f"MainLoop called! Url: {url} User/Group: {user} Accessmethod: {accessmethod}"
         )
         VAR["sma"] = pysma.getDevice(session, url, password, user, accessmethod)
+        assert VAR["sma"]
         VAR["sma"].set_options(options)
         try:
             await VAR["sma"].new_session()
         except pysma.exceptions.SmaAuthenticationException:
             _LOGGER.warning("Authentication failed!")
             return
-        except pysma.exceptions.SmaConnectionException:
+        except pysma.exceptions.SmaConnectionException as e:
             _LOGGER.warning("Unable to connect to device at %s", url)
             return
-
         # We should not get any exceptions, but if we do we will close the session.
         try:
             VAR["running"] = True
-            device_info = await VAR["sma"].device_info()
-            sensors = await VAR["sma"].get_sensors()
-            for name, value in device_info.items():
-                print("{:>15}{:>25}".format(name, value))
-            print(
-                "====================================================================================="
-            )
+            devicelist = await VAR["sma"].device_list()
+            for deviceId, deviceData in devicelist.items():
+                for name, value in deviceData.asDict().items():
+                    if type(value) in [str, float, int]:
+                        print("{:>17}{:>25}".format(name, value))
+                print(
+                    "====================================================================================="
+                )
 
+            sensors: dict[str, Sensors] = {}
+            for deviceId in devicelist.keys():
+                sensors[deviceId] = await VAR["sma"].get_sensors(deviceId)
+                for sensor in sensors[deviceId]:
+                    sensor.enabled = True
+
+            # TODO
             # Set Parameters if requested
-            for pname, pvalue in setvalue.items():
-                psensor = [
-                    sen for sen in sensors if sen.name == pname or sen.key == pname
-                ]
-                if len(psensor) != 1:
-                    raise ValueError("Sensor not found %s %s", pname, psensor)
-                await VAR["sma"].set_parameter(psensor[0], int(pvalue))
-
-            # enable all sensors
-            for sensor in sensors:
-                sensor.enabled = True
+            # for pname, pvalue in setvalue.items():
+            #     psensor = [
+            #         sen for sen in sensors if sen.name == pname or sen.key == pname
+            #     ]
+            #     if len(psensor) != 1:
+            #         raise ValueError("Sensor not found %s %s", pname, psensor)
+            #     await VAR["sma"].set_parameter(psensor[0], int(pvalue))
 
             while VAR.get("running"):
-                try:
-                    await VAR["sma"].read(sensors)
-                    print_table(sensors)
-                except TimeoutError as e:
-                    if not ignoretimeouts:
-                        raise e
-                    print("Timeout")
+                for deviceId in devicelist.keys():
+                    print("Device-ID: " + deviceId)
+                    try:
+                        await VAR["sma"].read(sensors[deviceId], deviceId)
+                        print_table(sensors[deviceId])
+                    except TimeoutError as e:
+                        if not ignoretimeouts:
+                            raise e
+                        print("Timeout")
+                    print(
+                        "---------------------------------------------------------------------------"
+                    )
                 cnt -= 1
                 if cnt == 0:
                     break
@@ -257,7 +266,7 @@ async def main() -> None:
         action="store_true",
         help="Run identify on found IP-addresses",
     )
-    for p in [parser_a, parser_b, parser_c]:
+    for p in [parser_a, parser_b, parser_c, parser_d]:
         p.add_argument(
             "--set",
             metavar="KEY=VALUE",

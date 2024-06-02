@@ -13,12 +13,14 @@ import socket
 import struct
 import time
 from dataclasses import dataclass, field
-from typing import Any, Dict, List
+from typing import Any, Dict, List, override
+
+from deprecated import deprecated
 
 from .const import SMATagList
 from .definitions_em import obis2sensor
 from .definitions_speedwire import speedwireHeader, speedwireHeader6069
-from .device import Device, DiscoveryInformation
+from .device import Device, DeviceInformation, DiscoveryInformation
 from .exceptions import SmaConnectionException, SmaReadException
 from .sensor import Sensor, Sensors
 
@@ -48,7 +50,8 @@ class SMAspeedwireEM(Device):
         self._data_received: asyncio.Future | None = None
         self.di = Debug_information_em()
 
-    async def get_sensors(self) -> Sensors:
+    @override
+    async def get_sensors(self, deviceID: str | None = None) -> Sensors:
         """Get the sensors that are present on the device.
 
         Returns:
@@ -85,23 +88,37 @@ class SMAspeedwireEM(Device):
         self._data_received = None
         return data
 
+    @override
+    @deprecated
     async def device_info(self) -> dict:
         """Read device info and return the results.
 
         Returns:
             dict: dict containing serial, name, type, manufacturer and sw_version
         """
-        data = await self._get_next_values()
-        device_info = {
-            "serial": data["serial"],
-            "name": data["device"],
-            "type": data["susyid"],
-            "manufacturer": "SMA",
-            "sw_version": data["sw_version"],
-        }
-        return device_info
+        di = await self.device_list()
+        return list(di.values())[0].asDict()
 
-    async def read(self, sensors: Sensors) -> bool:
+    @override
+    async def device_list(self) -> dict[str, DeviceInformation]:
+        """Read device info and return the results.
+
+        Returns:
+            dict: dict containing serial, name, type, manufacturer and sw_version
+        """
+        data = await self._get_next_values()
+        di = DeviceInformation(
+            str(data["serial"]),
+            str(data["serial"]),
+            data["device"],
+            data["susyid"],
+            "SMA",
+            data["sw_version"],
+        )
+        return {di.serial: di}
+
+    @override
+    async def read(self, sensors: Sensors, deviceID: str | None = None) -> bool:
         """Read a set of keys.
 
         Args:
@@ -129,12 +146,14 @@ class SMAspeedwireEM(Device):
 
         return True
 
+    @override
     async def close_session(self) -> None:
         """Closes the session"""
         if self._transport:
             self._transport.close()
         self._sock.close()
 
+    @override
     async def detect(self, ip: str) -> List[DiscoveryInformation]:
         """Try to detect SMA devices"""
         discovered = []
@@ -168,6 +187,7 @@ class SMAspeedwireEM(Device):
             )
         return discovered
 
+    @override
     async def get_debug(self) -> Dict[str, Any]:
         """Return a dict with all debug information."""
         debug_info = {
@@ -187,10 +207,14 @@ class SMAspeedwireEM(Device):
         }
         return debug_info
 
+    @override
     def set_options(self, options: Dict[str, Any]) -> None:
         """Set options"""
 
-    async def set_parameter(self, sensor: Sensor, value: int) -> None:
+    @override
+    async def set_parameter(
+        self, sensor: Sensor, value: int, deviceId: str | None = None
+    ) -> None:
         """Set Parameters."""
 
     def _getDiscoverySocket(self) -> socket.socket:
@@ -219,7 +243,7 @@ class SMAspeedwireEM(Device):
 
     def connection_lost(self, exc: Exception) -> None:
         """Called by connection lost."""
-        _LOGGER.error("Socket closed, stop the event loop %s %s", type(exc), exc)
+        # _LOGGER.error("Socket closed, stop the event loop %s %s", type(exc), exc)
 
     def datagram_received(self, p: bytes, addr: tuple[str, int]) -> dict[str, Any]:
         """Decode a Speedwire-Packet

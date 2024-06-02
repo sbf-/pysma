@@ -15,6 +15,12 @@ class BetterJSONEncoder(json.JSONEncoder):
         return str(o)
 
 
+def toJson(obj: Any):
+    """Converts a object to a json String.
+    Incl. handling of dataclass."""
+    return json.dumps(obj, cls=BetterJSONEncoder, indent=4)
+
+
 def version_int_to_string(version_integer: int) -> str:
     """Convert a version integer to a readable string.
 

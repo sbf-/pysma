@@ -3,8 +3,10 @@ abstract base class on which all device implementations are based
 """
 
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass, field
 from typing import Any, Dict, List
+
+from deprecated import deprecated
 
 from .sensor import Sensor, Sensors
 
@@ -19,11 +21,28 @@ class DiscoveryInformation:
     device: str = ""
 
 
+@dataclass
+class DeviceInformation:
+    id: str
+    serial: str
+    name: str
+    type: str
+    manufacturer: str
+    sw_version: str
+    additional: dict[str, str] = field(default_factory=dict)
+    measurementsCount: int | None = None
+    parameterCount: int | None = None
+
+    def asDict(self) -> dict[str, Any]:
+        """Returns the values as a dict"""
+        return asdict(self)
+
+
 class Device(ABC):
     """abstract base class on which all device implementations are based."""
 
     @abstractmethod
-    async def get_sensors(self) -> Sensors:
+    async def get_sensors(self, deviceID: str | None = None) -> Sensors:
         """Returns a list of all supported sensors"""
 
     @abstractmethod
@@ -31,11 +50,16 @@ class Device(ABC):
         """Starts a new session"""
 
     @abstractmethod
+    @deprecated(reason="Use device_list")
     async def device_info(self) -> dict:
         """Return a Dict with basic device information"""
 
     @abstractmethod
-    async def read(self, sensors: Sensors) -> bool:
+    async def device_list(self) -> dict[str, DeviceInformation]:
+        """List of all devices"""
+
+    @abstractmethod
+    async def read(self, sensors: Sensors, deviceID: str | None = None) -> bool:
         """Updates all sensors"""
 
     @abstractmethod
@@ -54,6 +78,8 @@ class Device(ABC):
         """Set options"""
         pass
 
-    async def set_parameter(self, sensor: Sensor, value: int) -> None:
+    async def set_parameter(
+        self, sensor: Sensor, value: int, deviceID: str | None = None
+    ) -> None:
         """Set Parameters."""
         pass

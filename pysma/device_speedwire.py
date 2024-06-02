@@ -14,7 +14,7 @@ import logging
 import struct
 import time
 from asyncio import DatagramProtocol, DatagramTransport, Future
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, override
 
 from .const import SMATagList
 from .definitions_speedwire import (
@@ -24,7 +24,7 @@ from .definitions_speedwire import (
     speedwireHeader,
     speedwireHeader6065,
 )
-from .device import Device, DiscoveryInformation
+from .device import Device, DeviceInformation, DiscoveryInformation
 from .exceptions import (
     SmaAuthenticationException,
     SmaConnectionException,
@@ -151,7 +151,7 @@ class SMAClientProtocol(DatagramProtocol):
             # All commands send. Clean up.
             f = self.future
             self.future = None
-            await asyncio.sleep(0.2)  # Wait for delayed respones
+            await asyncio.sleep(0.2)  # Wait for delayed responses
             self.debug["data"] = self.data_values
             self.cmds = []
             self.cmdidx = 0
@@ -388,7 +388,7 @@ class SMAspeedwireINV(Device):
     _options: Dict[str, Any] = {}
     _transport = None
     _protocol: SMAClientProtocol
-    _deviceinfo: Dict[str, Any] = {}
+    _deviceinfo: DeviceInformation
     _debug: Dict[str, Any] = {"overalltimeout": 0}
 
     def __init__(self, host: str, group: str, password: Optional[str]):
@@ -412,6 +412,7 @@ class SMAspeedwireINV(Device):
             remote_addr=(self._host, 9522),
         )
 
+    @override
     async def new_session(self) -> bool:
         # Create Endpoint
         await self._createEndpoint()
@@ -422,7 +423,14 @@ class SMAspeedwireINV(Device):
             raise SmaConnectionException("No connection to device: %s:9522", self._host)
         return True
 
+    @override
     async def device_info(self) -> dict:
+        l = await self.device_list()
+        return list(l.values())[0].asDict()
+
+    @override
+    async def device_list(self) -> dict[str, DeviceInformation]:
+
         fut = asyncio.get_running_loop().create_future()
         await self._protocol.start_query(["TypeLabel", "Firmware"], fut, self._group)
         try:
@@ -445,16 +453,18 @@ class SMAspeedwireINV(Device):
 
         invtnr = data.get("inverter_type", 0)
         invt = SMATagList.get(invtnr, "Unknown type")
-        self._deviceinfo = {
-            "serial": data.get("serial", ""),
-            "name": str(invt) + " (" + str(invtnr) + ")",
-            "type": str(invc) + " (" + str(invcnr) + ")",
-            "manufacturer": "SMA",
-            "sw_version": data.get("Firmware", ""),
-        }
-        return self._deviceinfo
+        self._deviceinfo = DeviceInformation(
+            data.get("serial", ""),
+            data.get("serial", ""),
+            str(invt) + " (" + str(invtnr) + ")",
+            str(invc) + " (" + str(invcnr) + ")",
+            "SMA",
+            data.get("Firmware", ""),
+        )
+        return {data.get("serial", ""): self._deviceinfo}
 
-    async def get_sensors(self) -> Sensors:
+    @override
+    async def get_sensors(self, deviceID: str | None = None) -> Sensors:
         fut = asyncio.get_running_loop().create_future()
         c = self._protocol.allCmds
         device_sensors = Sensors()
@@ -468,20 +478,21 @@ class SMAspeedwireINV(Device):
             raise e
         return device_sensors
 
-    async def read(self, sensors: Sensors) -> bool:
+    @override
+    async def read(self, sensors: Sensors, deviceID: str | None = None) -> bool:
         fut = asyncio.get_running_loop().create_future()
         c = self._protocol.allCmds
         await self._protocol.start_query(c, fut, self._group)
         try:
             await asyncio.wait_for(fut, timeout=self._protocol._overallTimeout)
-            self._update_sensors(sensors, self._protocol.sensors)
+            self._update_sensors(sensors, self._protocol.sensors, deviceID)
             return True
         except asyncio.TimeoutError as e:
             self._debug["overalltimeout"] += 1
             raise e
 
     def _update_sensors(
-        self, sensors: Sensors, sensorReadings: dict[str, Sensor]
+        self, sensors: Sensors, sensorReadings: dict[str, Sensor], deviceID: str | None
     ) -> None:
         """Update a sensor with the sensor reading"""
         _LOGGER.debug("Received %d sensor readings", len(sensorReadings))

@@ -802,7 +802,7 @@ ennexosSensorProfiles: list[tuple[list[int], list[str]]] = [
             "Plnt.TotAvalDsch",
             "Plnt.WRtg",
             "PortalUsrSettings.PlntNam",
-            "Measurement.InOut.DigIn.CurWCtlNom",  # codespell:ignore
+            "InOut.DigIn.CurWCtlNom",  # codespell:ignore
         ],
     ),
 ]
@@ -985,7 +985,7 @@ enneoxSensors = [
         Sensor("Wl.SoftAcsConnStt", None, factor=1, unit=None),
 
         Sensor("Operation.Dmd.WCtl", Identifier.active_power_limitation, factor=1, unit="W"),
-        Sensor("Measurement.InOut.DigIn.CurWCtlNom", Identifier.power_limit_via_io, factor=1, unit="%"), # codespell:ignore
+        Sensor("InOut.DigIn.CurWCtlNom", Identifier.power_limit_via_io, factor=1, unit="%"), # codespell:ignore
 ]
 # fmt: on
 name2sensor = {i.key: i for i in enneoxSensors}

@@ -898,7 +898,7 @@ enneoxSensors = [
         Sensor("Metering.GridMs.TotWhIn.Bat", None, factor=1, unit=None),
         Sensor("Metering.GridMs.TotWhIn.ChaSta", None, factor=1, unit=None),
         Sensor("Metering.GridMs.TotWhIn", Identifier.metering_total_absorbed, factor=1000, unit="kWh"),
-        Sensor("Metering.GridMs.TotWhIn", Identifier.metering_total_yield, factor=1000, unit="kWh"),
+#       Sensor("Metering.GridMs.TotWhIn", Identifier.metering_total_yield, factor=1000, unit="kWh"),
         Sensor("Metering.GridMs.TotWhOut.Bat", None, factor=1, unit=None),
         Sensor("Metering.GridMs.TotWhOut", Identifier.metering_total_consumption, factor=1000, unit="kWh"),
         Sensor("Metering.GridMs.TotWIn.ChaSta", None, factor=1, unit=None),

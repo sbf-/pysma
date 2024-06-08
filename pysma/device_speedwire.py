@@ -450,15 +450,16 @@ class SMAspeedwireINV(Device):
         data = self._protocol.data_values
 
         invcnr = data.get("inverter_class", 0)
-        invc = SMATagList.get(invcnr, "Unknown device")
+        invc = SMATagList.get(invcnr, f"Unknown device ({invcnr})")
 
         invtnr = data.get("inverter_type", 0)
-        invt = SMATagList.get(invtnr, "Unknown type")
+        invt = SMATagList.get(invtnr, f"Unknown type ({invtnr})")
+
         self._deviceinfo = DeviceInformation(
             data.get("serial", ""),
             data.get("serial", ""),
-            str(invt) + " (" + str(invtnr) + ")",
-            str(invc) + " (" + str(invcnr) + ")",
+            str(invt),
+            str(invc),
             "SMA",
             data.get("Firmware", ""),
         )

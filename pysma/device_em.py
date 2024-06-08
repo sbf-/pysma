@@ -15,8 +15,6 @@ import time
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, override
 
-from deprecated import deprecated
-
 from .const import SMATagList
 from .definitions_em import obis2sensor
 from .definitions_speedwire import speedwireHeader, speedwireHeader6069
@@ -94,7 +92,6 @@ class SMAspeedwireEM(Device):
         return data
 
     @override
-    @deprecated
     async def device_info(self) -> dict:
         """Read device info and return the results.
 

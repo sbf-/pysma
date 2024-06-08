@@ -24,8 +24,6 @@ setup(
         "aiohttp>3.3,<4",
         "attrs>18",
         "jmespath<2",
-        "deprecated",
-        "types-Deprecated",
     ],
     zip_safe=True,
 )

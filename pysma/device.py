@@ -6,8 +6,6 @@ from abc import ABC, abstractmethod
 from dataclasses import asdict, dataclass, field
 from typing import Any, Dict, List
 
-from deprecated import deprecated
-
 from .sensor import Sensor, Sensors
 
 
@@ -37,6 +35,9 @@ class DeviceInformation:
         """Returns the values as a dict"""
         return asdict(self)
 
+    def __str__(self):
+        return f"{self.serial} {self.name}"
+
 
 class Device(ABC):
     """abstract base class on which all device implementations are based."""
@@ -50,7 +51,6 @@ class Device(ABC):
         """Starts a new session"""
 
     @abstractmethod
-    @deprecated(reason="Use device_list")
     async def device_info(self) -> dict:
         """Return a Dict with basic device information"""
 

@@ -14,7 +14,6 @@ from typing import Any, Dict, List, Optional, override
 
 import jmespath  # type: ignore
 from aiohttp import ClientSession, ClientTimeout, client_exceptions, hdrs
-from deprecated import deprecated
 
 from . import definitions_webconnect
 from .const_webconnect import (
@@ -392,7 +391,6 @@ class SMAwebconnect(Device):
         return result_body
 
     @override
-    @deprecated
     async def device_info(self) -> dict:
         """Read device info and return the results.
 

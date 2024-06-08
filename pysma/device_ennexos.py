@@ -13,7 +13,6 @@ from datetime import UTC, datetime
 from typing import Any, Dict, Optional, override
 
 from aiohttp import ClientSession, ClientTimeout, client_exceptions, hdrs
-from deprecated import deprecated
 
 from .const import SMATagList
 from .const_webconnect import DEFAULT_TIMEOUT
@@ -38,6 +37,7 @@ class EnnexosDebug:
     last_notfound: dict[str, list] = field(default_factory=dict)
     profilemissing: dict[str, list] = field(default_factory=dict)
     plantInfo: dict[str, Any] = field(default_factory=dict)
+    devInfo: dict[str, Any] = field(default_factory=dict)
 
 
 class SMAennexos(Device):
@@ -351,13 +351,11 @@ class SMAennexos(Device):
         except ValueError:
             return False
 
-    # checked
     def deviceIDFallback(self, deviceID: str | None) -> str:
         if not deviceID:
             return self._componentId
         return deviceID
 
-    # checkeds
     @override
     async def read(self, sensors: Sensors, deviceID: str | None = None) -> bool:
         """Read a set of keys.
@@ -392,26 +390,28 @@ class SMAennexos(Device):
                     continue
                 notfound.append(f"{sen.name} [{sen.key}]")
 
-        self._debug.last_notfound[deviceID] = notfound
-        if notfound:
+        if deviceID not in self._debug.last_notfound:
+            self._debug.last_notfound[deviceID] = []
+
+        notfound = [x for x in notfound if x not in self._debug.last_notfound[deviceID]]
+        if len(notfound) > 0:
             _LOGGER.info(
                 "No values for sensors: %s",
                 ",".join(notfound),
             )
-
+            self._debug.last_notfound[deviceID].extend(notfound)
         return True
 
     @override
-    @deprecated(reason="Use device_list")
     async def device_info(self) -> dict:
         """Read device info and return the results.
 
         Returns:
             dict: dict containing serial, name, type, manufacturer and sw_version
         """
-        info = await self._device_info_by_componentId(self._componentId)
-        if info:
-            return info.asDict()
+        data = await self.device_list()
+        if self._componentId in data:
+            return data[self._componentId].asDict()
         else:
             return {}
 
@@ -436,7 +436,6 @@ class SMAennexos(Device):
         # Adding Device-Placeholder for the whole plant
         pi = self._debug.plantInfo["Plant:1"]
         serial = "P" + self._device_list["IGULD:SELF"].serial
-        print("Serial", serial)
         self._device_list["Plant:1"] = DeviceInformation(
             "Plant:1", serial, pi["name"], pi["plantId"], "SMA", ""
         )
@@ -450,6 +449,7 @@ class SMAennexos(Device):
         devInfo = await self._jsonrequest(
             url, {"headers": self._authorization_header}, hdrs.METH_GET
         )
+        self._debug.devInfo[componentId] = devInfo
         if not devInfo:
             return None
         di = DeviceInformation(

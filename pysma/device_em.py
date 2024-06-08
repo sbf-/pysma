@@ -13,7 +13,7 @@ import socket
 import struct
 import time
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, override
+from typing import Any, Dict, List
 
 from .const import SMATagList
 from .definitions_em import obis2sensor
@@ -50,7 +50,7 @@ class SMAspeedwireEM(Device):
         self._device_list: Dict[str, DeviceInformation] = {}
         self._expected_device: str | None = None
 
-    @override
+    # @override
     async def get_sensors(self, deviceID: str | None = None) -> Sensors:
         """Get the sensors that are present on the device.
 
@@ -91,7 +91,7 @@ class SMAspeedwireEM(Device):
         self._data_received = None
         return data
 
-    @override
+    # @override
     async def device_info(self) -> dict:
         """Read device info and return the results.
 
@@ -103,7 +103,7 @@ class SMAspeedwireEM(Device):
         di = await self.device_list()
         return list(di.values())[0].asDict()
 
-    @override
+    # @override
     async def device_list(self) -> dict[str, DeviceInformation]:
         """Read device info and return the results.
 
@@ -126,7 +126,7 @@ class SMAspeedwireEM(Device):
                 self._device_list[str(data["serial"])] = di
         return self._device_list
 
-    @override
+    # @override
     async def read(self, sensors: Sensors, deviceID: str | None = None) -> bool:
         """Read a set of keys.
 
@@ -155,14 +155,14 @@ class SMAspeedwireEM(Device):
 
         return True
 
-    @override
+    # @override
     async def close_session(self) -> None:
         """Closes the session"""
         if self._transport:
             self._transport.close()
         self._sock.close()
 
-    @override
+    # @override
     async def detect(self, ip: str) -> List[DiscoveryInformation]:
         """Try to detect SMA devices"""
         discovered = []
@@ -196,7 +196,7 @@ class SMAspeedwireEM(Device):
             )
         return discovered
 
-    @override
+    # @override
     async def get_debug(self) -> Dict[str, Any]:
         """Return a dict with all debug information."""
         debug_info = {
@@ -216,11 +216,11 @@ class SMAspeedwireEM(Device):
         }
         return debug_info
 
-    @override
+    # @override
     def set_options(self, options: Dict[str, Any]) -> None:
         """Set options"""
 
-    @override
+    # @override
     async def set_parameter(
         self, sensor: Sensor, value: int, deviceId: str | None = None
     ) -> None:

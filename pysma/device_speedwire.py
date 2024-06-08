@@ -14,7 +14,7 @@ import logging
 import struct
 import time
 from asyncio import DatagramProtocol, DatagramTransport, Future
-from typing import Any, Dict, List, Optional, override
+from typing import Any, Dict, List, Optional
 
 from .const import SMATagList
 from .definitions_speedwire import (
@@ -413,7 +413,7 @@ class SMAspeedwireINV(Device):
             remote_addr=(self._host, 9522),
         )
 
-    @override
+    # @override
     async def new_session(self) -> bool:
         # Create Endpoint
         await self._createEndpoint()
@@ -424,12 +424,12 @@ class SMAspeedwireINV(Device):
             raise SmaConnectionException("No connection to device: %s:9522", self._host)
         return True
 
-    @override
+    # @override
     async def device_info(self) -> dict:
         l = await self.device_list()
         return list(l.values())[0].asDict()
 
-    @override
+    # @override
     async def device_list(self) -> dict[str, DeviceInformation]:
 
         fut = asyncio.get_running_loop().create_future()
@@ -465,7 +465,7 @@ class SMAspeedwireINV(Device):
         )
         return {data.get("serial", ""): self._deviceinfo}
 
-    @override
+    # @override
     async def get_sensors(self, deviceID: str | None = None) -> Sensors:
         fut = asyncio.get_running_loop().create_future()
         c = self._protocol.allCmds
@@ -480,7 +480,7 @@ class SMAspeedwireINV(Device):
             raise e
         return device_sensors
 
-    @override
+    # @override
     async def read(self, sensors: Sensors, deviceID: str | None = None) -> bool:
         fut = asyncio.get_running_loop().create_future()
         c = self._protocol.allCmds

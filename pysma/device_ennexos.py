@@ -10,7 +10,7 @@ import logging
 import re
 from dataclasses import asdict, dataclass, field
 from datetime import UTC, datetime
-from typing import Any, Dict, Optional, override
+from typing import Any, Dict, Optional
 
 from aiohttp import ClientSession, ClientTimeout, client_exceptions, hdrs
 
@@ -121,7 +121,7 @@ class SMAennexos(Device):
             ) from exc
         return {}
 
-    @override
+    # @override
     async def new_session(self) -> bool:
         """Establish a new session.
 
@@ -284,7 +284,7 @@ class SMAennexos(Device):
         self._debug.measurements[componentId] = data
         return data
 
-    @override
+    # @override
     async def get_sensors(self, deviceID: str | None = None) -> Sensors:
         """Get the sensors that are present on the device.
 
@@ -356,7 +356,7 @@ class SMAennexos(Device):
             return self._componentId
         return deviceID
 
-    @override
+    # @override
     async def read(self, sensors: Sensors, deviceID: str | None = None) -> bool:
         """Read a set of keys.
 
@@ -402,7 +402,7 @@ class SMAennexos(Device):
             self._debug.last_notfound[deviceID].extend(notfound)
         return True
 
-    @override
+    # @override
     async def device_info(self) -> dict:
         """Read device info and return the results.
 
@@ -415,7 +415,7 @@ class SMAennexos(Device):
         else:
             return {}
 
-    @override
+    # @override
     async def device_list(self) -> dict[str, DeviceInformation]:
 
         devices = await self._jsonrequest(
@@ -479,14 +479,14 @@ class SMAennexos(Device):
             di.additional[key] = value
         return di
 
-    @override
+    # @override
     async def get_debug(self) -> Dict:
         """Returns all Debug Information."""
         x = asdict(self._debug)
         x["device_list"] = self._device_list
         return x
 
-    @override
+    # @override
     async def detect(self, ip: str) -> list[DiscoveryInformation]:
         """Tries to detect a ennexos-based Device on this ip-address."""
         rets = []
@@ -512,7 +512,7 @@ class SMAennexos(Device):
                 di.exception = e
         return rets
 
-    @override
+    # @override
     def set_options(self, options: Dict[str, Any]) -> None:
         """Set low-level options."""
         for key, value in options.items():
@@ -528,7 +528,7 @@ class SMAennexos(Device):
             f"{datetime.now(tz=UTC).isoformat(timespec='milliseconds').split('+')[0]}Z"
         )
 
-    @override
+    # @override
     async def set_parameter(
         self, sensor: Sensor, value: int, deviceID: str | None = None
     ) -> None:

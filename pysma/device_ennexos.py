@@ -533,13 +533,15 @@ class SMAennexos(Device):
         self, sensor: Sensor, value: int, deviceID: str | None = None
     ) -> None:
         """SetParameters."""
-        # deviceID = self.deviceIDFallback(deviceID)
-        # timestamp = await self._get_timestamp()
-        # channelName = self._readings[sensor.key]["origname"]
-        # requestData = f'{{"values":[{{"channelId":"{channelName}","timestamp":"{timestamp}","value":"{value}"}}]}}'
-        # putdata = {
-        #     "data": requestData,
-        #     "headers": self._authorization_header,
-        # }
-        # url = self._url + "/api/v1/parameters/" + deviceID
-        # dev = await self._jsonrequest(url, putdata, hdrs.METH_PUT)
+        if deviceID not in self._device_list:
+            raise RuntimeError("DeviceID %s unknown.", deviceID)
+        timestamp = await self._get_timestamp()
+        parameters = await self._get_parameter(deviceID)
+        channelName = parameters[sensor.key]["origname"]
+        requestData = f'{{"values":[{{"channelId":"{channelName}","timestamp":"{timestamp}","value":"{value}"}}]}}'
+        putdata = {
+            "data": requestData,
+            "headers": self._authorization_header,
+        }
+        url = self._url + "/api/v1/parameters/" + deviceID
+        dev = await self._jsonrequest(url, putdata, hdrs.METH_PUT)

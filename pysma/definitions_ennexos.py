@@ -276,6 +276,7 @@ ennexosSensorProfiles: list[tuple[list[int], list[str]]] = [
             "Setpoint.PlantControl.CmpBMS.OpMod.1",
             "Metering.GridMs.TotWhIn.Bat",
             "Metering.GridMs.TotWhOut.Bat",
+            "Inverter.WMax",
         ],
     ),
     # Data Manager EDMM-10

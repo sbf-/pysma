@@ -1,7 +1,11 @@
-The webconnect Interface was created by kellerza.
-Later Engery-Meter and EnnexOS Support was added by little.yoda.
-Parts of the SMA-Query-Library (https://github.com/Wired-Square/sma-query/) by Garth Berry
-was added to this Library and modified by little.yoda
+- The webconnect Interface was created by kellerza.
+- Engery-Meter and EnnexOS Support was added by little.yoda.
+- Parts of the SMA-Query-Library (https://github.com/Wired-Square/sma-query/) by Garth Berry
+  was added to this library and heavy modified by little.yoda
+- ssdp based on homeassistantcore/homeassistant/components/emulated_hue/upnp.py
+
+
+--------------
 
 The MIT License (MIT)
 

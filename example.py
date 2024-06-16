@@ -6,13 +6,16 @@ import json
 import logging
 import queue
 import signal
+import socket
 import sys
+import webbrowser
 from typing import Any
 
 import aiohttp
 
 import pysmaplus as pysma
 from pysmaplus.helpers import toJson
+from pysmaplus.semp import semp, sempDevice
 from pysmaplus.sensor import Sensors
 
 # This example will work with Python 3.9+
@@ -226,6 +229,40 @@ def setupLogging(verbose: bool):
     logger.addHandler(stream_handler)
 
 
+async def sempdemo():
+    hostname = socket.gethostname()
+    ip_address = socket.gethostbyname(hostname)
+    print(f"Using {ip_address}...")
+
+    control = semp(ip_address, 8080)
+    devId = "F-11223344-312233445501-00"
+    dev = device(devId, "Testgerät", "Other", "1", "None", 1000)
+    control.addDevice(dev)
+    control.getDevice(devId).setPowerStatus(0, "off")
+
+    await control.start()
+    webbrowser.open(f"http://{ip_address}:8080")
+    while True:
+        await asyncio.sleep(5 * 60)
+        print("Turning device on...")
+        control.getDevice(devId).setPowerStatus(1000, "on")
+        await asyncio.sleep(5 * 60)
+        print("Turning device off...")
+        control.getDevice(devId).setPowerStatus(0, "off")
+
+
+#     # today13 = datetime.now().replace(hour=15, minute=0, second=0, microsecond=0)
+#     # today15 = datetime.now().replace(hour=16, minute=30, second=0, microsecond=0)
+
+#     today13 = datetime.now()
+#     today15 = datetime.now() + timedelta(minutes=65)
+
+#     tf = timeframe(today13, today15, timedelta(minutes=60), timedelta(minutes=60))
+# #    dev.addTimeframe(tf)
+#     control.addDevice(dev)
+#     control.getDevice(devId).setPowerStatus(0, "off")
+
+
 async def main() -> None:
     print("Library version: " + getVersion())
     parser = argparse.ArgumentParser(
@@ -286,6 +323,15 @@ async def main() -> None:
     parser_d.set_defaults(url="")
     parser_d.set_defaults(accessmethod="speedwireem")
 
+    parser_h = subparsers.add_parser(
+        "shm2", help="Sunny Home Manager with Grid Guard Code"
+    )
+    parser_h.set_defaults(user="")
+    parser_h.set_defaults(password="")
+    parser_h.add_argument("url", type=str, help="IP-Address")
+    parser_h.add_argument("password", type=str, help="Grid Guard Code")
+    parser_h.set_defaults(accessmethod="shm2")
+
     parser_e = subparsers.add_parser(
         "identify", help="Tries to identify the available interfaces"
     )
@@ -300,7 +346,14 @@ async def main() -> None:
         action="store_true",
         help="Run identify on found IP-addresses",
     )
-    for p in [parser_a, parser_b, parser_c, parser_d]:
+
+    parser_g = subparsers.add_parser("semp", help="Semp Demo")
+    parser_g.set_defaults(accessmethod="sempdemo")
+    # parser_g.set_defaults(user="")
+    # parser_g.set_defaults(password="")
+    # parser_g.set_defaults(url="")
+
+    for p in [parser_a, parser_b, parser_c, parser_d, parser_h]:
         p.add_argument(
             "--set",
             metavar="KEY=VALUE",
@@ -326,6 +379,9 @@ async def main() -> None:
     elif args.accessmethod == "discovery":
         print("Discovery...\n")
         await discovery(args.save, args.identify)
+
+    elif args.accessmethod == "sempdemo":
+        await sempdemo()
 
     else:
 

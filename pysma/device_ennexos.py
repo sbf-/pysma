@@ -7,7 +7,6 @@ import asyncio
 import copy
 import json
 import logging
-import re
 from dataclasses import asdict, dataclass, field
 from datetime import UTC, datetime
 from typing import Any, Dict, Optional
@@ -544,4 +543,4 @@ class SMAennexos(Device):
             "headers": self._authorization_header,
         }
         url = self._url + "/api/v1/parameters/" + deviceID
-        dev = await self._jsonrequest(url, putdata, hdrs.METH_PUT)
+        dev = await self._jsonrequest(url, putdata, hdrs.METH_PUT)  # noqa: F841

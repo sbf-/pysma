@@ -2,7 +2,7 @@ import asyncio
 import copy
 import logging
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 from pymodbus import ModbusException
 from pymodbus.client import AsyncModbusTcpClient
@@ -10,11 +10,7 @@ from pymodbus.pdu import ModbusResponse
 
 from .const import Identifier, SMATagList
 from .device import Device, DeviceInformation, DiscoveryInformation
-from .exceptions import (
-    SmaAuthenticationException,
-    SmaConnectionException,
-    SmaReadException,
-)
+from .exceptions import SmaConnectionException, SmaReadException
 from .sensor import Sensor, Sensor_Range, Sensors
 
 _LOGGER = logging.getLogger(__name__)

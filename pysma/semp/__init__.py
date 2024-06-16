@@ -1,7 +1,7 @@
 import random
 import uuid
 
-from .device import sempDevice, sempTimeframe
+from .device import sempDevice
 from .SEMPhttpd import SEMPhttpServer
 from .ssdp import async_create_upnp_datagram_endpoint
 

@@ -66,7 +66,7 @@ class SMAspeedwireEM(Device):
     async def new_session(self) -> bool:
         """Starts a new session"""
         sock = self._getDiscoverySocket()
-        on_connection_lost = self.loop.create_future()
+        on_connection_lost = self.loop.create_future()  # noqa F841
         self._transport, self._protocol = await self.loop.create_datagram_endpoint(
             lambda: self,  # type: ignore[type-var]
             sock=sock,
@@ -312,7 +312,7 @@ class SMAspeedwireEM(Device):
         self.di.last_valid_packet = p
         self.di.last_data = data
         if self._data_received is not None and not self._data_received.done():
-            if self._expected_device == None or self._expected_device == str(
+            if self._expected_device is None or self._expected_device == str(
                 data["serial"]
             ):
                 self._data_received.set_result(data)

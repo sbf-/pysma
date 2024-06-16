@@ -13,7 +13,7 @@ import copy
 import logging
 import struct
 import time
-from asyncio import DatagramProtocol, DatagramTransport, Future
+from asyncio import DatagramProtocol, Future
 from typing import Any, Dict, List, Optional
 
 from .const import SMATagList
@@ -426,8 +426,8 @@ class SMAspeedwireINV(Device):
 
     # @override
     async def device_info(self) -> dict:
-        l = await self.device_list()
-        return list(l.values())[0].asDict()
+        ll = await self.device_list()
+        return list(ll.values())[0].asDict()
 
     # @override
     async def device_list(self) -> dict[str, DeviceInformation]:

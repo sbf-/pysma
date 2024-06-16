@@ -1,11 +1,11 @@
 """
-Definition for all enneoxOS senosrs 
+Definition for all enneoxOS senosrs
 """
 
 from .const import Identifier, SMATagList
 from .sensor import Sensor
 
-""" The profiles are necessary because the devices generally 
+""" The profiles are necessary because the devices generally
     return a significantly lower number of measured values without sunlight. """
 ennexosSensorProfiles: list[tuple[list[int], list[str]]] = [
     (
@@ -809,7 +809,7 @@ ennexosSensorProfiles: list[tuple[list[int], list[str]]] = [
 ]
 
 # fmt: off
-# black -C -l 200 pysma/definitions_ennexos.py 
+# black -C -l 200 pysma/definitions_ennexos.py
 enneoxSensors = [
         Sensor("Bat.Amp.1", None, factor=1, unit=None),
         Sensor("Bat.ChaSttArr.1", None, factor=1, unit=None),
@@ -881,8 +881,8 @@ enneoxSensors = [
         Sensor("GridMs.W.phsA", Identifier.power_l1, factor=1, unit="W"),
         Sensor("GridMs.W.phsB", Identifier.power_l2, factor=1, unit="W"),
         Sensor("GridMs.W.phsC", Identifier.power_l3, factor=1, unit="W"),
-        Sensor("InOut.GI1", None, factor=1, unit=None), # codespell:ignore
-        Sensor("InOut.GO1", None, factor=1, unit=None), # codespell:ignore
+        Sensor("InOut.GI1", None, factor=1, unit=None),  # codespell:ignore
+        Sensor("InOut.GO1", None, factor=1, unit=None),  # codespell:ignore
         Sensor("Inverter.VArModCfg.PFCtlVolCfg.Stt", None, factor=1, unit=None),
         Sensor("Inverter.WMax", Identifier.inverter_power_limit, factor=1, unit="W"),
         Sensor("Isolation.FltA", Identifier.insulation_residual_current, factor=1000, unit="mA"),
@@ -899,7 +899,7 @@ enneoxSensors = [
         Sensor("Metering.GridMs.TotWhIn.Bat", None, factor=1, unit=None),
         Sensor("Metering.GridMs.TotWhIn.ChaSta", None, factor=1, unit=None),
         Sensor("Metering.GridMs.TotWhIn", Identifier.metering_total_absorbed, factor=1000, unit="kWh"),
-#       Sensor("Metering.GridMs.TotWhIn", Identifier.metering_total_yield, factor=1000, unit="kWh"),
+        # Sensor("Metering.GridMs.TotWhIn", Identifier.metering_total_yield, factor=1000, unit="kWh"),
         Sensor("Metering.GridMs.TotWhOut.Bat", None, factor=1, unit=None),
         Sensor("Metering.GridMs.TotWhOut", Identifier.metering_total_consumption, factor=1000, unit="kWh"),
         Sensor("Metering.GridMs.TotWIn.ChaSta", None, factor=1, unit=None),
@@ -962,7 +962,7 @@ enneoxSensors = [
         Sensor("PvGen.PvWh", None, factor=1, unit=None),
         Sensor("PvGen.PvW", None, factor=1, unit=None),
         Sensor("Setpoint.PlantControl.CmpBMS.OpMod.1", None, factor=1, unit=None),
-        Sensor("Setpoint.PlantControl.InOut.GO1", None, factor=1, unit=None), # codespell:ignore
+        Sensor("Setpoint.PlantControl.InOut.GO1", None, factor=1, unit=None),  # codespell:ignore
         Sensor("Spdwr.ActlDnsSrvIp", None, factor=1, unit=None),
         Sensor("Spdwr.ActlGwIp", None, factor=1, unit=None),
         Sensor("Spdwr.ActlIp", None, factor=1, unit=None),
@@ -986,7 +986,7 @@ enneoxSensors = [
         Sensor("Wl.SoftAcsConnStt", None, factor=1, unit=None),
 
         Sensor("Operation.Dmd.WCtl", Identifier.active_power_limitation, factor=1, unit="W"),
-        Sensor("InOut.DigIn.CurWCtlNom", Identifier.power_limit_via_io, factor=1, unit="%"), # codespell:ignore
+        Sensor("InOut.DigIn.CurWCtlNom", Identifier.power_limit_via_io, factor=1, unit="%"),  # codespell:ignore
         Sensor("Inverter.WMaxIn", Identifier.power_limit_in, factor=1, unit="W")
 ]
 # fmt: on

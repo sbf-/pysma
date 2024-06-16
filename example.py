@@ -2,7 +2,6 @@
 """Basic usage example and testing of pysma."""
 import argparse
 import asyncio
-import json
 import logging
 import queue
 import signal
@@ -15,7 +14,7 @@ import aiohttp
 
 import pysmaplus as pysma
 from pysmaplus.helpers import toJson
-from pysmaplus.semp import semp, sempDevice
+from pysmaplus.semp import device, semp
 from pysmaplus.sensor import Sensors
 
 # This example will work with Python 3.9+
@@ -120,7 +119,9 @@ async def main_loop(args: argparse.Namespace) -> None:
         options = (
             dict(map(lambda s: s.split("="), args.options)) if args.options else {}
         )
-        setvalue = dict(map(lambda s: s.split("="), args.set)) if args.set else {}
+        setvalue = (  # noqa: F841
+            dict(map(lambda s: s.split("="), args.set)) if args.set else {}
+        )
 
         _LOGGER.debug(
             f"MainLoop called! Url: {url} User/Group: {user} Accessmethod: {accessmethod}"
@@ -133,7 +134,7 @@ async def main_loop(args: argparse.Namespace) -> None:
         except pysma.exceptions.SmaAuthenticationException:
             _LOGGER.error("Authentication failed!")
             return
-        except pysma.exceptions.SmaConnectionException as e:
+        except pysma.exceptions.SmaConnectionException:
             _LOGGER.error("Unable to connect to device at %s", url)
             return
         # We should not get any exceptions, but if we do we will close the session.

@@ -132,7 +132,7 @@ class SEMPhttpServer:
             #     print(buffer)
         #        try:
         print(buffer)
-        #'<EM2Device xmlns="http://www.sma.de/communication/schema/SEMP/v1"><DeviceControl><DeviceId>F-00000001-000000000002-00</DeviceId><On>true</On></DeviceControl></EM2Device>
+        #  '<EM2Device xmlns="http://www.sma.de/communication/schema/SEMP/v1"><DeviceControl><DeviceId>F-00000001-000000000002-00</DeviceId><On>true</On></DeviceControl></EM2Device>
         obj = untangle.parse(buffer.decode("utf-8"))
         assert (
             obj.children[0]["xmlns"] == "http://www.sma.de/communication/schema/SEMP/v1"
@@ -215,7 +215,7 @@ class SEMPhttpServer:
         async def middleware_factory(app, handler):
             async def middleware_handler(request):
                 print(
-                    f"Request: {request.rel_url} {request.remote} {request.raw_headers    }"
+                    f"Request: {request.rel_url} {request.remote} {request.raw_headers}"
                 )
                 return await handler(request)
 

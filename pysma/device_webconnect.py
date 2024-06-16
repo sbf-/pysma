@@ -9,8 +9,8 @@ import asyncio
 import copy
 import json
 import logging
-from dataclasses import asdict, dataclass, field
-from typing import Any, Dict, List, Optional
+from dataclasses import asdict, dataclass
+from typing import Any, Dict, Optional
 
 import jmespath  # type: ignore
 from aiohttp import ClientSession, ClientTimeout, client_exceptions, hdrs

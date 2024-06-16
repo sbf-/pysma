@@ -32,8 +32,8 @@ class Discovery:
     async def run(self) -> list:
         """Start the Task"""
         sock = self.getDiscoverySocket()
-        on_connection_lost = self.loop.create_future()
-        connect = await self.loop.create_datagram_endpoint(
+        self.loop.create_future()
+        await self.loop.create_datagram_endpoint(
             lambda: self,  # type: ignore[type-var]
             sock=sock,
         )

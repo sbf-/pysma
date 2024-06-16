@@ -223,9 +223,9 @@ class SMAClientProtocol(DatagramProtocol):
         if sen.key in self.sensors:
             oldValue = self.sensors[sen.key].value
             if oldValue != value:
-                _LOGGER.warning(
-                    f"Sensors {sen.key} {sen.name} Old Value: {oldValue} New values: {sen.value} Overwrite: {overwrite}"
-                )
+                # _LOGGER.warning(
+                #     f"Sensors {sen.key} {sen.name} Old Value: {oldValue} New values: {sen.value} Overwrite: {overwrite}"
+                # )
                 if not overwrite:
                     value = oldValue
         self.sensors[sen.key] = sen

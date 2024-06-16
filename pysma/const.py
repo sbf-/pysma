@@ -134,6 +134,12 @@ class Identifier:
     active_power_limitation: str = "active_power_limitation"
     power_limit_via_io: str = "power_limit_via_io"
 
+    operating_mode_plant_control: str = "operating_mode_plant_control"
+
+    charging_mode: str = "charging_mode"  # key="operating_mode_of_charge_session", channel="Parameter.Chrg.ActChaMod"
+    charge_current_limit: str = "charge_current_limit"  # key="charge_current_limit", channel="Parameter.Inverter.AcALim"
+    power_limit_in: str = "power_limit_in"  #    charge__limit: str = "charge_"# key="charge_power_limit", channel="Parameter.Inverter.WMaxIn"
+
 
 # Data-Source:
 # https://www.sma.de/produkte/solar-wechselrichter/sunny-tripower-x
@@ -581,6 +587,7 @@ SMATagList: Dict[int, str] = {
     9335: "SMA Com Gateway",
     9336: "STP 15000TL-30",
     9337: "STP 17000TL-30",
+    9343: "Sunny Home Manager 2",
     9344: "STP4.0-3AV-40 (Sunny Tripower 4.0)",
     9345: "STP5.0-3AV-40 (Sunny Tripower 5.0)",
     9346: "STP6.0-3AV-40 (Sunny Tripower 6.0)",

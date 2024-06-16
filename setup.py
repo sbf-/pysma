@@ -24,6 +24,9 @@ setup(
         "aiohttp>3.3,<4",
         "attrs>18",
         "jmespath<2",
+        "dataclasses-struct>0.8",
+        "untangle>=1.2.1",
+        "pymodbus",
     ],
     zip_safe=True,
 )

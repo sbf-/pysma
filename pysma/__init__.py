@@ -14,6 +14,7 @@ from aiohttp import ClientSession
 from .device import Device, DiscoveryInformation
 from .device_em import SMAspeedwireEM
 from .device_ennexos import SMAennexos
+from .device_shm2 import SHM2
 from .device_speedwire import SMAspeedwireINV
 from .device_webconnect import SMAwebconnect
 from .discovery import Discovery
@@ -50,6 +51,8 @@ def getDevice(
         return SMAspeedwireEM()
     if accessmethod == "speedwireinv":
         return SMAspeedwireINV(host=url, password=password, group=groupuser)
+    if accessmethod == "shm2":
+        return SHM2(ip=url, password=password)
     _LOGGER.error("Unknown Accessmethod: %s", accessmethod)
     return None
 
@@ -67,6 +70,8 @@ async def _run_detect(
         sma = SMAspeedwireINV(host=ip, password="", group="user")
     elif accessmethod == "speedwireem":
         sma = SMAspeedwireEM()
+    elif accessmethod == "shm2":
+        sma = SHM2(ip, "0")
     else:
         return []
     ret = await sma.detect(ip)
@@ -87,6 +92,7 @@ async def autoDetect(session: ClientSession, ip: str) -> list[DiscoveryInformati
         _run_detect("speedwireinv", session, ip),
         _run_detect("webconnect", session, ip),
         _run_detect("speedwireem", session, ip),
+        _run_detect("shm2", session, ip),
     )
     results: list[DiscoveryInformation] = []
     for r in ret:

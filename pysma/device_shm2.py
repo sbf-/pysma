@@ -3,7 +3,6 @@ import copy
 import logging
 from dataclasses import dataclass
 from typing import Any, Dict, List
-from urllib.parse import urlparse
 
 from pymodbus import ModbusException
 from pymodbus.client import AsyncModbusTcpClient
@@ -17,6 +16,7 @@ from .exceptions import (
     SmaReadException,
     SmaWriteException,
 )
+from .helpers import splitUrl
 from .sensor import Sensor, Sensor_Range, Sensors
 
 _LOGGER = logging.getLogger(__name__)
@@ -126,14 +126,14 @@ class SHM2(Device):
 
     def __init__(self, ip: str, password: str | None):
         """Init"""
-        url = urlparse(ip)
+        destination = splitUrl(ip)
+        _LOGGER.debug(f"{destination}")
+        self._ip = destination["host"]
         self._sensorValues: Dict[str, int] = {}
-        self._ip = url.hostname
         if password:
             self._ggc = int(password)
         else:
             self._ggc = 0
-        _LOGGER.error(f"{self._ip} {self._ggc}")
         self._device_list: Dict[str, DeviceInformation] = {}
         self._client: AsyncModbusTcpClient
 

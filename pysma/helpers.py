@@ -2,7 +2,8 @@
 
 import dataclasses
 import json
-from typing import Any
+from typing import Any, Dict
+from urllib.parse import urlparse
 
 
 class BetterJSONEncoder(json.JSONEncoder):
@@ -13,6 +14,18 @@ class BetterJSONEncoder(json.JSONEncoder):
         if dataclasses.is_dataclass(o):
             return dataclasses.asdict(o)
         return str(o)
+
+
+def splitUrl(url: str) -> Dict[str, Any]:
+    if "://" not in url:
+        url = "fake://" + url
+    x = urlparse(url)
+    return {
+        "schema": x.scheme,
+        "host": x.hostname,
+        "netloc": x.netloc,
+        "port": x.port,
+    }
 
 
 def toJson(obj: Any):

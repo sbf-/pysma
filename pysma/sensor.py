@@ -3,7 +3,7 @@
 import copy
 import logging
 from dataclasses import dataclass
-from typing import Any, Iterator, List, Optional, Union, cast
+from typing import Any, Dict, Iterator, List, Optional, Union, cast
 
 import attr
 import jmespath  # type: ignore
@@ -18,10 +18,22 @@ class Sensor_Range:
     typ: str
     values: list[int]
     editable: bool
+    mapper: Dict[int, str] | None = None
 
     def __str__(self) -> str:
         """String Function."""
         return f"{self.typ} {self.values} {self.editable}"
+
+    def names(self) -> Dict[int, str]:
+        names = {}
+        if self.typ == "selection":
+            for value in self.values:
+                value = int(value)
+                if self.mapper:
+                    names[value] = self.mapper.get(value, "unknown")
+                else:
+                    names[value] = "unknown"
+        return names
 
 
 @attr.s(slots=True)

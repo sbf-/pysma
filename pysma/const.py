@@ -135,6 +135,7 @@ class Identifier:
     power_limit_via_io: str = "power_limit_via_io"
 
     operating_mode_plant_control: str = "operating_mode_plant_control"
+    power_setpoint_plant_control: str = "power_setpoint_plant_control"
 
     charging_mode: str = "charging_mode"  # channel="Parameter.Chrg.ActChaMod"
     charge_current_limit: str = (
@@ -177,6 +178,8 @@ SMATagList: Dict[int, str] = {
     455: "Warning",
     461: "SMA",
     569: "activated",
+    802: "Active",
+    803: "Inactive",
     887: "No recommended action",
     1041: "leading / overexcited",
     1042: "lagging / underexcited",

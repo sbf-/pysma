@@ -3,6 +3,7 @@ import copy
 import logging
 from dataclasses import dataclass
 from typing import Any, Dict, List
+from urllib.parse import urlparse
 
 from pymodbus import ModbusException
 from pymodbus.client import AsyncModbusTcpClient
@@ -10,7 +11,12 @@ from pymodbus.pdu import ModbusResponse
 
 from .const import Identifier, SMATagList
 from .device import Device, DeviceInformation, DiscoveryInformation
-from .exceptions import SmaConnectionException, SmaReadException
+from .exceptions import (
+    SmaAuthenticationException,
+    SmaConnectionException,
+    SmaReadException,
+    SmaWriteException,
+)
 from .sensor import Sensor, Sensor_Range, Sensors
 
 _LOGGER = logging.getLogger(__name__)
@@ -27,6 +33,7 @@ class modusbus2sensor:
 
 
 modusbus2sensorList: List[modusbus2sensor] = [
+    # TO DO Modus readonly/writeonly/readwrite
     modusbus2sensor(
         30201,
         2,
@@ -95,7 +102,20 @@ modusbus2sensorList: List[modusbus2sensor] = [
             mapper=SMATagList,
         ),
         True,
-        range=Sensor_Range("selection", [802, 803], True),
+        range=Sensor_Range("selection", [802, 803], True, SMATagList),
+    ),
+    modusbus2sensor(
+        40149,
+        2,
+        "s32",
+        Sensor(
+            Identifier.power_setpoint_plant_control,
+            Identifier.power_setpoint_plant_control,
+            factor=1,
+            unit="W",
+        ),
+        True,
+        range=Sensor_Range("min/max", [-100000, 100000], True),
     ),
 ]
 modbusDict = {i.sensor.key: i for i in modusbus2sensorList}
@@ -106,11 +126,14 @@ class SHM2(Device):
 
     def __init__(self, ip: str, password: str | None):
         """Init"""
-        self._ip = ip
+        url = urlparse(ip)
+        self._sensorValues: Dict[str, int] = {}
+        self._ip = url.hostname
         if password:
             self._ggc = int(password)
         else:
             self._ggc = 0
+        _LOGGER.error(f"{self._ip} {self._ggc}")
         self._device_list: Dict[str, DeviceInformation] = {}
         self._client: AsyncModbusTcpClient
 
@@ -127,6 +150,7 @@ class SHM2(Device):
         ret = await self._client.write_registers(
             43090, [self._ggc // 65536, self._ggc % 65536], slave=1
         )
+        _LOGGER.debug(f"Login-Response {ret}")
         print("Login-Response", ret)
         # Exception Response(144, 16, IllegalValue)
         # WriteMultipleRegisterResponse
@@ -155,6 +179,7 @@ class SHM2(Device):
 
     async def new_session(self) -> bool:
         """Starts a new session"""
+
         self._client = AsyncModbusTcpClient(str(self._ip))  # Create client object
         connected = await self._client.connect()
         if not connected:
@@ -170,6 +195,8 @@ class SHM2(Device):
             await self._login()
         ggcStatus = await self.read_modbus(43090, 1, "u32")
         _LOGGER.debug(f"After Login -- GGC Code {ggcStatus}")
+        if ggcStatus == 0:
+            raise SmaAuthenticationException("Grid Guard Code is not valid!")
         return True
 
     async def device_info(self) -> dict:
@@ -215,6 +242,11 @@ class SHM2(Device):
                 sensor.value = value
                 if sensor.mapper:
                     sensor.mapped_value = sensor.mapper.get(value, str(value))
+            else:
+                if sensor.key in self._sensorValues:
+                    sensor.value = self._sensorValues[sensor.key]
+                else:
+                    sensor.value = None
             if sensorDef.range:
                 sensor.range = sensorDef.range
 
@@ -266,3 +298,30 @@ class SHM2(Device):
         self, sensor: Sensor, value: int, deviceID: str | None = None
     ) -> None:
         """Set Parameters."""
+        if sensor.key not in modbusDict:
+            raise SmaWriteException(f"Can not write to sensor {sensor.key}")
+        info = modbusDict[sensor.key]
+        if not info.writeonly:
+            raise SmaWriteException(f"Not allowed to write to the sensor {sensor.key}")
+        key = info.sensor.key
+        if info.valueFormat == "u32":
+            b = value.to_bytes(4, byteorder="big")
+            values = [b[0] * 256 + b[1], b[2] * 256 + b[3]]
+        elif info.valueFormat == "s32":
+            b = value.to_bytes(4, byteorder="big", signed=True)
+            values = [b[0] * 256 + b[1], b[2] * 256 + b[3]]
+        else:
+            raise SmaWriteException(
+                f"Unsupported Format {info.valueFormat} for writing."
+            )
+        try:
+            ret = await self._client.write_registers(
+                info.addr, values, slave=info.slaveid
+            )
+        except ModbusException as exc:
+            _LOGGER.error(exc)
+            raise SmaWriteException(f"Error writing to sensor {sensor.key}") from exc
+        if ret.isError():
+            raise SmaWriteException(f"Error writing to sensor {sensor.key} {ret}")
+        if info.writeonly:
+            self._sensorValues[key] = value

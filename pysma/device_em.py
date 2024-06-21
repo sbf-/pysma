@@ -31,6 +31,7 @@ class Debug_information_em:
 
     serial: set[int] = field(default_factory=set)
     protocol: set[str] = field(default_factory=lambda: set())
+    last_packet_metadata: tuple[str, int, int] | None = None
     last_packet: bytes | None = None
     last_data: dict[str, Any] | None = None
     last_valid_packet: bytes | None = None
@@ -49,6 +50,7 @@ class SMAspeedwireEM(Device):
         self.di = Debug_information_em()
         self._device_list: Dict[str, DeviceInformation] = {}
         self._expected_device: str | None = None
+        self._bindingAddr: List[Any] = []
 
     # @override
     async def get_sensors(self, deviceID: str | None = None) -> Sensors:
@@ -56,6 +58,7 @@ class SMAspeedwireEM(Device):
 
         Returns:
             Sensors: Sensors object containing Sensor objects
+
         """
         device_sensors = Sensors()
         for s in obis2sensor:
@@ -219,6 +222,10 @@ class SMAspeedwireEM(Device):
     # @override
     def set_options(self, options: Dict[str, Any]) -> None:
         """Set options"""
+        for key, item in options.items():
+            if key.lower() == "bindingaddr":
+                addrs = str(item).split(",")
+                self._bindingAddr.extend(addrs)
 
     # @override
     async def set_parameter(
@@ -227,19 +234,38 @@ class SMAspeedwireEM(Device):
         """Set Parameters."""
 
     def _getDiscoverySocket(self) -> socket.socket:
-        mcast_grp = "239.12.255.254"
-        ipbind = "0.0.0.0"
-        addrinfo = socket.getaddrinfo(mcast_grp, None)[0]
-        self._sock = socket.socket(addrinfo[0], socket.SOCK_DGRAM)
-        self._sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        self._sock.bind(("", 9522))
-        try:
+        multicast_group = "239.12.255.254"
+        server_address = ("", 9522)
+
+        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        sock.bind(server_address)
+        if len(self._bindingAddr) == 0:
+            self._bindingAddr = [socket.INADDR_ANY]
             mreq = struct.pack(
-                "4s4s", socket.inet_aton(mcast_grp), socket.inet_aton(ipbind)
+                "4sL", socket.inet_aton(multicast_group), socket.INADDR_ANY
             )
-            self._sock.setsockopt(socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, mreq)
-        except BaseException as exc:
-            raise RuntimeError("Could not start multicast") from exc
+            sock.setsockopt(socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, mreq)
+        else:
+            _LOGGER.info("Binding to %s" % self._bindingAddr)
+            for addr in self._bindingAddr:
+                try:
+                    mreq = struct.pack(
+                        "4s4s",
+                        socket.inet_aton(multicast_group),
+                        socket.inet_aton(addr),
+                    )
+                    sock.setsockopt(
+                        socket.IPPROTO_IP,
+                        socket.IP_ADD_MEMBERSHIP,
+                        socket.inet_aton(multicast_group) + socket.inet_aton(addr),
+                    )
+                except BaseException as exc:
+                    raise RuntimeError(
+                        "Could not start multicast for %s. IP of the Interfaces must be used!"
+                        % addr
+                    ) from exc
+        self._sock = sock
         return self._sock
 
     def connection_made(self, transport: asyncio.BaseTransport) -> None:
@@ -269,6 +295,10 @@ class SMAspeedwireEM(Device):
         if not sw.check6069():
             return {}
         sw6069 = speedwireHeader6069.from_packed(p[18:28])
+        m = (addr[0], addr[1], sw6069.timestamp)
+        if self.di.last_packet_metadata == m:
+            return {}
+        self.di.last_packet_metadata = m
         data: dict[str, Any] = {}
         data["protocolID"] = sw.protokoll
         data["susyid"] = sw6069.src_susyid

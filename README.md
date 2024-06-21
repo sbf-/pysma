@@ -1,6 +1,6 @@
 # pysma-plus library
 
-Python 3 library to retrieve data from various [SMA](https://www.sma.de/) devices.
+Unofficial and unaffiliated Python 3 library to retrieve data from various [SMA](https://www.sma.de/) devices.
 Based on the Webconnect implementation of the [pysma lib from kellerza](https://github.com/kellerza/pysma), the number of supported devices has been massively increased by this implementation.
 
 This library is the basis for a [Home Assistant Integration](https://github.com/littleyoda/ha-pysmaplus).
@@ -19,7 +19,7 @@ See [example.py](./example.py) for a basic usage and tests
 
 ## Successfully tested devices
 
-| Bereich | Gerät | Methode |
+| Bereich | Gerät | Method |
 |--|--|--|
 | Wechselrichter | Tripower X (STP XX-50)<br>(15,25) | ennexos |
 | Hybrid-Wechselrichter | Sunny Tripower Smart Energy<br>(10.0)  | webconnect |

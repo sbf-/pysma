@@ -52,3 +52,12 @@ def version_int_to_string(version_integer: int) -> str:
         appendixes[version_bytes[3]] if 0 <= version_bytes[3] < len(appendixes) else ""
     )
     return f"{version_bytes[0]:x}.{version_bytes[1]:x}.{version_bytes[2]}.{version_appendix}"
+
+
+def isInteger(s: str) -> bool:
+    """Test if the string is a integer"""
+    try:
+        int(s)
+        return True
+    except ValueError:
+        return False

@@ -16,7 +16,7 @@ from .exceptions import (
     SmaReadException,
     SmaWriteException,
 )
-from .helpers import splitUrl
+from .helpers import isInteger, splitUrl
 from .sensor import Sensor, Sensor_Range, Sensors
 
 _LOGGER = logging.getLogger(__name__)
@@ -131,6 +131,10 @@ class SHM2(Device):
         self._ip = destination["host"]
         self._sensorValues: Dict[str, int] = {}
         if password:
+            if not isInteger(password):
+                raise SmaConnectionException(
+                    "Password/Grid Guard Code must be a number."
+                )
             self._ggc = int(password)
         else:
             self._ggc = 0

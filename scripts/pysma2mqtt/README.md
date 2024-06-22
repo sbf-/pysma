@@ -8,6 +8,7 @@ The Python script is a _proof of concept_.
 
 ## Usage
 To install the libraries necessary for the script, the following instruction must be executed.
+
       python -m venv venv
       . venv/bin/activate
       pip install -r requirements.txt

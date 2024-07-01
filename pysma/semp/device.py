@@ -30,6 +30,7 @@ class sempDevice:
     deviceSerial: str
     deviceVendor: str
     deviceMaxConsumption: int
+    deviceMinConsumption: int
     timeframes: list[sempTimeframe] = []
 
     @staticmethod
@@ -59,6 +60,7 @@ class sempDevice:
         deviceSerial: str,
         deviceVendor: str,
         maxConsumption: int,
+        minConsumption: int | None = None,
     ):
         assert (
             len(deviceId) == 26
@@ -74,6 +76,9 @@ class sempDevice:
         self.interruptionsAllowed = False
         self.power = 0
         self.deviceMaxConsumption = maxConsumption
+        self.deviceMinConsumption = (
+            minConsumption if minConsumption is not None else maxConsumption
+        )
         self.status = "off"
         self.optionalEnergy = False
         # true, falls mintime != maxtime
@@ -93,9 +98,6 @@ class sempDevice:
         self.power = power
 
         # Optional i Device Info
-
-    # <MinOnTime>1200</MinOnTime>
-    # <MinOffTime>600</MinOffTime>
 
     def setTimeframes(self, timeframes: list[sempTimeframe]):
         self.timeframes = timeframes

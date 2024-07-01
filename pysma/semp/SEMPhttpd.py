@@ -1,13 +1,19 @@
+import asyncio
 import collections
 import copy
 import html
 import json
 import logging
+import os
 from dataclasses import dataclass
 from datetime import datetime
+from typing import Awaitable, Callable
 
 import untangle  # type: ignore
+import xmlschema
 from aiohttp import web
+
+from pysmaplus.semp.const import callbackAction
 
 from .const import (
     debugHTML,
@@ -39,7 +45,14 @@ class SEMPhttpServer:
     devices: dict[str, sempDevice] = {}
     history: collections.deque[historyData] = collections.deque(maxlen=180)
 
-    def __init__(self, addr, port, uuid, timezone):
+    def __init__(
+        self,
+        addr,
+        port,
+        uuid,
+        timezone,
+        callback: Callable[[callbackAction], Awaitable[None]] | None = None,
+    ):
         """Initialize the instance of the view."""
         print("Init HTTP-Server")
         self.port = port
@@ -47,6 +60,13 @@ class SEMPhttpServer:
         self.lastip = addr.split(".")[-1]
         self.uuid = uuid
         self.timezone = timezone
+        self.sempSchema = None
+        self.callback = callback
+
+    def loadSempSchema(self):
+        self.sempSchema = xmlschema.XMLSchema(
+            os.path.join(os.path.dirname(__file__), "semp.xsd")
+        )
 
     async def _get_handler(self, request):
 
@@ -131,17 +151,18 @@ class SEMPhttpServer:
             # if end_of_http_chunk:
             #     print(buffer)
         #        try:
+        _LOGGER.info(buffer)
         print(buffer)
         #  '<EM2Device xmlns="http://www.sma.de/communication/schema/SEMP/v1"><DeviceControl>
         # <DeviceId>F-00000001-000000000002-00</DeviceId>
         # <On>true</On>
         # </DeviceControl></EM2Device>
+        # b'<?xml version="1.0" encoding="UTF-8"?>\n<EM2Device xmlns="http://www.sma.de/communication/schema/SEMP/v1">\n\t<DeviceControl>\n\t\t<DeviceId>F-11223344-223529992949-00</DeviceId>\n\t\t<On>true</On>\n\t\t<RecommendedPowerConsumption>0</RecommendedPowerConsumption>\n\t\t<Timestamp>0</Timestamp>\n\t</DeviceControl>\n</EM2Device>'
+
         obj = untangle.parse(buffer.decode("utf-8"))
         assert (
             obj.children[0]["xmlns"] == "http://www.sma.de/communication/schema/SEMP/v1"
         )
-        print(obj.children[0].children[0].children[0].cdata)
-        print(obj.children[0].children[0].children[1].cdata)
         devId = obj.EM2Device.DeviceControl.DeviceId.cdata
         onoff = obj.EM2Device.DeviceControl.On.cdata.lower()
         if onoff == "true":
@@ -161,10 +182,15 @@ class SEMPhttpServer:
             data,
         )
         self.history.append(h)
-
         assert onoff in ["true", "false"]
         onoffBool = onoff == "true"
         print(devId, onoffBool)
+        if devId.startswith("F-11223344-") and devId.endswith("-00"):
+            devId = devId[2 + 8 + 1 : -3]
+        else:
+            _LOGGER.warning(f"Unknown device id received {devId}")
+        if self.callback:
+            await self.callback(callbackAction(devId, onoffBool))
         return web.Response(text="", content_type="text/xml")
 
     def Now(self) -> datetime:
@@ -190,6 +216,7 @@ class SEMPhttpServer:
                 deviceSerial=dev.deviceSerial,
                 deviceVendor=html.escape(dev.deviceVendor),
                 maxPowerConsumption=int(dev.deviceMaxConsumption),
+                #                minPowerConsumption=int(dev.deviceMinConsumption),
                 interruptionsAllowed=self.bool2str(dev.interruptionsAllowed),
                 optionalEnergy=self.bool2str(dev.optionalEnergy),
             )
@@ -231,9 +258,12 @@ class SEMPhttpServer:
                     )
             msg += "</PlanningRequest>"
         msg += sempXMLend
+        self.sempSchema.validate(msg)
         return web.Response(text=msg, content_type="text/xml")
 
     async def start(self):
+        await asyncio.gather(asyncio.to_thread(self.loadSempSchema))
+
         async def middleware_factory(app, handler):
             async def middleware_handler(request):
                 print(request)

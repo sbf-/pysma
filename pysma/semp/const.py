@@ -1,3 +1,5 @@
+from dataclasses import dataclass
+
 debugHTML = """<!DOCTYPE html>
 <html lang="en">
   <head>
@@ -94,6 +96,8 @@ deviceInfoXML = """    <DeviceInfo>
     </DeviceInfo>
 """
 
+# <!--            <MinPowerConsumption>{minPowerConsumption}</MinPowerConsumption> -->
+
 deviceStatusXML = """        <DeviceStatus>
         <DeviceId>{deviceId}</DeviceId> <!-- {deviceName} -->
         <EMSignalsAccepted>{emSignalsAccepted}</EMSignalsAccepted>
@@ -118,3 +122,9 @@ timeFrameXml = """<Timeframe>
 """
 
 # Temp             <PreferenceIndifferentAreas>NoPreference</PreferenceIndifferentAreas>
+
+
+@dataclass
+class callbackAction:
+    deviceid: str
+    requestedStatus: bool

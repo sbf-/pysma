@@ -1,7 +1,10 @@
 import random
 import uuid
 from datetime import datetime
+from typing import Awaitable, Callable
 from zoneinfo import ZoneInfo
+
+from pysmaplus.semp.const import callbackAction
 
 from .device import sempDevice
 from .SEMPhttpd import SEMPhttpServer
@@ -9,11 +12,17 @@ from .ssdp import async_create_upnp_datagram_endpoint
 
 
 class semp:
-    def __init__(self, ip: str, port: int, timezone: ZoneInfo | None = None):
+    def __init__(
+        self,
+        ip: str,
+        port: int,
+        timezone: ZoneInfo | None = None,
+        callback: Callable[[callbackAction], Awaitable[None]] | None = None,
+    ):
         self.ip = ip
         self.port = port
         self.uuid = self.getUUID()
-        self.http = SEMPhttpServer(self.ip, self.port, self.uuid, timezone)
+        self.http = SEMPhttpServer(self.ip, self.port, self.uuid, timezone, callback)
 
     def getUUID(self) -> str:
         """Generate a UUID based on the IP and the used port"""

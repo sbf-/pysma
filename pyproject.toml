@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pysma-plus"
-version = "0.3.5"
+version = "0.3.6"
 description = "Library to interface SMA Devices via WebConnect, EnnexOS and Energy Meter Devices"
 readme = "README.md"
 authors = [{ name = "Sven Bursch-Osewold", email = "sb_pysma@bursch.com" },{ name = "Johann Kellerman" , email ="kellerza@gmail.com"} ]
@@ -22,7 +22,8 @@ dependencies = [
     "jmespath<2",
     "dataclasses-struct>0.8",
     "untangle>=1.2.1",
-    "pymodbus"
+    "pymodbus>=3.6.9",
+    "xmlschema>=3.3.0"
 ]
 requires-python = ">=3.9"
 

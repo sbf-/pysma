@@ -10,7 +10,7 @@ URL = "https://github.com/littleyoda/pysma"
 setup(
     name="pysma-plus",
     version=VERSION,
-    description="Library to interface SMA Devices via WebConnect, EnnexOS and Energy Meter Devices",
+    description="Library to interface SMA Devices via Speedwire, WebConnect, EnnexOS and Energy Meter Protocol",
     long_description=Path("README.md").read_text(),
     long_description_content_type="text/markdown",
     url=URL,

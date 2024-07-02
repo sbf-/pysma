@@ -21,7 +21,8 @@ See [example.py](./example.py) for a basic usage and tests
 
 | Bereich | Gerät | Method |
 |--|--|--|
-| Wechselrichter | Tripower X (STP XX-50)<br>(15,25) | ennexos |
+| Wechselrichter | Tripower X (STP XX-50)<br>(12,15,25) | ennexos |
+| Wechselrichter | Tripower (STP XX)<br>(8,10) | speedwireINV |
 | Hybrid-Wechselrichter | Sunny Tripower Smart Energy<br>(10.0)  | webconnect |
 | Hybrid-Wechselrichter | Sunny Boy Storage<br>(SBS3.7-10, SBS5.0-10) | webconnect |
 | | | |

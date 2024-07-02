@@ -30,5 +30,5 @@ setup(
         "xmlschema>=3.3.0",
     ],
     zip_safe=True,
-    include_package_data=True,
+    include_package_data=False,
 )

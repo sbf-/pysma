@@ -4,7 +4,7 @@ from pathlib import Path
 
 from setuptools import setup
 
-VERSION = "0.3.8"
+VERSION = "0.3.9"
 URL = "https://github.com/littleyoda/pysma"
 
 setup(
@@ -30,4 +30,5 @@ setup(
         "xmlschema>=3.3.0",
     ],
     zip_safe=True,
+    include_package_data=True,
 )

@@ -1,7 +1,7 @@
 import random
 import uuid
 from datetime import datetime
-from typing import Awaitable, Callable
+from typing import Awaitable, Callable, Union
 from zoneinfo import ZoneInfo
 
 from pysmaplus.semp.const import callbackAction
@@ -39,7 +39,13 @@ class semp:
     def addDevice(self, dev: sempDevice):
         self.http.addDevice(dev)
 
-    def getDevice(self, deviceId: str) -> sempDevice:
+    def removeDevice(self, dev: Union[str | sempDevice]):
+        if isinstance(dev, sempDevice):
+            self.http.removeDevice(dev.deviceId)
+        else:
+            self.http.removeDevice(dev)
+
+    def getDevice(self, deviceId: Union[str | sempDevice]) -> sempDevice:
         if isinstance(deviceId, sempDevice):
             return self.getDevice(deviceId.deviceId)
         return self.http.getDevice(deviceId)

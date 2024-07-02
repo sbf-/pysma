@@ -4,7 +4,6 @@ import copy
 import html
 import json
 import logging
-import os
 from dataclasses import dataclass
 from datetime import datetime
 from typing import Awaitable, Callable
@@ -26,6 +25,7 @@ from .const import (
     timeFrameXml,
 )
 from .device import sempDevice
+from .sempxsd import sempxsd
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -64,9 +64,7 @@ class SEMPhttpServer:
         self.callback = callback
 
     def loadSempSchema(self):
-        self.sempSchema = xmlschema.XMLSchema(
-            os.path.join(os.path.dirname(__file__), "semp.xsd")
-        )
+        self.sempSchema = xmlschema.XMLSchema(sempxsd)
 
     async def _get_handler(self, request):
 
@@ -112,7 +110,7 @@ class SEMPhttpServer:
                         value = (
                             f"{row.deviceData[d].power} ({row.deviceData[d].status})"
                         )
-                    if row.cmdData:
+                    if row.cmdData and d in row.cmdData:
                         value = f"Request: Turn {row.cmdData[d]['status']}"
                     out += "<td>" + value + "</td>"
                 out += f"<td>{row.remote} {row.typ}</td>"
@@ -200,8 +198,6 @@ class SEMPhttpServer:
             return datetime.now()
 
     async def getSemp(self, request):
-        # TODO xsd verification
-        # history: collections.deque[Tuple[str, dict[str, device]]] = collections.deque(maxlen=180)
         now = self.Now()
 
         msg = sempXMLstart
@@ -219,6 +215,8 @@ class SEMPhttpServer:
                 #                minPowerConsumption=int(dev.deviceMinConsumption),
                 interruptionsAllowed=self.bool2str(dev.interruptionsAllowed),
                 optionalEnergy=self.bool2str(dev.optionalEnergy),
+                minOnTime=int(dev.minOnTime),
+                minOffTime=int(dev.minOffTime),
             )
         now = self.Now()
         h = historyData(

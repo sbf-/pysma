@@ -61,6 +61,8 @@ class sempDevice:
         deviceVendor: str,
         maxConsumption: int,
         minConsumption: int | None = None,
+        minOnTime: timedelta | None = None,
+        minOffTime: timedelta | None = None,
     ):
         assert (
             len(deviceId) == 26
@@ -79,12 +81,15 @@ class sempDevice:
         self.deviceMinConsumption = (
             minConsumption if minConsumption is not None else maxConsumption
         )
+        self.minOnTime = int(minOnTime.total_seconds()) if minOnTime else 120
+        self.minOffTime = int(minOffTime.total_seconds()) if minOffTime else 120
         self.status = "off"
         self.optionalEnergy = False
-        # true, falls mintime != maxtime
+        # is set automatically from the timeframes (true, if mintime != maxtime).
         # <OptionalEnergy>false</OptionalEnergy>
 
         self.emSignalsAccepted = False
+        # is set automatically from the timeframes (false if no timeframe defined).
         # EMSignalsAccepted (xs:
         # Bool that indicates if the device is currently considering the control signals or recommendations
         # provided by the energy manager or if it is in a mode which ignores the signals or recommendations
@@ -97,7 +102,8 @@ class sempDevice:
         self.status = status
         self.power = power
 
-        # Optional i Device Info
+    def setInterruptable(self, allowinterupts: bool) -> None:
+        self.interruptionsAllowed = allowinterupts
 
     def setTimeframes(self, timeframes: list[sempTimeframe]):
         self.timeframes = timeframes
@@ -114,24 +120,3 @@ class sempDevice:
             if tf.minRunningTime != tf.maxRunningTime:
                 self.optionalEnergy = True
         self.emSignalsAccepted = len(self.timeframes) > 0
-
-
-# <PlanningRequest>
-# <Timeframe>
-# <DeviceId>F-11223344-112233445566-00</DeviceId>
-# <EarliestStart>0</EarliestStart><!-- already running -->
-# <LatestEnd>10800</LatestEnd><!—latest end in 3h -->
-# <!-- mandatory demand of 0.5h (MinRunningTime = MaxRunningTime) -->
-# <MinRunningTime>1800</MinRunningTime>
-# <MaxRunningTime>1800</MaxRunningTime>
-# <PreferenceIndifferentAreas>Late</PreferenceIndifferentAreas>
-# </Timeframe>
-# <Timeframe>
-# <DeviceId>F-11223344-112233445566-00</DeviceId>
-# <EarliestStart>18000</EarliestStart><!-- earliest start in 5h -->
-# <LatestEnd>25200</LatestEnd><!-- latest end in 7h -->
-# <!-- optional runtime of 30min (MinRunningTime=0) -->
-# <MinRunningTime>0</MinRunningTime>
-# <MaxRunningTime>1800</MaxRunningTime>
-# </Timeframe>
-# </PlanningRequest>

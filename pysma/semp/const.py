@@ -76,8 +76,8 @@ deviceInfoXML = """    <DeviceInfo>
         </Identification>
         <Characteristics>
             <MaxPowerConsumption>{maxPowerConsumption}</MaxPowerConsumption>
-            <MinOnTime>600</MinOnTime>
-            <MinOffTime>600</MinOffTime>
+            <MinOnTime>{minOnTime}</MinOnTime>
+            <MinOffTime>{minOffTime}</MinOffTime>
         </Characteristics>
         <Capabilities>
             <CurrentPower>

@@ -16,9 +16,9 @@ debugHTML = """<!DOCTYPE html>
 
 hintsHTML = """
 <h2>Hints</h2>
-    If no requests or requests older than 1 minute are listed, this means that communication between this device () and the Sunny Home Manager is not working.<br>
-    <a href="https://www.sunnyportal.com/Homan/ConsumerBalance">Sunny Portal</a>
-    <a href="https://www.sunnyportal.com/FixedPages/HoManLive.aspx">Sunny Portal (Overview of timeframes)</a>
+    If no requests or requests older than 1 minute are listed, this means that communication between this device and the Sunny Home Manager is not working.<br>
+    <a href="https://www.sunnyportal.com/Homan/ConsumerBalance">Classic Sunny Portal (Consumer Oeriew)</a><br>
+    <a href="https://www.sunnyportal.com/FixedPages/HoManLive.aspx">Classic Sunny Portal (Overview of timeframes)</a>
 """
 # see 3.2.2 UPnP Device-Description
 descriptionXML = """<root xmlns="urn:schemas-upnp-org:device-1-0">

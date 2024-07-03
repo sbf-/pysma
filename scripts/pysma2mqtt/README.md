@@ -22,3 +22,5 @@ To run it
       python3 pysma2mqtt.py mqtt://username:password@hostname/pysma2mqtt speedwire userORinstaller passwordInverter ipInverter
 
       python3 pysma2mqtt.py mqtt://username:password@hostname/pysma2mqtt energymeter
+
+      python3 pysma2mqtt.py mqtt://username:password@hostname/pysma2mqtt shm2 '' gridGuardCode ipInverter

@@ -3,7 +3,9 @@
 Unofficial and unaffiliated Python 3 library to retrieve data from various [SMA](https://www.sma.de/) devices.
 Based on the Webconnect implementation of the [pysma lib from kellerza](https://github.com/kellerza/pysma), the number of supported devices has been massively increased by this implementation.
 
-This library is the basis for a [Home Assistant Integration](https://github.com/littleyoda/ha-pysmaplus).
+This library is the basis for:
+* a [Home Assistant Integration](https://github.com/littleyoda/ha-pysmaplus)
+* [LoxBerry SMA Plugin](https://wiki.loxberry.de/plugins/sma2loxone/start)
 
 Supported Devices:
 * Devices with Webconnect-Interface
@@ -12,6 +14,7 @@ Supported Devices:
 * Almost all SMA devices through the use of Speedwire (with a reduced range of measured values compared to the other interfaces)
 
 The long-term goal is to integrate the change into the original library.
+
 
 ## Example usage
 

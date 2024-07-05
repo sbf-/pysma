@@ -109,6 +109,11 @@ class sempDevice:
         self.timeframes = timeframes
 
     def addTimeframe(self, timeframe: sempTimeframe):
+        assert timeframe.minRunningTime <= timeframe.maxRunningTime
+        assert timeframe.minRunningTime > 0
+        if timeframe.maxRunningTime == timeframe.minRunningTime:
+            # workaround
+            timeframe.minRunningTime -= 1
         self.timeframes.append(timeframe)
 
     def update(self):

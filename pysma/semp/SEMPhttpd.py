@@ -1,4 +1,3 @@
-import asyncio
 import collections
 import copy
 import html
@@ -66,7 +65,7 @@ class SEMPhttpServer:
     def loadSempSchema(self):
         self.sempSchema = xmlschema.XMLSchema(sempxsd)
 
-    async def _get_handler(self, request):
+    async def getUUIDPage(self, request):
 
         msg = descriptionXML.format(
             friendly_name=self.lastip + " HA-GW",
@@ -82,7 +81,7 @@ class SEMPhttpServer:
         )
         return web.Response(text=msg, content_type="text/xml")
 
-    async def _getMain(self, request):
+    async def getStatusPage(self, request):
         devices = set()
         devicesName = {}
         for dataTuple in self.history:
@@ -259,9 +258,7 @@ class SEMPhttpServer:
         self.sempSchema.validate(msg)
         return web.Response(text=msg, content_type="text/xml")
 
-    async def start(self):
-        await asyncio.gather(asyncio.to_thread(self.loadSempSchema))
-
+    async def startWebserver(self):
         async def middleware_factory(app, handler):
             async def middleware_handler(request):
                 print(request)
@@ -292,8 +289,8 @@ class SEMPhttpServer:
         # o HTTP GET: <baseURL>/PlanningRequest?DeviceId=<DeviceID>
         app.add_routes(
             [
-                web.get("/", self._getMain),
-                web.get("/uuid:" + self.uuid + "/description.xml", self._get_handler),
+                web.get("/", self.getStatusPage),
+                web.get("/uuid:" + self.uuid + "/description.xml", self.getUUIDPage),
                 web.get("/semp/", self.getSemp),
                 web.post("/semp/", self.postSemp),
             ]

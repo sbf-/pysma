@@ -1,3 +1,4 @@
+import asyncio
 import random
 import uuid
 from datetime import datetime
@@ -30,8 +31,10 @@ class semp:
         rnd.seed(self.ip + str(self.port))
         return str(uuid.UUID(int=rnd.getrandbits(128), version=4))
 
-    async def start(self):
-        await self.http.start()
+    async def start(self, embeddedHttpd: bool = True):
+        if embeddedHttpd:
+            await self.http.startWebserver()
+        await asyncio.gather(asyncio.to_thread(self.http.loadSempSchema))
         await async_create_upnp_datagram_endpoint(
             self.ip, True, self.ip, self.port, self.uuid
         )
@@ -58,3 +61,16 @@ class semp:
         if diff < 130:
             return "Connected"
         return "Connection lost"
+
+    def getRoutes(self) -> list[dict]:
+        return [
+            {"path": "/sempinfo", "callback": {"GET": self.http.getStatusPage}},
+            {
+                "path": "/uuid:" + self.uuid + "/description.xml",
+                "callback": {"GET": self.http.getUUIDPage},
+            },
+            {
+                "path": "/semp/",
+                "callback": {"GET": self.http.getSemp, "POST": self.http.postSemp},
+            },
+        ]

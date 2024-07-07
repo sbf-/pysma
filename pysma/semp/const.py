@@ -9,16 +9,67 @@ debugHTML = """<!DOCTYPE html>
     <title>SEMP Overview</title>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2.0.6/css/pico.classless.min.css" integrity="sha256-x6eJE6DWO+0qwgv4JXN3jXY3/GIzHSlVoH0jcdsLHEQ=" crossorigin="anonymous">
+  <style>
+        [role="tabs"] {
+        display: flex;
+        }
+
+        [role="tabs"] section {
+        display: flex;
+        flex-wrap: wrap;
+        width: 100%;
+        }
+
+        [role="tabs"] figure {
+        flex-grow: 1;
+        width: 100%;
+        height: 100%;
+        display: none;
+        }
+
+        [role="tabs"] [type="radio"]:checked + figure {
+        display: block;
+        }
+
+        nav[role="tab-control"] label.active {
+        color: var(--primary);
+        cursor: pointer;
+        }
+  </style>
   </head>
 
   <body>
 """
+
 
 hintsHTML = """
 <h2>Hints</h2>
     If no requests or requests older than 1 minute are listed, this means that communication between this device and the Sunny Home Manager is not working.<br>
     <a href="https://www.sunnyportal.com/Homan/ConsumerBalance">Classic Sunny Portal (Consumer Oeriew)</a><br>
     <a href="https://www.sunnyportal.com/FixedPages/HoManLive.aspx">Classic Sunny Portal (Overview of timeframes)</a>
+
+
+<script id="rendered-js" >
+const nodeList = document.querySelectorAll('nav[role="tab-control"] label');
+const eventListenerCallback = setActiveState.bind(null, nodeList);
+
+
+nodeList.forEach(node => {
+  node.addEventListener("click", eventListenerCallback); /** add click event listener to all nodes */
+});
+
+/** the click handler */
+function setActiveState(nodeList, event) {
+  nodeList.forEach(node => {
+    node.classList.remove("active"); /** remove active class from all nodes */
+  });
+  event.target.classList.add("active"); /* set active class on current node */
+}
+
+nodeList[0].classList.add('active'); /** add active class to first node  */
+
+</script>
+
 """
 # see 3.2.2 UPnP Device-Description
 descriptionXML = """<root xmlns="urn:schemas-upnp-org:device-1-0">
@@ -76,7 +127,7 @@ deviceInfoXML = """    <DeviceInfo>
         </Identification>
         <Characteristics>
             <MaxPowerConsumption>{maxPowerConsumption}</MaxPowerConsumption>
-            <MinPowerConsumption>{minPowerConsumption}</MinPowerConsumption>
+<!--            <MinPowerConsumption>{minPowerConsumption}</MinPowerConsumption> -->
             <MinOnTime>{minOnTime}</MinOnTime>
             <MinOffTime>{minOffTime}</MinOffTime>
         </Characteristics>

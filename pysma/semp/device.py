@@ -97,7 +97,7 @@ class sempDevice:
         # tion for the device at the moment.
 
     def setPowerStatus(self, power: int, status: str):
-        assert status in ["on", "off", "offline"]
+        assert status in ["on", "off", "offline"], f"Unknown Status {status}"
         assert power >= 0
         self.status = status
         self.power = power

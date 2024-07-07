@@ -1,4 +1,3 @@
-import asyncio
 import random
 import uuid
 from datetime import datetime
@@ -34,7 +33,6 @@ class semp:
     async def start(self, embeddedHttpd: bool = True):
         if embeddedHttpd:
             await self.http.startWebserver()
-        await asyncio.gather(asyncio.to_thread(self.http.loadSempSchema))
         await async_create_upnp_datagram_endpoint(
             self.ip, True, self.ip, self.port, self.uuid
         )
@@ -42,13 +40,18 @@ class semp:
     def addDevice(self, dev: sempDevice):
         self.http.addDevice(dev)
 
+    def _getDeviceFromStr(self, deviceId) -> sempDevice | None:
+        return self.getDevice(deviceId)
+
     def removeDevice(self, dev: Union[str | sempDevice]):
-        if isinstance(dev, sempDevice):
-            self.http.removeDevice(dev.deviceId)
+        if isinstance(dev, str):
+            d = self._getDeviceFromStr(dev)
+            assert d is not None
+            self.http.removeDevice(d)
         else:
             self.http.removeDevice(dev)
 
-    def getDevice(self, deviceId: Union[str | sempDevice]) -> sempDevice:
+    def getDevice(self, deviceId: Union[str | sempDevice]) -> sempDevice | None:
         if isinstance(deviceId, sempDevice):
             return self.getDevice(deviceId.deviceId)
         return self.http.getDevice(deviceId)

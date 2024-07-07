@@ -1,7 +1,6 @@
 import collections
 import copy
 import html
-import json
 import logging
 from dataclasses import dataclass
 from datetime import datetime
@@ -14,16 +13,15 @@ from aiohttp import web
 from pysmaplus.semp.const import callbackAction
 
 from .const import (
-    debugHTML,
     descriptionXML,
     deviceInfoXML,
     deviceStatusXML,
-    hintsHTML,
     sempXMLend,
     sempXMLstart,
     timeFrameXml,
 )
 from .device import sempDevice
+from .RendererStatusPage import statusPageRenderer
 from .sempxsd import sempxsd
 
 _LOGGER = logging.getLogger(__name__)
@@ -35,8 +33,8 @@ class historyData:
     timemsec: float
     typ: str
     remote: str
-    deviceData: dict[str, sempDevice]
-    cmdData: dict
+    deviceData: dict[str, sempDevice] | None
+    cmdData: dict | None
 
 
 class SEMPhttpServer:
@@ -46,9 +44,9 @@ class SEMPhttpServer:
 
     def __init__(
         self,
-        addr,
-        port,
-        uuid,
+        addr: str,
+        port: int,
+        uuid: str,
         timezone,
         callback: Callable[[callbackAction], Awaitable[None]] | None = None,
     ):
@@ -59,13 +57,10 @@ class SEMPhttpServer:
         self.lastip = addr.split(".")[-1]
         self.uuid = uuid
         self.timezone = timezone
-        self.sempSchema = None
+        self.sempSchema: xmlschema.XMLSchema10 = xmlschema.XMLSchema(sempxsd)
         self.callback = callback
 
-    def loadSempSchema(self):
-        self.sempSchema = xmlschema.XMLSchema(sempxsd)
-
-    async def getUUIDPage(self, request):
+    async def getUUIDPage(self, request: web.Request) -> web.Response:
 
         msg = descriptionXML.format(
             friendly_name=self.lastip + " HA-GW",
@@ -81,67 +76,13 @@ class SEMPhttpServer:
         )
         return web.Response(text=msg, content_type="text/xml")
 
-    async def getStatusPage(self, request):
-        devices = set()
-        devicesName = {}
-        for dataTuple in self.history:
-            if dataTuple.deviceData:
-                for devId in dataTuple.deviceData.keys():
-                    devices.add(devId)
-                    if devId not in devicesName:
-                        devicesName[devId] = dataTuple.deviceData[devId]
-        devices = list(devices)
-        out = debugHTML
-        out += "<h2>Last SEMP-Requests from SHM</h2>"
-        if len(self.history) == 0:
-            out += "None<br>"
-        else:
-            out += "<table><thead><tr><th>Time</th>\n"
-            for d in devices:
-                out += f"<th>{d[11:23]}<br>{devicesName[d].deviceName}</th>\n"
-            out += "<th>Request IP</th></thead>\n<tbody>"
+    async def getStatusPage(self, request: web.Request):
+        return await statusPageRenderer(request, self.devices, self.history)
 
-            for row in reversed(self.history):
-                out += f"<tr><td>{row.time}</td>"
-                for d in devices:
-                    value = ""
-                    if row.deviceData and d in row.deviceData:
-                        value = (
-                            f"{row.deviceData[d].power} ({row.deviceData[d].status})"
-                        )
-                    if row.cmdData and d in row.cmdData:
-                        value = f"Request: Turn {row.cmdData[d]['status']}"
-                    out += "<td>" + value + "</td>"
-                out += f"<td>{row.remote} {row.typ}</td>"
-                out += "</tr>"
-            out += "</tbody></table>"
-
-        out += "<h2>Current Status</h2><pre>"
-        ret = []
-        for dev in self.devices.values():
-            ret.append(
-                {
-                    "deviceId": dev.deviceId,
-                    "deviceName": html.escape(dev.deviceName),
-                    "deviceType": dev.deviceType,
-                    "deviceSerial": html.escape(dev.deviceSerial),
-                    "deviceVendor": html.escape(dev.deviceVendor),
-                    "power": dev.power,
-                    "status": dev.status,
-                    "optionalEnergy": dev.optionalEnergy,
-                    "interruptionsAllowed": dev.interruptionsAllowed,
-                    "Max Consumption": dev.deviceMaxConsumption,
-                }
-            )
-        out += json.dumps(ret, indent=4)
-        out += "</pre>"
-        out += hintsHTML
-        return web.Response(text=out, content_type="text/html")
-
-    def bool2str(self, b):
+    def bool2str(self, b) -> str:
         return str(b).lower()
 
-    async def postSemp(self, request):
+    async def postSemp(self, request) -> web.Response:
         buffer = b""
         async for data, end_of_http_chunk in request.content.iter_chunks():
             buffer += data
@@ -159,7 +100,7 @@ class SEMPhttpServer:
         obj = untangle.parse(buffer.decode("utf-8"))
         assert (
             obj.children[0]["xmlns"] == "http://www.sma.de/communication/schema/SEMP/v1"
-        )
+        ), "Not a SEMP XML-File received."
         devId = obj.EM2Device.DeviceControl.DeviceId.cdata
         onoff = obj.EM2Device.DeviceControl.On.cdata.lower()
         if onoff == "true":
@@ -196,7 +137,7 @@ class SEMPhttpServer:
         else:
             return datetime.now()
 
-    async def getSemp(self, request):
+    async def getSemp(self, request) -> web.Response:
         now = self.Now()
 
         msg = sempXMLstart
@@ -258,7 +199,7 @@ class SEMPhttpServer:
         self.sempSchema.validate(msg)
         return web.Response(text=msg, content_type="text/xml")
 
-    async def startWebserver(self):
+    async def startWebserver(self) -> None:
         async def middleware_factory(app, handler):
             async def middleware_handler(request):
                 print(request)
@@ -300,13 +241,15 @@ class SEMPhttpServer:
         site = web.TCPSite(self.runner, self.addr, self.port)
         await site.start()
 
-    def addDevice(self, device: sempDevice):
+    def addDevice(self, device: sempDevice) -> None:
         self.devices[device.deviceId] = device
 
-    def removeDevice(self, deviceId: str):
-        del self.devices[sempDevice.deviceId]
+    def removeDevice(self, device: sempDevice) -> None:
+        print(device)
+        print(type(device))
+        del self.devices[device.deviceId]
 
-    def getDevice(self, deviceId: str):
+    def getDevice(self, deviceId: str) -> sempDevice | None:
         print(self.devices, deviceId)
         return self.devices.get(deviceId, None)
 

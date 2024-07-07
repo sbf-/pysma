@@ -1,5 +1,5 @@
 ﻿# flake8: noqa
-sempxsd = """<?xml version="1.0" encoding="utf-8"?>
+sempxsd: str = """<?xml version="1.0" encoding="utf-8"?>
 <!--
 # SEMP - Simple Energy Management Protocol
 #

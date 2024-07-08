@@ -32,9 +32,10 @@ debugHTML = """<!DOCTYPE html>
         }
 
         nav[role="tab-control"] label.active {
-        color: var(--primary);
+        text-decoration: underline overline #FF3028;
         cursor: pointer;
         }
+
   </style>
   </head>
 
@@ -71,6 +72,14 @@ nodeList[0].classList.add('active'); /** add active class to first node  */
 </script>
 
 """
+
+tabHTML = """
+<input hidden="hidden" type="radio" {check} name="tabs" id="{tabname}" />
+<figure>
+{data}
+</figure>
+"""
+
 # see 3.2.2 UPnP Device-Description
 descriptionXML = """<root xmlns="urn:schemas-upnp-org:device-1-0">
     <specVersion>

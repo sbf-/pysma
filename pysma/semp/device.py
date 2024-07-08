@@ -18,7 +18,7 @@ class sempTimeframe:
         self.stop = stop
         self.minRunningTime = int(minRunningTime.total_seconds())
         self.maxRunningTime = int(maxRunningTime.total_seconds())
-        assert self.minRunningTime > 0
+        assert self.minRunningTime >= 0
         assert self.minRunningTime <= self.maxRunningTime
 
 

@@ -136,7 +136,7 @@ deviceInfoXML = """    <DeviceInfo>
         </Identification>
         <Characteristics>
             <MaxPowerConsumption>{maxPowerConsumption}</MaxPowerConsumption>
-<!--            <MinPowerConsumption>{minPowerConsumption}</MinPowerConsumption> -->
+            <MinPowerConsumption>{minPowerConsumption}</MinPowerConsumption>
             <MinOnTime>{minOnTime}</MinOnTime>
             <MinOffTime>{minOffTime}</MinOffTime>
         </Characteristics>

@@ -95,6 +95,7 @@ class SMAennexos(Device):
             async with self._aio_session.request(
                 method, url, timeout=ClientTimeout(total=DEFAULT_TIMEOUT), **parameters
             ) as res:
+                _LOGGER.debug(f"Request {url} Code {res.status}")
                 if res.status == 200:
                     res = await res.json()
                     return res
@@ -106,8 +107,9 @@ class SMAennexos(Device):
         except SmaAuthenticationException as e:
             raise e
         except (client_exceptions.ContentTypeError, json.decoder.JSONDecodeError):
-            _LOGGER.warning("Request to %s did not return a valid json.", url)
+            _LOGGER.error("Request to %s did not return a valid json.", url)
         except client_exceptions.ServerDisconnectedError as exc:
+            _LOGGER.error(f"Timeout while requesting {url} {exc}")
             raise SmaConnectionException(
                 f"Server at {self._url} disconnected."
             ) from exc
@@ -115,6 +117,7 @@ class SMAennexos(Device):
             client_exceptions.ClientError,
             asyncio.exceptions.TimeoutError,
         ) as exc:
+            _LOGGER.error(f"Error requesting {url} {exc}")
             raise SmaConnectionException(
                 f"Could not connect to SMA at {self._url}: {exc}"
             ) from exc
@@ -130,6 +133,7 @@ class SMAennexos(Device):
         if self._new_session_data is None:
             _LOGGER.error("User & Pwd not set!")
             return False
+        _LOGGER.debug(f'Trying to login {self._url} {self._new_session_data["user"]}')
         loginurl = self._url + "/api/v1/token"
         postdata = {
             "data": {
@@ -140,6 +144,7 @@ class SMAennexos(Device):
         }
         ret = await self._jsonrequest(loginurl, postdata)
         if "access_token" not in ret:
+            _LOGGER.debug(f"Login failed {ret}")
             raise SmaAuthenticationException("Login failed!")
         self._authorization_header = {
             "Authorization": "Bearer " + ret["access_token"],

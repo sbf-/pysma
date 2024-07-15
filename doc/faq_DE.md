@@ -71,3 +71,8 @@ Die Energy Meter (einschließlich Sunny Home Manager 2) versenden ihre Daten per
 Experten können die Energy Meters von Multicast auf Unicast umstellen. Die Geräte senden dann die Daten nur noch an die ausgewählten IP Adressen und nicht mehr per Multicast an alle Geräte des Subnetzes. Hierdurch können Subnetzte überwunden werden. Hierbei ist sicher zu stellen, dass man alle Geräte einträgt, die die Informationen der Energy Meter erhalten müssen. Bitte vor der Änderung die Anleitung lesen.
 
 Sunny Portal => Konfiguration => Geräteübersicht => Symbol Eigenschaft => Button Bearbeiten 
+
+# Unterstützung
+
+Da die Implementierung doch recht aufwendig war, würde ich mich über eine kleine Aufmerksamkeit freuen:
+https://littleyoda.github.io/

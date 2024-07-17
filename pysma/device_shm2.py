@@ -127,7 +127,7 @@ class SHM2(Device):
     def __init__(self, ip: str, password: str | None):
         """Init"""
         destination = splitUrl(ip)
-        _LOGGER.debug(f"{destination}")
+        _LOGGER.debug(f"SHM {ip} => {destination}")
         self._ip = destination["host"]
         self._sensorValues: Dict[str, int] = {}
         if password:

@@ -22,6 +22,7 @@ from .exceptions import (
     SmaConnectionException,
     SmaReadException,
 )
+from .helpers import splitUrl
 from .sensor import Sensor, Sensor_Range, Sensors
 
 _LOGGER = logging.getLogger(__name__)
@@ -68,9 +69,11 @@ class SMAennexos(Device):
             group (str, optional): Username to use during login.
 
         """
-        self._url = url.rstrip("/")
-        if not url.startswith("http"):
-            self._url = "https://" + self._url
+        destination = splitUrl(url, "https")
+        self._url = destination["schema"] + "://" + destination["host"]
+        if destination["port"] is not None:
+            self._url = self._url + ":" + str(destination["port"])
+        _LOGGER.debug(f"Ennexos {url} => {self._url}")
         self._new_session_data = {"user": group, "pass": password}
         self._aio_session = session
 
@@ -117,7 +120,7 @@ class SMAennexos(Device):
             client_exceptions.ClientError,
             asyncio.exceptions.TimeoutError,
         ) as exc:
-            _LOGGER.error(f"Error requesting {url} {exc}")
+            _LOGGER.error(f"Error requesting {url} {exc} [Timeout]")
             raise SmaConnectionException(
                 f"Could not connect to SMA at {self._url}: {exc}"
             ) from exc

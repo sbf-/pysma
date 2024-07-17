@@ -16,9 +16,10 @@ class BetterJSONEncoder(json.JSONEncoder):
         return str(o)
 
 
-def splitUrl(url: str) -> Dict[str, Any]:
+def splitUrl(url: str, fallbackScheme: str = "fake") -> Dict[str, Any]:
+    url = url.strip(" ")
     if "://" not in url:
-        url = "fake://" + url
+        url = fallbackScheme + "://" + url
     x = urlparse(url)
     return {
         "schema": x.scheme,

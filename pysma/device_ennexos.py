@@ -161,9 +161,15 @@ class SMAennexos(Device):
             "/api/v1/featuretoggles",
         ]:
             url = self._url + u
-            ret = await self._jsonrequest(
-                url, {"headers": self._authorization_header}, hdrs.METH_GET
-            )
+            try:
+                ret = await self._jsonrequest(
+                    url, {"headers": self._authorization_header}, hdrs.METH_GET
+                )
+            except SmaConnectionException as e:
+                # Ignore Error while requesting featuretoogles as not available on all systems
+                if u == "/api/v1/featuretoggles":
+                    continue
+                raise e
             if isinstance(ret, dict):
                 ret.pop("_links", None)
             if isinstance(ret, list):

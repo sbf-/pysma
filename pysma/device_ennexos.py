@@ -14,8 +14,7 @@ from typing import Any, Dict, Optional
 from aiohttp import ClientSession, ClientTimeout, client_exceptions, hdrs
 
 from .const import SMATagList
-from .const_webconnect import DEFAULT_TIMEOUT
-from .definitions_ennexos import getSensorForDevice
+from .definitions_ennexos import DEFAULT_TIMEOUT, getSensorForDevice
 from .device import Device, DeviceInformation, DiscoveryInformation
 from .exceptions import (
     SmaAuthenticationException,

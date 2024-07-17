@@ -5,6 +5,8 @@ Definition for all enneoxOS senosrs
 from .const import Identifier, SMATagList
 from .sensor import Sensor
 
+DEFAULT_TIMEOUT = 8
+
 """ The profiles are necessary because the devices generally
     return a significantly lower number of measured values without sunlight. """
 ennexosSensorProfiles: list[tuple[list[int], list[str]]] = [

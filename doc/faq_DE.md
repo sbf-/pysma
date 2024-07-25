@@ -52,7 +52,7 @@ Geräte: z.B. Tripower X, EVCharger, Sunny Boy Smart Energy
 Netzwerk-Protokoll: TCP/IP, https
 
 ## Speedwire 0x6065 ("speedwireinv")
-Fast alle SMA Wechselrichter unterstützen standardmäßig die Kommunikation per Speedwire. Dieses Protokoll 0x6065 ist aber nicht offen gelegt und ein paar Personen haben versucht, zumindest die unverschlüsselte Version des Protokolls zu dekodieren.
+Fast alle SMA Wechselrichter unterstützen standardmäßig die Kommunikation per Speedwire. Dieses Protokoll 0x6065 ist aber nicht offen gelegt und ein paar Personen haben versucht, zumindest die unverschlüsselte Version des Protokolls zu dekodieren. Stand heute (Q3 2024) ist es nur möglich, Werte auszulesen. Das Verändern von Werten ist über diesen Weg aktuell nicht möglich. 
 
 Voraussetzungen: Die Speedwire-Verschlüsselung darf nicht aktiviert werden. Defaultmäßig ist dieser für die User-Gruppe auf 0000 und für die Installer-Gruppe auf 1111 eingestellt.
 

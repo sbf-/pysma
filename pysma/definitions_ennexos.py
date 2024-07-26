@@ -135,9 +135,9 @@ ennexosSensorProfiles: list[tuple[list[int], list[str]]] = [
             "Wl.SoftAcsConnStt",
         ],
     ),
-    # Sunny Boy Smart Energy 4.0, 5.0
+    # Sunny Boy Smart Energy 3.6, 4.0, 5.0, 6.0
     (
-        [19129, 19130],
+        [19085, 19128, 19129, 19130],
         [
             "Operation.Bat.Health.1",
             "Coolsys.Inverter.TmpVal.1",

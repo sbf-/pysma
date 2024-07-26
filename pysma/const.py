@@ -621,6 +621,7 @@ SMATagList: Dict[int, str] = {
     19049: "STP6.0SE (SUNNY TRIPOWER 6.0 SE)",
     19050: "STP8.0SE (SUNNY TRIPOWER 8.0 SE)",
     19051: "STP10.0SE (SUNNY TRIPOWER 10.0 SE)",
+    19129: "Sunny Boy Smart Energy 4.0",
     19130: "Sunny Boy Smart Energy 5.0",
     200111: "Not connected",  # EV-Charger
     200112: "Sleep Mode",  # EV-Charger

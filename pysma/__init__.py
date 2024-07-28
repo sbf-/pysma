@@ -67,7 +67,7 @@ async def _run_detect(
     elif accessmethod == "ennexos":
         sma = SMAennexos(session, ip, password=None, group=None)
     elif accessmethod == "speedwireinv":
-        sma = SMAspeedwireINV(host=ip, password="", group="user")
+        sma = SMAspeedwireINV(host=ip, password="0000", group="user")
     elif accessmethod == "speedwireem":
         sma = SMAspeedwireEM()
     elif accessmethod == "shm2":

@@ -272,7 +272,7 @@ class SHM2(Device):
             di = DiscoveryInformation()
             rets.append(di)
             di.tested_endpoints = ip
-            di.remark = "needs Grid Guard Code"
+            di.remark = "needs Installer Grid Guard Code. Usage not recommended."
 
             self._client = AsyncModbusTcpClient(str(self._ip))
             connected = await self._client.connect()

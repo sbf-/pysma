@@ -99,12 +99,12 @@ class SMAennexos(Device):
             ) as res:
                 _LOGGER.debug(f"Request {url} Code {res.status}")
                 if res.status == 200:
-                    res = await res.json()
-                    return res
+                    resjson = await res.json()
+                    return resjson
                 elif res.status == 401 or res.status == 400:
-                    res = await res.json()
+                    resjson = await res.json()
                     _LOGGER.error("Error " + str(res.status))
-                    _LOGGER.error(res)
+                    _LOGGER.error(resjson)
                     raise SmaAuthenticationException("Token failed!")
                 else:
                     _LOGGER.warning("HTTP-Error %d for %s", res.status, url)

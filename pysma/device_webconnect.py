@@ -31,6 +31,7 @@ from .const_webconnect import (
     URL_LOGGER,
     URL_LOGIN,
     URL_LOGOUT,
+    URL_SETPARAMETER,
     URL_VALUES,
     USERS,
 )
@@ -41,7 +42,7 @@ from .exceptions import (
     SmaReadException,
 )
 from .helpers import version_int_to_string
-from .sensor import Sensors
+from .sensor import Sensor, Sensors
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -529,3 +530,13 @@ class SMAwebconnect(Device):
                 di.exception = e
             results.append(di)
         return results
+
+    # @override
+    async def set_parameter(
+        self, sensor: Sensor, value: int, deviceID: str | None = None
+    ) -> None:
+        """Set Parameters."""
+        key = sensor.key
+        requestData = {"destDev": [], "values": [{str(key): {"1": [value]}}]}
+        ret = await self._post_json(URL_SETPARAMETER, requestData)
+        _LOGGER.info(f"Set_Paramter {sensor} {value} {deviceID} Return {ret}")

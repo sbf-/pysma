@@ -3,6 +3,7 @@
 URL_LOGIN = "/dyn/login.json"
 URL_LOGOUT = "/dyn/logout.json"
 URL_VALUES = "/dyn/getValues.json"
+URL_SETPARAMETER = "/dyn/setParamValues.json"
 URL_ALL_VALUES = "/dyn/getAllOnlValues.json"
 URL_ALL_PARAMS = "/dyn/getAllParamValues.json"
 URL_LOGGER = "/dyn/getLogger.json"

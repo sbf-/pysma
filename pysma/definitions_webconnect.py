@@ -560,6 +560,12 @@ inverter_power_limit = Sensor(
     "6800_00832A00", Identifier.inverter_power_limit, unit="W"
 )
 
+
+active_power_limitation = Sensor(
+    "6802_00832B00", Identifier.active_power_limitation, unit="W"
+)
+
+
 # System communication - Meter on Speedwire
 #: Serial number of energy meter
 energy_meter = Sensor("6800_008AA300", Identifier.energy_meter)
@@ -626,6 +632,7 @@ sensor_map = {
         insulation_residual_current,
         inverter_condition,
         inverter_power_limit,
+        active_power_limitation,
         inverter_system_init,
         operating_status_general,
         operating_status,

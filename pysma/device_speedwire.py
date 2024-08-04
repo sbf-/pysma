@@ -418,10 +418,14 @@ class SMAspeedwireINV(Device):
         # Create Endpoint
         await self._createEndpoint()
 
+        self._protocol._failedCounter = 0
+        self._protocol._sendCounter = 0
         # Test with device_info if the ip and user/pwd are correct
         await self.device_info()
         if self._protocol._failedCounter >= self._protocol._sendCounter:
-            raise SmaConnectionException("No connection to device: %s:9522", self._host)
+            raise SmaConnectionException(
+                f"No connection to device: {self._host}:9522  ({self._protocol._failedCounter}/{self._protocol._sendCounter})"
+            )
         return True
 
     # @override

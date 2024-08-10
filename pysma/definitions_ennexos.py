@@ -226,7 +226,7 @@ ennexosSensorProfiles: list[tuple[list[int], list[str]]] = [
             "BatChrg.CurBatChaArr.1",
             "BatDsch.BatDsch",
             "BatDsch.BatDschArr.1",
-            "BatDsch.CurBatDsch.1",
+            "BatDsch.CurBatDsch",
             "BatDsch.CurBatDschArr.1",
             "DcMs.TotDcEnCntWh.1",
             "DcMs.TotDcEnCntWh.2",

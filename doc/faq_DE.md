@@ -12,6 +12,11 @@ Inhaltsverzeichnis
   - [Energy Meter (Sunny Home Manager 2) wird nicht gefunden](#energy-meter-sunny-home-manager-2-wird-nicht-gefunden)
 - [Unterstützung](#unterstützung)
 
+# Unterstützung
+
+Da die Implementierung doch recht aufwendig war, würde ich mich über eine kleine Aufmerksamkeit freuen:
+https://littleyoda.github.io/
+
 # Welche Geräte werden unterstützt?
 Es werde fast alle SMA Wechselrichter unterstützt, die über einen Netzwerkanschluss verfügen. 
 
@@ -42,6 +47,8 @@ Geräte: z.B. Sunny Tripower Smart Energy , Sunny Boy Storage
 
 Netzwerk-Protokoll: TCP/IP, je nach Generation http oder https
 
+API-Interface-Name: webconnect 
+
 
 ## EnnexOS ("ennexos")
 
@@ -50,6 +57,8 @@ Die neuen Geräte (Tripower X und EVCharger) von SMA verwenden hauptsächlich da
 Geräte: z.B. Tripower X, EVCharger, Sunny Boy Smart Energy
 
 Netzwerk-Protokoll: TCP/IP, https
+
+API-Interface-Name: ennexos
 
 ## Speedwire 0x6065 ("speedwireinv")
 Fast alle SMA Wechselrichter unterstützen standardmäßig die Kommunikation per Speedwire. Dieses Protokoll 0x6065 ist aber nicht offen gelegt und ein paar Personen haben versucht, zumindest die unverschlüsselte Version des Protokolls zu dekodieren. Stand heute (Q3 2024) ist es nur möglich, Werte auszulesen. Das Verändern von Werten ist über diesen Weg aktuell nicht möglich. 
@@ -61,6 +70,7 @@ Geräte: alle, insbesondere Geräte, die von den anderen Interfaces nicht unters
 
 Netzwerk-Protokoll: UDP
 
+API-Interface-Name: speedwireinv
 
 ## Speedwire EM 0x6069 ("energymeter", vormals "speedwireem")
 Der SHM2 und die Engerymeter übermittelt von sich aus die Daten per Multicast im Speedwire 0x6069 Format. Die Programme müssen hierbei nur auf den Netzwerktraffik lauschen und können die Werte dann dekodieren. Das Format für dieses eine Nachrichten Format hat SMA mittlerweile offen gelegt.
@@ -69,6 +79,7 @@ Geräte: Energymeter + Sunny Home Manager 2
 
 Netzwerk-Protokoll: Multicast
 
+API-Interface-Name: speedwireem
 
 ## Modbus Sunny Home Manager 2 ("shm2")
 Dieses Interface sollte nur in ausgewählten Spezialfällen genutzt werden. In 99% der Fälle sollte das "enerymeter" Interface genutzt werden.
@@ -78,6 +89,8 @@ Zur Nutzung dieses Interfaces wird eine besondere Freigabe ("Grid Guard Code") v
 Geräte: Sunny Home Manager 2
 
 Netzwerk-Protokoll: TCP/IP; Modbus/TCP
+
+API-Interface-Name: shm2
 
 ## Einschränkungen:
 
@@ -110,7 +123,15 @@ Experten können die Energy Meters von Multicast auf Unicast umstellen. Die Ger�
 
 Sunny Portal => Konfiguration => Geräteübersicht => Symbol Eigenschaft => Button Bearbeiten 
 
-# Unterstützung
 
-Da die Implementierung doch recht aufwendig war, würde ich mich über eine kleine Aufmerksamkeit freuen:
-https://littleyoda.github.io/
+## Die verschiedenen Begrifflichkeiten verwirren mich
+Die Begrifflichkeiten sind historisch gewachsen. Die folgende Tabelle soll helfen:
+
+Beschreibung | API-Interface | Begriff für Userdialoge | Auch genutzte Namen
+-- | -- | -- | --
+Devices of the Webconnect generation | webconnect | webconnect |  
+Devices of the ennexos generation | ennexos | ennexos |  
+Energymeters | speedwireem | energymeter | speedwireem, speedwire, speedwire 0x6069
+Devices with speedwire Interface | speedwireinv | speedwire | speedwireinv, speedwire, speedwire 0x6065
+Sunny Home Manager with Grid Guard Code | shm2 | shm2 grid guard code |  
+

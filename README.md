@@ -29,9 +29,8 @@ See [example.py](./example.py) for a basic usage and tests
 | Hybrid-Wechselrichter | Sunny Tripower Smart Energy<br>(10.0)  | webconnect |
 | Hybrid-Wechselrichter | Sunny Boy Storage<br>(SBS3.7-10, SBS5.0-10) | webconnect |
 | Hybrid-Wechselrichter | Sunny Boy Smart Energy 5.0 | ennexos |
-| | | |
+| Batterie-Wechselrichter | Sunny Island 8.0H (SI 8.0H-12) | webconnect |
 | Energy Meter | Energy Meter 2<br>(EMTER 20) | speedwireEM |
 | Energy Meter | Sunny Home Manager 2<br>(SHM2) | speedwireEM |
 | | | |
  
-

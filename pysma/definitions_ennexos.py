@@ -104,7 +104,7 @@ ennexosSensorProfiles: list[tuple[list[int], list[str]]] = [
     ),
     # Charger
     (
-        [9484],
+        [9483, 9484],
         [
             "ChaSess.WhIn",
             "Chrg.ModSw",

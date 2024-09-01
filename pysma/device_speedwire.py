@@ -388,7 +388,7 @@ class SMAspeedwireINV(Device):
 
     _options: Dict[str, Any] = {}
     _transport = None
-    _protocol: SMAClientProtocol
+    _protocol = None
     _deviceinfo: DeviceInformation
     _debug: Dict[str, Any] = {"overalltimeout": 0}
 
@@ -400,6 +400,9 @@ class SMAspeedwireINV(Device):
             raise KeyError(f"Invalid user type: {group} (user or installer)")
 
     async def _createEndpoint(self) -> None:
+        if self._protocol is not None:
+            _LOGGER.warning("Protocol already created")
+            return
         loop = asyncio.get_running_loop()
         on_connection_lost = loop.create_future()
         if not self._password:
@@ -417,6 +420,8 @@ class SMAspeedwireINV(Device):
     async def new_session(self) -> bool:
         # Create Endpoint
         await self._createEndpoint()
+        if self._protocol is None:
+            raise SmaConnectionException("protocol not initialized")
 
         self._protocol._failedCounter = 0
         self._protocol._sendCounter = 0
@@ -435,6 +440,8 @@ class SMAspeedwireINV(Device):
 
     # @override
     async def device_list(self) -> dict[str, DeviceInformation]:
+        if self._protocol is None:
+            raise SmaConnectionException("protocol not initialized")
 
         fut = asyncio.get_running_loop().create_future()
         await self._protocol.start_query(["TypeLabel", "Firmware"], fut, self._group)
@@ -471,6 +478,9 @@ class SMAspeedwireINV(Device):
 
     # @override
     async def get_sensors(self, deviceID: str | None = None) -> Sensors:
+        if self._protocol is None:
+            raise SmaConnectionException("protocol not initialized")
+
         fut = asyncio.get_running_loop().create_future()
         c = self._protocol.allCmds
         device_sensors = Sensors()
@@ -486,6 +496,9 @@ class SMAspeedwireINV(Device):
 
     # @override
     async def read(self, sensors: Sensors, deviceID: str | None = None) -> bool:
+        if self._protocol is None:
+            raise SmaConnectionException("protocol not initialized")
+
         fut = asyncio.get_running_loop().create_future()
         c = self._protocol.allCmds
         await self._protocol.start_query(c, fut, self._group)
@@ -514,6 +527,9 @@ class SMAspeedwireINV(Device):
             self._transport.close()
 
     async def get_debug(self) -> Dict:
+        if self._protocol is None:
+            raise SmaConnectionException("protocol not initialized")
+
         ret = self._protocol.debug.copy()
         ret["unfinished"] = list(ret["unfinished"])
         ret["msg"] = list(ret["msg"])
@@ -525,6 +541,8 @@ class SMAspeedwireINV(Device):
     # wait for a response or a timeout
     async def detect(self, ip: str) -> list[DiscoveryInformation]:
         try:
+            if self._protocol is None:
+                raise SmaConnectionException("protocol not initialized")
             di = DiscoveryInformation()
             di.tested_endpoints = str(ip) + ":9522"
             await self.new_session()

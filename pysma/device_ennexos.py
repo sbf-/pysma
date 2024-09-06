@@ -130,7 +130,7 @@ class SMAennexos(Device):
         ) as exc:
             _LOGGER.error(f"Error requesting {url} {exc} [Timeout]")
             raise SmaConnectionException(
-                f"Could not connect to SMA at {self._url}: {exc}"
+                f"Could not connect to SMA at {self._url} -- {exc}"
             ) from exc
         return {}
 
@@ -479,7 +479,7 @@ class SMAennexos(Device):
             devInfo["product"],
             devInfo["name"],
             devInfo["vendor"],
-            devInfo["firmwareVersion"],
+            devInfo.get("firmwareVersion", "0.0"),
         )
         para = await self._get_parameter(componentId)
         di.parameterCount = len(para)
@@ -559,6 +559,7 @@ class SMAennexos(Device):
         timestamp = await self._get_timestamp()
         parameters = await self._get_parameter(deviceID)
         channelName = parameters[sensor.key]["origname"]
+        # T.O.D.O Validation of the value
         requestData = f'{{"values":[{{"channelId":"{channelName}","timestamp":"{timestamp}","value":"{value}"}}]}}'
         putdata = {
             "data": requestData,

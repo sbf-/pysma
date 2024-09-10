@@ -1,7 +1,7 @@
 import random
 import uuid
 from datetime import datetime
-from typing import Awaitable, Callable, Union
+from typing import Any, Awaitable, Callable, Union
 from zoneinfo import ZoneInfo
 
 from pysmaplus.semp.const import callbackAction
@@ -58,12 +58,12 @@ class semp:
 
     def getStatus(self) -> str:
         if len(self.http.history) == 0:
-            return "Not Connected"
+            return "Not Connected (Never)"
         r = self.http.history[-1]
         diff = datetime.now().timestamp() - r.timemsec
         if diff < 130:
             return "Connected"
-        return "Connection lost"
+        return f"Connection lost ({diff})"
 
     def getRoutes(self) -> list[dict]:
         return [
@@ -77,3 +77,7 @@ class semp:
                 "callback": {"GET": self.http.getSemp, "POST": self.http.postSemp},
             },
         ]
+
+    def getDebug(self) -> dict[str, Any]:
+        ddebug = {"history": list(self.http.history), "status": self.getStatus()}
+        return ddebug

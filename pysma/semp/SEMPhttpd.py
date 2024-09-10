@@ -4,7 +4,7 @@ import html
 import logging
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Awaitable, Callable
+from typing import Any, Awaitable, Callable
 
 import untangle  # type: ignore
 import xmlschema
@@ -33,7 +33,7 @@ class historyData:
     timemsec: float
     typ: str
     remote: str
-    deviceData: dict[str, sempDevice] | None
+    deviceData: dict[str, Any] | None
     cmdData: dict | None
 
 

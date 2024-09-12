@@ -155,7 +155,8 @@ class SMAClientProtocol(DatagramProtocol):
             self.debug["data"] = self.data_values
             self.cmds = []
             self.cmdidx = 0
-            f.set_result(True)
+            if not f.done():
+                f.set_result(True)
             if self._firstSend:
                 self.debug["msg"].append(
                     ["TOTAL", 0, "", round(time.time() - self._firstSend, 2)]
@@ -540,12 +541,12 @@ class SMAspeedwireINV(Device):
 
     # wait for a response or a timeout
     async def detect(self, ip: str) -> list[DiscoveryInformation]:
+        di = DiscoveryInformation()
+        di.tested_endpoints = str(ip) + ":9522"
         try:
+            await self.new_session()
             if self._protocol is None:
                 raise SmaConnectionException("protocol not initialized")
-            di = DiscoveryInformation()
-            di.tested_endpoints = str(ip) + ":9522"
-            await self.new_session()
             fut = asyncio.get_running_loop().create_future()
             await self._protocol.start_query(["TypeLabel"], fut, self._group)
             try:

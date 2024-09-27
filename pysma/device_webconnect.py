@@ -54,6 +54,8 @@ class Debug_information_webconnect:
     full_json: dict | None = None
     last_json: dict | None = None
     device_info: DeviceInformation | None = None
+    all_values: dict | None = None
+    all_params: dict | None = None
 
 
 class SMAwebconnect(Device):
@@ -420,6 +422,8 @@ class SMAwebconnect(Device):
     async def _read_all_sensors(self) -> dict:
         all_values = await self._read_body(URL_ALL_VALUES, {"destDev": []})
         all_params = await self._read_body(URL_ALL_PARAMS, {"destDev": []})
+        self._debug.all_values = all_values
+        self._debug.all_params = all_params
         return all_values | all_params
 
     # @override

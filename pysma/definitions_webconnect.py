@@ -1,6 +1,6 @@
 """Sensor definitions for SMA WebConnect library for Python."""
 
-from .const import Identifier
+from .const import Identifier, SMATagList
 from .const_webconnect import (
     DEVICE_INFO,
     ENERGY_METER_VIA_INVERTER,
@@ -30,6 +30,15 @@ operating_status = Sensor(
     path=JMESPATHS_TAG,
     l10n_translate=True,
     enabled=False,
+)
+#: Operation.OpMod -- General operating mode
+operating_mode = Sensor(
+    "6800_08831E00",
+    Identifier.operating_mode,
+    path=JMESPATHS_TAG,
+    l10n_translate=True,
+    enabled=False,
+    mapper=SMATagList,
 )
 # Status - Operation - Inverter
 #: General operating status
@@ -636,6 +645,7 @@ sensor_map = {
         inverter_system_init,
         operating_status_general,
         operating_status,
+        operating_mode,
         power_l1,
         power_l2,
         power_l3,

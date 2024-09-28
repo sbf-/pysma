@@ -8,6 +8,7 @@ from typing import Any, Dict, Iterator, List, Optional, Union, cast
 import attr
 import jmespath  # type: ignore
 
+from .const import SMATagList
 from .const_webconnect import JMESPATH_VAL, JMESPATH_VAL_IDX, JMESPATH_VAL_STR
 
 _LOGGER = logging.getLogger(__name__)
@@ -64,7 +65,7 @@ class Sensor:
             self.key_idx = int(skey[2])
 
     def extract_value(self, result_body: dict, l10n: Optional[dict] = None) -> bool:
-        """Extract value from json body.
+        """[Webconnect] Extract value from json body.
 
         Args:
             result_body (dict): json body retrieved from device
@@ -80,7 +81,6 @@ class Sensor:
             res = self.value
             self.value = None
             return self.value != res
-
         if not isinstance(self.path, str):
             # Try different methods until we can decode...
             _paths = (
@@ -92,7 +92,6 @@ class Sensor:
                     JMESPATH_VAL_IDX.format(self.key_idx),
                 ]
             )
-
             while _paths:
                 _path = _paths.pop()
                 _val = jmespath.search(_path, res)
@@ -108,31 +107,47 @@ class Sensor:
 
         # Extract new value
         if isinstance(self.path, str):
-            res = jmespath.search(self.path, res)
+            ret = jmespath.search(self.path, res)
+
+            # Check for Sensor-Range (selection)
+            validVals = jmespath.search("* | [0][0].validVals", res)
+            if validVals is not None:
+                self.range = Sensor_Range("selection", validVals, True, self.mapper)
+
+            # Check for Sensor-Range (low/high)
+            validHigh = jmespath.search("* | [0][0].high", res)
+            validLow = jmespath.search("* | [0][0].low", res)
+            if validHigh is not None and validLow is not None:
+                self.range = Sensor_Range("min/max", [validLow, validHigh], True)
+
+            # Check for values to be mapped
+            if self.path.endswith(".tag"):
+                self.mapper = SMATagList
+
         else:
             _LOGGER.debug(
                 "Sensor %s: No successful value decoded yet: %s", self.name, res
             )
-            res = None
+            ret = None
 
         # SMA will return None instead of 0 if if no power is generated
         # For "W" sensors we will set it to 0 by default.
-        if res is None and self.unit == "W":
-            res = 0
+        if ret is None and self.unit == "W":
+            ret = 0
 
-        if isinstance(res, (int, float)) and self.factor:
-            res /= self.factor
+        if isinstance(ret, (int, float)) and self.factor:
+            ret /= self.factor  # type: ignore
 
         if self.l10n_translate and isinstance(l10n, dict):
-            res = l10n.get(
-                str(res),
-                res,
+            ret = l10n.get(
+                str(ret),
+                ret,
             )
 
         try:
-            return res != self.value
+            return ret != self.value
         finally:
-            self.value = res
+            self.value = ret
 
 
 class Sensors:

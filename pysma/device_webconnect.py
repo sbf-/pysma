@@ -157,7 +157,7 @@ class SMAwebconnect(Device):
                 if (retry + 1) < max_retries:
                     # For some reason the SMA device sometimes raises a server disconnected error
                     # If this happens we will retry up to `max_retries` times
-                    # This prevents errors in Home Assistant
+                    # This  events errors in Home Assistant
                     _LOGGER.debug("ServerDisconnectedError, will retry connection.")
                     continue
 

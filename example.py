@@ -167,7 +167,7 @@ async def main_loop(args: argparse.Namespace) -> None:
 
             while VAR.get("running"):
                 for deviceId in devicelist.keys():
-                    print("Device-ID: " + deviceId)
+                    print("Device-ID: " + str(deviceId))
                     try:
                         await VAR["sma"].read(sensors[deviceId], deviceId)
                         print_table(sensors[deviceId])

@@ -122,6 +122,7 @@ class Identifier:
     energy_meter: str = "energy_meter"
     operating_status_genereal: str = "operating_status_general"
     operating_status: str = "operating_status"
+    operating_mode: str = "operating_mode"
     inverter_condition: str = "inverter_condition"
     inverter_system_init: str = "inverter_system_init"
     grid_connection_status: str = "grid_connection_status"

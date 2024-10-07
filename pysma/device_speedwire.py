@@ -408,6 +408,8 @@ class SMAspeedwireINV(Device):
         on_connection_lost = loop.create_future()
         if not self._password:
             raise ValueError("Password not set!")
+        if len(self._password) > 12:
+            raise ValueError("Password to long! Max 12 Characters.")
         self._transport, self._protocol = await loop.create_datagram_endpoint(
             lambda: SMAClientProtocol(
                 self._password,  # type: ignore[arg-type]

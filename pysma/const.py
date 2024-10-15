@@ -146,6 +146,7 @@ class Identifier:
         "charge_current_limit"  # channel="Parameter.Inverter.AcALim"
     )
     power_limit_in: str = "power_limit_in"  # channel="Parameter.Inverter.WMaxIn"
+    active_power_limitation_gcp = "active_power_limitation_gcp"
 
 
 # Data-Source:

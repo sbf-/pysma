@@ -569,11 +569,15 @@ inverter_power_limit = Sensor(
     "6800_00832A00", Identifier.inverter_power_limit, unit="W"
 )
 
-
 active_power_limitation = Sensor(
     "6802_00832B00", Identifier.active_power_limitation, unit="W"
 )
 
+
+# "Set active power limit at grid connection point"
+active_power_limitation_gcp = Sensor(
+    "6800_0092D70", Identifier.active_power_limitation_gcp, unit="W"
+)
 
 # System communication - Meter on Speedwire
 #: Serial number of energy meter

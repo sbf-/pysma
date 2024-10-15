@@ -646,6 +646,7 @@ sensor_map = {
         inverter_condition,
         inverter_power_limit,
         active_power_limitation,
+        active_power_limitation_gcp,
         inverter_system_init,
         operating_status_general,
         operating_status,

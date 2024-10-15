@@ -576,7 +576,7 @@ active_power_limitation = Sensor(
 
 # "Set active power limit at grid connection point"
 active_power_limitation_gcp = Sensor(
-    "6800_0092D70", Identifier.active_power_limitation_gcp, unit="W"
+    "6800_0092D700", Identifier.active_power_limitation_gcp, unit="W"
 )
 
 # System communication - Meter on Speedwire

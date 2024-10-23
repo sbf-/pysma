@@ -6,7 +6,6 @@ from typing import Any, Dict, List
 
 from pymodbus.client import AsyncModbusTcpClient
 from pymodbus.exceptions import ModbusException
-from pymodbus.pdu import ModbusResponse
 
 from .const import Identifier, SMATagList
 from .device import Device, DeviceInformation, DiscoveryInformation
@@ -211,10 +210,6 @@ class SHM2(Device):
         """
         di = await self.device_list()
         return list(di.values())[0].asDict()
-
-    def _u32(self, regs: ModbusResponse) -> int:
-        #        print(regs.registers)
-        return regs.registers[0] * (2**16) + regs.registers[1]
 
     async def device_list(self) -> dict[str, DeviceInformation]:
         """List of all devices"""

@@ -29,6 +29,7 @@ setup(
         "untangle>=1.2.1",
         "pymodbus>=3.6.9",
         "xmlschema>=3.3.0",
+        "pymodbus>3.7.4",
     ],
     zip_safe=True,
     include_package_data=False,

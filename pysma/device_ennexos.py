@@ -330,8 +330,8 @@ class SMAennexos(Device):
         productTagId = int(dev.additional.get("productTagId", 0))
         profile = getSensorForDevice(productTagId)
         if not profile:
-            _LOGGER.warning(
-                f"Unknown Device: {productTagId} N:{dev.name} T:{dev.type} ID:{deviceID}"
+            _LOGGER.error(
+                f"Unknown Device: {productTagId} N:{dev.name} T:{dev.type} ID:{deviceID}. Please report to the author of pysmaplus."
             )
             return device_sensors
         expected_sensors, unknown = profile

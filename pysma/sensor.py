@@ -55,6 +55,7 @@ class Sensor:
     mapper: dict[int, str] = attr.ib(default=None, repr=False)
     mapped_value: Any = attr.ib(default=None, init=False)
     range: Sensor_Range = attr.ib(default=None, init=False)
+    webconnect_deviceId: str = attr.ib(default=None, init=False)
 
     def __attrs_post_init__(self) -> None:
         """Post init Sensor."""
@@ -124,6 +125,10 @@ class Sensor:
             if self.path.endswith(".tag"):
                 self.mapper = SMATagList
 
+            # Extract Device Id
+            if isinstance(res, dict):
+                if len(res.keys()) == 1:
+                    self.webconnect_deviceId = list(res.keys())[0]
         else:
             _LOGGER.debug(
                 "Sensor %s: No successful value decoded yet: %s", self.name, res

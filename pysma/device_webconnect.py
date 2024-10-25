@@ -540,7 +540,18 @@ class SMAwebconnect(Device):
         self, sensor: Sensor, value: int, deviceID: str | None = None
     ) -> None:
         """Set Parameters."""
+        if sensor.webconnect_deviceId is None:
+            _LOGGER.info(
+                f"Cannot set Parameter {sensor} {value} {deviceID}. Device ID could not be determined."
+            )
+            return
+
         key = sensor.key
-        requestData = {"destDev": [], "values": [{str(key): {"1": [value]}}]}
+        requestData = {
+            "destDev": [],
+            "values": [{str(key): {sensor.webconnect_deviceId: [value]}}],
+        }
         ret = await self._post_json(URL_SETPARAMETER, requestData)
-        _LOGGER.info(f"Set_Paramter {sensor} {value} {deviceID} Return {ret}")
+        _LOGGER.info(
+            f"Set_Paramter {sensor} {value} {deviceID} {sensor.webconnect_deviceId} Return {ret}"
+        )

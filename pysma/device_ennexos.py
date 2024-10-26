@@ -128,7 +128,8 @@ class SMAennexos(Device):
             client_exceptions.ClientError,
             asyncio.exceptions.TimeoutError,
         ) as exc:
-            _LOGGER.error(f"Error requesting {url} {exc} [Timeout]")
+            if "/api/v1/featuretoggles" not in url:
+                _LOGGER.error(f"Error requesting {url} {exc} [Timeout]")
             raise SmaConnectionException(
                 f"Could not connect to SMA at {self._url} -- {exc}"
             ) from exc

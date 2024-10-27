@@ -673,7 +673,7 @@ ennexosSensorProfiles: list[tuple[list[int], list[str]]] = [
         ],
     ),
     (
-        [4232],  # SB 4000TL-20
+        [358],  # SB 4000TL-20
         [
             "DcMs.Amp.1",
             "DcMs.Vol.1",
@@ -682,9 +682,6 @@ ennexosSensorProfiles: list[tuple[list[int], list[str]]] = [
             "DcMs.Vol.2",
             "DcMs.Watt.2",
             "Coolsys.Inverter.TmpVal",
-            "DcMs.Amp[]",
-            "DcMs.Vol[]",
-            "DcMs.Watt[]",
             "GridGuard.Cntry",
             "GridMs.A.phsA",
             "GridMs.A.phsB",
@@ -1399,7 +1396,6 @@ enneoxSensors = [
         Sensor("Operation.GriSwCnt", None, factor=1, unit=None),
         Sensor("Operation.GriSwStt", Identifier.grid_relay_status, unit=None, mapper=SMATagList),
         Sensor("Operation.Health", Identifier.status, factor=1, unit=None, mapper=SMATagList),
-        Sensor("Operation.Health", None, factor=1, unit=None),
         Sensor("Operation.HealthStt.Alm", None, factor=1, unit=None),
         Sensor("Operation.HealthStt.Ok", None, factor=1, unit=None),
         Sensor("Operation.HealthStt.Wrn", None, factor=1, unit=None),

@@ -126,6 +126,8 @@ sempXMLend = """
 </Device2EM>
 """
 
+#             <MinPowerConsumption>{minPowerConsumption}</MinPowerConsumption>
+
 deviceInfoXML = """    <DeviceInfo>
         <Identification>
             <DeviceId>{deviceId}</DeviceId>
@@ -136,7 +138,6 @@ deviceInfoXML = """    <DeviceInfo>
         </Identification>
         <Characteristics>
             <MaxPowerConsumption>{maxPowerConsumption}</MaxPowerConsumption>
-            <MinPowerConsumption>{minPowerConsumption}</MinPowerConsumption>
             <MinOnTime>{minOnTime}</MinOnTime>
             <MinOffTime>{minOffTime}</MinOffTime>
         </Characteristics>

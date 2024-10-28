@@ -154,7 +154,7 @@ class SEMPhttpServer:
                 deviceSerial=dev.deviceSerial,
                 deviceVendor=html.escape(dev.deviceVendor),
                 maxPowerConsumption=int(dev.deviceMaxConsumption),
-                minPowerConsumption=int(dev.deviceMinConsumption),
+                #     minPowerConsumption=int(dev.deviceMinConsumption),
                 interruptionsAllowed=self.bool2str(dev.interruptionsAllowed),
                 optionalEnergy=self.bool2str(dev.optionalEnergy),
                 minOnTime=int(dev.minOnTime),

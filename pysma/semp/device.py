@@ -1,10 +1,12 @@
 import logging
 import re
+from dataclasses import dataclass
 from datetime import datetime, timedelta
 
 _LOGGER = logging.getLogger(__name__)
 
 
+@dataclass
 class sempTimeframe:
     start: datetime
     stop: datetime

@@ -81,6 +81,10 @@ Netzwerk-Protokoll: Multicast
 
 API-Interface-Name: speedwireem
 
+
+[Protokoll-Definition](https://cdn.sma.de/fileadmin/content/www.developer.sma.de/docs/EMETER-Protokoll-TI-en-10.pdf?v=1699276024)
+
+
 ## Modbus Sunny Home Manager 2 ("shm2")
 Dieses Interface sollte nur in ausgewählten Spezialfällen genutzt werden. In 99% der Fälle sollte das "enerymeter" Interface genutzt werden.
 
@@ -92,6 +96,7 @@ Netzwerk-Protokoll: TCP/IP; Modbus/TCP
 
 API-Interface-Name: shm2
 
+[Protokoll-Definition](https://files.sma.de/downloads/HM-20-Modbus-NSD-TI-en-12.pdf)
 ## Einschränkungen:
 
 Da alle Schnittstellen, außer Energy Meter, ohne offizielle Unterlagen von SMA entschlüsselt wurden, kann immer etwas falsch interpretiert werden. Außerdem sind die Schnittstellen im Zweifelsfall nicht vollständig. Insbesondere die Implementierung von Speedwire ist noch unvollständig.

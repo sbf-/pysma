@@ -122,10 +122,27 @@ Speedwire ist für Geräte gedacht, die keine andere Schnittstelle unterstützen
 
 # Probleme
 ## Energy Meter (Sunny Home Manager 2) wird nicht gefunden
-Die Energy Meter (einschließlich Sunny Home Manager 2) versenden ihre Daten per [Multicast](https://de.wikipedia.org/wiki/Multicast#IP-Multicast). Deshalb müssen diese Geräte und das Gerät, welches die Daten empfangen soll, im gleichen [Subnetz](https://de.wikipedia.org/wiki/Subnetz) liegen. Also z.B. in 192.168.2.X. Da die Daten nicht aktiv abgerufen werden können, kann keine Verbindung über die IP-Adresse aufgebaut werden.
+Die Energy Meter (einschließlich Sunny Home Manager 2) versenden ihre Daten per [Multicast](https://de.wikipedia.org/wiki/Multicast#IP-Multicast). 
 
-Experten können die Energy Meters von Multicast auf Unicast umstellen. Die Geräte senden dann die Daten nur noch an die ausgewählten IP Adressen und nicht mehr per Multicast an alle Geräte des Subnetzes. Hierdurch können Subnetzte überwunden werden. Hierbei ist sicher zu stellen, dass man alle Geräte einträgt, die die Informationen der Energy Meter erhalten müssen. Bitte vor der Änderung die Anleitung lesen.
+Wenn die Informationen nicht empfangen werden, gibt es verschiedene Gründe:
+1.) Deshalb müssen diese Geräte und das Gerät, welches die Daten empfangen soll, im gleichen [Subnetz](https://de.wikipedia.org/wiki/Subnetz) liegen. Also z.B. in 192.168.2.X. Da die Daten nicht aktiv abgerufen werden können, kann keine Verbindung über die IP-Adresse aufgebaut werden.
 
+2.) Teilweise werden die Pakete nicht empfangen, da es zu Inkompatbilitäten mit den Netzwerkgeräten (Router/Switches/AP) kommt.
+
+3.) Im Falle einer virtuellen Umgebung muss sichergestellt sein, dass die Multicast Systeme auch an die virtuelle Umgebung weitergeleitet werden.
+
+Experten können in diesen Fällen aber auch die Energy Meters von Multicast auf Unicast umstellen. Die Geräte senden dann die Daten nur noch an die ausgewählten IP Adressen und nicht mehr per Multicast an alle Geräte des Subnetzes. Hierdurch können Subnetzte überwunden und Probleme mit den Netzwerkgeräten vermieden werden. 
+
+Es können jedoch nur 3 Geräte(=IP) eingetragen werden. Es muss aber sicher gestellt sein, dass alle Geräte eingetragen sind, die die Informationen der Energy Meter erhalten müssen. In der Regel sind dies die Wechselrichter, Batteriesystem und evtl. der SMA-EV-Charger. Dazu dann noch dein Smart-Home-System, falls dieses auch die SHM-Daten auswertet.
+
+Diese Lösung funktioniert also nur, wenn du eine, von der Geräteanzahl her, kleine Anlage hast.
+
+Merke:
+* Solange es keine Probleme mit Multicast gibt, gibt es keinen Grund, auf Unicast zu wechseln.
+* Ein Wechsel auf Unicast funktioniert nur, wenn du max. 3 Geräte hast, die auf die Daten des SHM angewiesen sind.
+* Wenn du irgendein Gerät in der Liste vergisst, das die Information brauchst, werden komische Effekte auftreten.
+
+Bitte vor der Änderung die Anleitung lesen und Änderungen auf eigene Gefahr.
 Sunny Portal => Konfiguration => Geräteübersicht => Symbol Eigenschaft => Button Bearbeiten 
 
 

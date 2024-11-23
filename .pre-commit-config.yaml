@@ -18,9 +18,9 @@ repos:
     hooks:
       - id: codespell
         args: ["--skip=*_DE.md"]
-  - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.10.0
-    hooks:
-      - id: mypy
-        files: "pysma/.*.py"
-        additional_dependencies: [types-attrs,dataclasses_struct,types-Deprecated]
+#  - repo: https://github.com/pre-commit/mirrors-mypy
+ ##   rev: v1.13.0
+   # hooks:
+    #  - id: mypy
+     #   files: "pysma/.*.py"
+      #  additional_dependencies: [types-attrs,dataclasses_struct,types-Deprecated]

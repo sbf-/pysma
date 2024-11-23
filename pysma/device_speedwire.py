@@ -67,6 +67,7 @@ class SMAClientProtocol(DatagramProtocol):
         self.sensors: dict[str, Sensor] = {}
         self._group = ""
         self._resendcounter = 0
+        self._loggedIn = False
         self._failedCounter = 0
         self._sendCounter = 0
         self._commandTimeout = float(options.get("commandTimeout", 0.5))
@@ -113,7 +114,9 @@ class SMAClientProtocol(DatagramProtocol):
         self._commandFuture.set_result(True)
 
     async def start_query(self, cmds: List, future: Future, group: str) -> None:
-        self.cmds = ["login"]
+        self.cmds = []
+        if not self._loggedIn:
+            self.cmds.append("login")
         self.cmds.extend(cmds)
         self.future = future
         self.cmdidx = 0
@@ -130,6 +133,7 @@ class SMAClientProtocol(DatagramProtocol):
     def connection_lost(self, exc: Exception | None) -> None:
         """connection lost handler"""
         _LOGGER.debug("Connection lost: %s %s", type(exc), exc)
+        self._loggedIn = False
         self.on_connection_lost.set_result(True)
 
     def _send_command(self, cmd: bytes) -> None:
@@ -142,6 +146,13 @@ class SMAClientProtocol(DatagramProtocol):
         if self._transport is None:
             raise RuntimeError("Transport is None")
         self._transport.sendto(cmd)
+
+    async def logoff(self) -> None:
+        try:
+            self._send_command(self.speedwire.getLogoutFrame(0))
+            await asyncio.sleep(0.2)  # Wait for delayed responses
+        except RuntimeError:
+            pass
 
     async def _send_next_command(self) -> None:
         """Send the next command in the list"""
@@ -177,9 +188,7 @@ class SMAClientProtocol(DatagramProtocol):
                 )
             else:
                 self._send_command(
-                    self.speedwire.getQueryFrame(
-                        self.password, 0, self.cmds[self.cmdidx]
-                    )
+                    self.speedwire.getQueryFrame(0, self.cmds[self.cmdidx])
                 )
 
     def _getFormat(self, handler: dict) -> tuple:
@@ -212,6 +221,8 @@ class SMAClientProtocol(DatagramProtocol):
                         "Login failed! Credentials wrong (user/install or password)"
                     )
                 )
+        else:
+            self._loggedIn = True
 
     def handle_newvalue(self, sensor: Sensor, value: Any, overwrite: bool) -> None:
         """Set the new value to the sensor"""
@@ -527,7 +538,9 @@ class SMAspeedwireINV(Device):
 
     async def close_session(self) -> None:
         if self._transport is not None:
+            await self._protocol.logoff()
             self._transport.close()
+            self._trasport = None
 
     async def get_debug(self) -> Dict:
         if self._protocol is None:

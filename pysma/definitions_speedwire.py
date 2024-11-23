@@ -1151,33 +1151,39 @@ class SpeedwireFrame:
             ("data_end", ctypes.c_uint32),
         ]
 
-    # def getLogoutFrame(self, inverter):
-    #     frame_header = self.getFrameHeader()
-    #     frame_data_header = self.getDataHeader(inverter)
-    #     frame_data = self.LogoutFrame()
+    def getLogoutFrame(self, serial):
+        frame_header = self.getFrameHeader()
+        frame_data_header = self.getDataHeader(serial)
+        frame_data = self.LogoutFrame()
 
-    #     frame_header.ctrl = 0xA0
-    #     frame_data_header.dst_sysyid = 0xFFFF
-    #     frame_data_header.ctrl2_1 = (ctypes.c_ubyte * 2).from_buffer(bytearray(b"\x00\x03"))
-    #     frame_data_header.ctrl2_2 = (ctypes.c_ubyte * 2).from_buffer(bytearray(b"\x00\x03"))
+        frame_header.ctrl = 0xA0
+        frame_data_header.dst_sysyid = 0xFFFF
+        frame_data_header.ctrl2_1 = (ctypes.c_ubyte * 2).from_buffer(
+            bytearray(b"\x00\x03")
+        )
+        frame_data_header.ctrl2_2 = (ctypes.c_ubyte * 2).from_buffer(
+            bytearray(b"\x00\x03")
+        )
 
-    #     frame_data.command = commands["logoff"]["command"]
-    #     frame_data.data_start = 0xFFFFFFFF
-    #     frame_data.data_end = 0x00000000
+        frame_data.command = commands["logoff"]["command"]
+        frame_data.data_start = 0xFFFFFFFF
+        frame_data.data_end = 0x00000000
 
-    #     data_length = ctypes.sizeof(frame_data_header) + ctypes.sizeof(frame_data)
+        data_length = ctypes.sizeof(frame_data_header) + ctypes.sizeof(frame_data)
 
-    #     frame_header.data_length = int.from_bytes(data_length.to_bytes(2, "big"), "little")
+        frame_header.data_length = int.from_bytes(
+            data_length.to_bytes(2, "big"), "little"
+        )
 
-    #     frame_header.longwords = (data_length // 4)
+        frame_header.longwords = data_length // 4
 
-    #     return bytes(frame_header) + bytes(frame_data_header) + bytes(frame_data)
+        return bytes(frame_header) + bytes(frame_data_header) + bytes(frame_data)
 
     def getLoginFrame(self, password: str, serial: int, installer: bool) -> bytes:
         # pylint: disable=too-few-public-methods
         """Returns a Login Frame"""
         frame_header = self.getFrameHeader()
-        frame_data_header = self.getDataHeader(password, serial)
+        frame_data_header = self.getDataHeader(serial)
         frame_data = self.LoginFrame()
 
         frame_header.ctrl = 0xA0
@@ -1209,10 +1215,10 @@ class SpeedwireFrame:
 
         return bytes(frame_header) + bytes(frame_data_header) + bytes(frame_data)
 
-    def getQueryFrame(self, password: str, serial: int, command_name: str) -> bytes:
+    def getQueryFrame(self, serial: int, command_name: str) -> bytes:
         """Return Query Frame"""
         frame_header = self.getFrameHeader()
-        frame_data_header = self.getDataHeader(password, serial)
+        frame_data_header = self.getDataHeader(serial)
         frame_data = self.QueryFrame()
 
         command = commands[command_name]
@@ -1254,7 +1260,7 @@ class SpeedwireFrame:
 
         return newFrameHeader
 
-    def getDataHeader(self, password: str, serial: int) -> DataHeader:
+    def getDataHeader(self, serial: int) -> DataHeader:
         """Return Data Header"""
         newDataHeader = self.DataHeader()
 

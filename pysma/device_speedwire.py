@@ -67,13 +67,20 @@ class SMAClientProtocol(DatagramProtocol):
         self.sensors: dict[str, Sensor] = {}
         self._group = ""
         self._resendcounter = 0
+        self._defaultRetries = int(options.get("defaultRetries", 2))
+        self._loginRetries = int(options.get("loginRetries", 3))
         self._loggedIn = False
         self._failedCounter = 0
         self._sendCounter = 0
         self._commandTimeout = float(options.get("commandTimeout", 0.5))
         self._commandDelay = float(options.get("commandDelay", 0.0))
+        self._overallTimeout = max(
+            5 + len(commands) * (self._commandDelay) * 2,
+            (self._commandTimeout + self._commandDelay)
+            * (max(self._loginRetries, self._loginRetries) + 1),
+        )
         self._overallTimeout = float(
-            options.get("overallTimeout", 5 + len(commands) * (self._commandDelay))
+            options.get("overallTimeout", self._overallTimeout)
         )
         self.allCmds: list[str] = []
         self.allCmds.extend(commands.keys())
@@ -97,8 +104,16 @@ class SMAClientProtocol(DatagramProtocol):
             _LOGGER.debug(f"Timeout in command. Resendcounter: {self._resendcounter}")
             self._resendcounter += 1
             self.debug["resendcounter"] += 1
-            if self._resendcounter > 2:
+            retries = self._defaultRetries
+            if self.cmds[self.cmdidx] == "login":
+                retries = self._loginRetries
+            _LOGGER.debug(
+                f"Timeout in command. Resendcounter: {self._resendcounter} {retries}"
+            )
+            if self._resendcounter > retries:
                 # Giving up. Next Command
+                if self.cmds[self.cmdidx] == "login":
+                    raise RuntimeError("No connection to device. Login failed")
                 _LOGGER.debug("Timeout in command")
                 self.cmdidx += 1
                 self._resendcounter = 0

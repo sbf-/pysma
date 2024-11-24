@@ -113,7 +113,9 @@ class SMAClientProtocol(DatagramProtocol):
             if self._resendcounter > retries:
                 # Giving up. Next Command
                 if self.cmds[self.cmdidx] == "login":
-                    raise RuntimeError("No connection to device. Login failed")
+                    self.future.set_exception(
+                        SmaConnectionException("Login failed! No Response from Device!")
+                    )
                 _LOGGER.debug("Timeout in command")
                 self.cmdidx += 1
                 self._resendcounter = 0

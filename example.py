@@ -252,18 +252,6 @@ async def sempdemo():
         control.getDevice(devId).setPowerStatus(0, "off")
 
 
-#     # today13 = datetime.now().replace(hour=15, minute=0, second=0, microsecond=0)
-#     # today15 = datetime.now().replace(hour=16, minute=30, second=0, microsecond=0)
-
-#     today13 = datetime.now()
-#     today15 = datetime.now() + timedelta(minutes=65)
-
-#     tf = timeframe(today13, today15, timedelta(minutes=60), timedelta(minutes=60))
-# #    dev.addTimeframe(tf)
-#     control.addDevice(dev)
-#     control.getDevice(devId).setPowerStatus(0, "off")
-
-
 async def main() -> None:
     print("Library version: " + getVersion())
     parser = argparse.ArgumentParser(

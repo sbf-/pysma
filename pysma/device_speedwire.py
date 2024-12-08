@@ -308,12 +308,13 @@ class SMAClientProtocol(DatagramProtocol):
                 values.append(v)
                 valuesPos.append(f"{idx + 54}")
             # check if the value 'c' was already logged within the last 24 hrs (TIMEDELTA def above)
-            if c in self.debug.get("warned"):
-                ts = self.debug.get("warned",{}).get(c)
-                if ts and ts>(datetime.now()-NO_HANDLER_FOR_MIN_TIMEDELTA):
-                    # do not warn again
-                    # it also already known to "unfinished" set
-                    return
+
+
+            if ((ts := self.debug.get("warned",{}).get(c)) 
+                and ts>(datetime.now()-NO_HANDLER_FOR_MIN_TIMEDELTA)):
+                # do not warn again
+                # it also already known to "unfinished" set
+                return
 
             _LOGGER.warning(f"No Handler for {c}: {values} @ {valuesPos}")
             self.debug["unfinished"].add(f"{c}")

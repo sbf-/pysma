@@ -112,7 +112,7 @@ class SMAClientProtocol(DatagramProtocol):
             )
             if self._resendcounter > retries:
                 # Giving up. Next Command
-                if self.cmds[self.cmdidx] == "login":
+                if self.cmds[self.cmdidx] == "login" and not self.future.done():
                     self.future.set_exception(
                         SmaConnectionException("Login failed! No Response from Device!")
                     )
@@ -142,7 +142,8 @@ class SMAClientProtocol(DatagramProtocol):
         self._group = group
         self.data_values = {}
         self.sensors = {}
-        _LOGGER.debug("Sending login")
+        _LOGGER.debug(f"Start Query {cmds}")
+        #        _LOGGER.debug("Sending login")
         self.debug["msg"].append(["SEND", "login"])
         self._firstSend = time.time()
         await self._send_next_command()
@@ -153,21 +154,24 @@ class SMAClientProtocol(DatagramProtocol):
         self._loggedIn = False
         self.on_connection_lost.set_result(True)
 
-    def _send_command(self, cmd: bytes) -> None:
+    def _send_command(self, cmd: bytes, exceptResponse: bool = True) -> None:
         """Send the Command"""
         _LOGGER.debug(
             f"Sending command [{len(cmd)}] -- {binascii.hexlify(cmd).upper()}"  # type: ignore[str-bytes-safe]
         )
-        self._commandFuture = asyncio.get_running_loop().create_future()
-        asyncio.get_running_loop().create_task(self.controller())
+        if exceptResponse:
+            self._commandFuture = asyncio.get_running_loop().create_future()
+            asyncio.get_running_loop().create_task(self.controller())
         if self._transport is None:
             raise RuntimeError("Transport is None")
         self._transport.sendto(cmd)
 
     async def logoff(self) -> None:
+        _LOGGER.debug("Sending logoff")
         try:
-            self._send_command(self.speedwire.getLogoutFrame(0))
+            self._send_command(self.speedwire.getLogoutFrame(0x23021922), False)
             await asyncio.sleep(0.2)  # Wait for delayed responses
+            self._loggedIn = False
         except RuntimeError:
             pass
 
@@ -176,7 +180,7 @@ class SMAClientProtocol(DatagramProtocol):
         if not self.future:
             return
         if self.cmdidx >= len(self.cmds):
-            # All commands send. Clean up.
+            await self.logoff()
             f = self.future
             self.future = None
             await asyncio.sleep(0.2)  # Wait for delayed responses
@@ -201,11 +205,11 @@ class SMAClientProtocol(DatagramProtocol):
             if (self.cmds[self.cmdidx]) == "login":
                 groupidx = ["user", "installer"].index(self._group) == 1
                 self._send_command(
-                    self.speedwire.getLoginFrame(self.password, 0, groupidx)
+                    self.speedwire.getLoginFrame(self.password, 0x23021922, groupidx)
                 )
             else:
                 self._send_command(
-                    self.speedwire.getQueryFrame(0, self.cmds[self.cmdidx])
+                    self.speedwire.getQueryFrame(0x23021922, self.cmds[self.cmdidx])
                 )
 
     def _getFormat(self, handler: dict) -> tuple:

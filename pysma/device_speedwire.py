@@ -169,7 +169,7 @@ class SMAClientProtocol(DatagramProtocol):
     async def logoff(self) -> None:
         _LOGGER.debug("Sending logoff")
         try:
-            self._send_command(self.speedwire.getLogoutFrame(0x23021922), False)
+            self._send_command(self.speedwire.getLogoutFrame(0x23021923), False)
             await asyncio.sleep(0.2)  # Wait for delayed responses
             self._loggedIn = False
         except RuntimeError:
@@ -205,11 +205,11 @@ class SMAClientProtocol(DatagramProtocol):
             if (self.cmds[self.cmdidx]) == "login":
                 groupidx = ["user", "installer"].index(self._group) == 1
                 self._send_command(
-                    self.speedwire.getLoginFrame(self.password, 0x23021922, groupidx)
+                    self.speedwire.getLoginFrame(self.password, 0x23021923, groupidx)
                 )
             else:
                 self._send_command(
-                    self.speedwire.getQueryFrame(0x23021922, self.cmds[self.cmdidx])
+                    self.speedwire.getQueryFrame(0x23021923, self.cmds[self.cmdidx])
                 )
 
     def _getFormat(self, handler: dict) -> tuple:

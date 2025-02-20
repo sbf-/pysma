@@ -1566,7 +1566,8 @@ enneoxSensors = [
 
         Sensor("Operation.Dmd.WCtl", Identifier.active_power_limitation, factor=1, unit="W"),
         Sensor("InOut.DigIn.CurWCtlNom", Identifier.power_limit_via_io, factor=1, unit="%"),  # codespell:ignore
-        Sensor("Inverter.WMaxIn", Identifier.power_limit_in, factor=1, unit="W")
+        Sensor("Inverter.WMaxIn", Identifier.power_limit_in, factor=1, unit="W"),
+        Sensor("Metering.DyWhOut", Identifier.daily_yield, factor=1, unit="Wh")
 ]
 # fmt: on
 name2sensor = {i.key: i for i in enneoxSensors}

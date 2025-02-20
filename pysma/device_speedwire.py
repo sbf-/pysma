@@ -14,8 +14,8 @@ import logging
 import struct
 import time
 from asyncio import DatagramProtocol, Future
-from typing import Any, Dict, List, Optional
 from datetime import datetime, timedelta
+from typing import Any, Dict, List, Optional
 
 from .const import SMATagList
 from .definitions_speedwire import (
@@ -36,7 +36,10 @@ from .sensor import Sensor, Sensors
 
 _LOGGER = logging.getLogger(__name__)
 
-NO_HANDLER_FOR_MIN_TIMEDELTA = timedelta(hours=24) # How often to report a "known unknown" response
+NO_HANDLER_FOR_MIN_TIMEDELTA = timedelta(
+    hours=24
+)  # How often to report a "known unknown" response
+
 
 class SMAClientProtocol(DatagramProtocol):
     """Basic Class for communication"""
@@ -51,7 +54,7 @@ class SMAClientProtocol(DatagramProtocol):
         "sendcounter": 0,
         "resendcounter": 0,
         "failedCounter": 0,
-        "warned": {}, # dictionary of "No handler for" adresses with timestamp of last logged message, 
+        "warned": {},  # dictionary of "No handler for" addresses with timestamp of last logged message,
         # so it can be repeated daily (instead of per poll)
     }
 
@@ -313,16 +316,18 @@ class SMAClientProtocol(DatagramProtocol):
                 valuesPos.append(f"{idx + 54}")
             # check if the value 'c' was already logged within the last 24 hrs (TIMEDELTA def above)
 
-
-            if ((ts := self.debug.get("warned",{}).get(c)) 
-                and ts>(datetime.now()-NO_HANDLER_FOR_MIN_TIMEDELTA)):
+            if (ts := self.debug.get("warned", {}).get(c)) and ts > (
+                datetime.now() - NO_HANDLER_FOR_MIN_TIMEDELTA
+            ):
                 # do not warn again
                 # it also already known to "unfinished" set
                 return
 
-            _LOGGER.warning(f"No Handler for {c}: {values} @ {valuesPos}")
+            _LOGGER.debug(f"No Handler for {c}: {values} @ {valuesPos}")
             self.debug["unfinished"].add(f"{c}")
-            self.debug["warned"][c]=datetime.now() # add to known unknowns that have been warned
+            self.debug["warned"][
+                c
+            ] = datetime.now()  # add to known unknowns that have been warned
             return
 
         # Handle known repsones
@@ -448,7 +453,7 @@ class SMAspeedwireINV(Device):
 
     async def _createEndpoint(self) -> None:
         if self._protocol is not None:
-            _LOGGER.warning("Protocol already created")
+            # _LOGGER.debug("Protocol already created")
             return
         loop = asyncio.get_running_loop()
         on_connection_lost = loop.create_future()

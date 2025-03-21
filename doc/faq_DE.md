@@ -36,7 +36,7 @@ Eine unvollständige Liste:
 | Wallbox | EVC22-3AC-10 | ennexos | Noch unvollständig implementiert
 
 # Die verschiedenen Zugriffsmethoden
-Da jedes Geräte unterschiedliche Intnerfaces zur Verfügung stellt, muss bei dieser Integration ausgewählt werden, welches Interface gentutz werden soll.
+Da jedes Geräte unterschiedliche Interfaces zur Verfügung stellt, muss bei dieser Integration ausgewählt werden, welches Interface genutzt werden soll.
 
 ## Webconnect ("webconnect")
 Obwohl diese Schnittstelle Webconnect heißt, wird das Webconnect-Protokoll *nicht* verwendet.
@@ -73,7 +73,7 @@ Netzwerk-Protokoll: UDP
 API-Interface-Name: speedwireinv
 
 ## Speedwire EM 0x6069 ("energymeter", vormals "speedwireem")
-Der SHM2 und die Engerymeter übermittelt von sich aus die Daten per Multicast im Speedwire 0x6069 Format. Die Programme müssen hierbei nur auf den Netzwerktraffik lauschen und können die Werte dann dekodieren. Das Format für dieses eine Nachrichten Format hat SMA mittlerweile offen gelegt.
+Der SHM2 und die Energymeter übermitteln von sich aus die Daten per Multicast im Speedwire 0x6069 Format. Die Programme müssen hierbei nur auf den Netzwerktraffik lauschen und können die Werte dann dekodieren. Das Format für dieses eine Nachrichten Format hat SMA mittlerweile offen gelegt.
 
 Geräte: Energymeter + Sunny Home Manager 2
 
@@ -88,7 +88,7 @@ API-Interface-Name: speedwireem
 ## Modbus Sunny Home Manager 2 ("shm2")
 Dieses Interface sollte nur in ausgewählten Spezialfällen genutzt werden. In 99% der Fälle sollte das "enerymeter" Interface genutzt werden.
 
-Zur Nutzung dieses Interfaces wird eine besondere Freigabe ("Grid Guard Code") von SMA benötigt, da dieser Weg normalerweise für Vierteilnetzbetreiber reserviert ist. Über "shm2" werden weniger Informationen als über "energymeter" geliefert, dafür ist aber die Einspeisung ins Netz steuerbar.
+Zur Nutzung dieses Interfaces wird eine besondere Freigabe ("Grid Guard Code") von SMA benötigt, da dieser Weg normalerweise für Verteilnetzbetreiber reserviert ist. Über "shm2" werden weniger Informationen als über "energymeter" geliefert, dafür ist aber die Einspeisung ins Netz steuerbar.
 
 Geräte: Sunny Home Manager 2
 

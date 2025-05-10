@@ -22,9 +22,8 @@ dependencies = [
     "jmespath<2",
     "dataclasses-struct>0.8",
     "untangle>=1.2.1",
-    "pymodbus>=3.6.9",
     "xmlschema>=3.3.0",
-    "pymodbus==3.7.4"
+    "pymodbus>=3.9.0, <4"
 ]
 requires-python = ">=3.9"
 

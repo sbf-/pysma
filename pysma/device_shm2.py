@@ -168,7 +168,9 @@ class SHM2(Device):
     async def read_modbus(self, register: int, slave: int, number_format: str) -> int:
         """Read from modbus"""
         try:
-            ret = await self._client.read_holding_registers(register, 2, slave=slave)
+            ret = await self._client.read_holding_registers(
+                register, count=2, slave=slave
+            )
         except ModbusException as exc:
             _LOGGER.error(exc)
             raise SmaConnectionException(f"ERROR: exception in pymodbus {exc}") from exc

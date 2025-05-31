@@ -130,12 +130,14 @@ class SHM2(Device):
         self._ip = destination["host"]
         self._sensorValues: Dict[str, int] = {}
         if password:
+            _LOGGER.debug("Modus: using GGC Code")
             if not isInteger(password):
                 raise SmaConnectionException(
                     "Password/Grid Guard Code must be a number."
                 )
             self._ggc = int(password)
         else:
+            _LOGGER.debug("Modus: No GGC Code")
             self._ggc = 0
         self._device_list: Dict[str, DeviceInformation] = {}
         self._client: AsyncModbusTcpClient
@@ -194,14 +196,15 @@ class SHM2(Device):
         if device != 9343:
             raise SmaConnectionException(f"No Sunny Home Manager 2 found. ({device})")
 
-        ggcStatus = await self.read_modbus(43090, 1, "u32")
-        _LOGGER.debug(f"GGC Code {ggcStatus}")
-        if ggcStatus == 0:
-            await self._login()
-        ggcStatus = await self.read_modbus(43090, 1, "u32")
-        _LOGGER.debug(f"After Login -- GGC Code {ggcStatus}")
-        if ggcStatus == 0:
-            raise SmaAuthenticationException("Grid Guard Code is not valid!")
+        if self._ggc != 0:
+            ggcStatus = await self.read_modbus(43090, 1, "u32")
+            _LOGGER.debug(f"GGC Code Status {ggcStatus}")
+            if ggcStatus == 0:
+                await self._login()
+            ggcStatus = await self.read_modbus(43090, 1, "u32")
+            _LOGGER.debug(f"After Login -- GGC Code {ggcStatus}")
+            if ggcStatus == 0:
+                raise SmaAuthenticationException("Grid Guard Code is not valid!")
         return True
 
     async def device_info(self) -> dict:

@@ -313,12 +313,12 @@ async def main() -> None:
     parser_d.set_defaults(accessmethod="speedwireem")
 
     parser_h = subparsers.add_parser(
-        "shm2", help="Sunny Home Manager with Grid Guard Code"
+        "shm2", help="Sunny Home Manager, optionally with Grid Guard Code"
     )
     parser_h.set_defaults(user="")
     parser_h.set_defaults(password="")
     parser_h.add_argument("url", type=str, help="IP-Address")
-    parser_h.add_argument("password", type=str, help="Grid Guard Code")
+    parser_h.add_argument("password", type=str, help="Grid Guard Code", nargs="?")
     parser_h.set_defaults(accessmethod="shm2")
 
     parser_e = subparsers.add_parser(

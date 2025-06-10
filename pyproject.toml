@@ -20,7 +20,7 @@ dependencies = [
     "aiohttp>3.3,<4",
     "attrs>18",
     "jmespath<2",
-    "dataclasses-struct>0.8",
+    "dataclasses-struct>=1.0",
     "untangle>=1.2.1",
     "xmlschema>=3.3.0",
     "pymodbus>=3.9.0, <4"

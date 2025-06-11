@@ -938,7 +938,7 @@ commands: Dict[str, Dict[str, Any]] = {
 }
 
 
-@dcs.dataclass_struct(size="std", byteorder="big")
+@dcs.dataclass(dcs.BIG_ENDIAN)
 class speedwireHeader:
     """Speedwire header"""
 
@@ -989,14 +989,14 @@ class speedwireHeader:
         )
 
 
-@dcs.dataclass_struct(size="std", byteorder="big")
+@dcs.dataclass(dcs.BIG_ENDIAN)
 class speedwireData2Tag:
     smanet2_lengthPayload: dcs.U16
     smanet2_id: dcs.U16
     protokoll: dcs.U16
 
 
-@dcs.dataclass_struct(size="std", byteorder="big")
+@dcs.dataclass(dcs.LITTLE_ENDIAN)
 class speedwireHeader6065:
     """Speedwire Header2 for 6065 Messages."""
 
@@ -1029,7 +1029,7 @@ class speedwireHeader6065:
         return f"speedwireHeader6065(?:{self.unknown09A0E0.hex()} Src (ID,SNR,CNT): {self.src_susyid} {self.src_serial} {self.src_control} Dest (ID,SNR,CNT): {self.dest_susyid} {self.dest_serial} {self.dest_control}   error:{self.error} fragment:{self.fragment} pktId:{self.pktId} cmdid:{self.cmdid:#010x} firstRegister:{self.firstRegister:#010x} lastRegister:{self.lastRegister:#010x})"
 
 
-@dcs.dataclass_struct(size="std", byteorder="big")
+@dcs.dataclass(dcs.BIG_ENDIAN)
 class speedwireHeader6069:
     """Speedwire Header2 for 6069 Messages. 10 Bytes"""
 
@@ -1039,7 +1039,7 @@ class speedwireHeader6069:
     timestamp: dcs.U32  # the 4 least significant bytes from a Unix Timestamp (msec since 1970) => int(time.time * 1000) & 0xFFFFFFFF)
 
 
-@dcs.dataclass_struct(size="std", byteorder="big")
+@dcs.dataclass(dcs.LITTLE_ENDIAN)
 class speedwireHeader6065x010:
     pass
 

@@ -579,6 +579,12 @@ active_power_limitation_gcp = Sensor(
     "6800_0092D700", Identifier.active_power_limitation_gcp, unit="W"
 )
 
+#: Temp 1 (inverter?)
+inverter_temp = Sensor("6102_40633E00", Identifier.temp_a, unit="°C", factor=10)
+
+#: Temp 2 (Transformer?)
+transformer_temp = Sensor("6102_40633400", Identifier.temp_b, unit="°C", factor=10)
+
 # System communication - Meter on Speedwire
 #: Serial number of energy meter
 energy_meter = Sensor("6800_008AA300", Identifier.energy_meter)
@@ -674,6 +680,8 @@ sensor_map = {
         voltage_l1,
         voltage_l2,
         voltage_l3,
+        inverter_temp,
+        transformer_temp,
     ],
     OPTIMIZERS_VIA_INVERTER: [
         optimizer_power,

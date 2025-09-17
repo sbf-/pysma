@@ -153,7 +153,7 @@ class SHM2(Device):
         """Login Using Grid Guard Code"""
         _LOGGER.debug("Login with GGC")
         ret = await self._client.write_registers(
-            43090, [self._ggc // 65536, self._ggc % 65536], slave=1
+            43090, [self._ggc // 65536, self._ggc % 65536], device_id=1
         )
         _LOGGER.debug(f"Login-Response {ret}")
         print("Login-Response", ret)
@@ -171,7 +171,7 @@ class SHM2(Device):
         """Read from modbus"""
         try:
             ret = await self._client.read_holding_registers(
-                register, count=2, slave=slave
+                register, count=2, device_id=slave
             )
         except ModbusException as exc:
             _LOGGER.error(exc)
@@ -320,7 +320,7 @@ class SHM2(Device):
             )
         try:
             ret = await self._client.write_registers(
-                info.addr, values, slave=info.slaveid
+                info.addr, values, device_id=info.slaveid
             )
         except ModbusException as exc:
             _LOGGER.error(exc)
